@@ -24,6 +24,11 @@ float triIncrement = 0.005f;
 
 float curAngle = 0.0f;
 
+ bool sizeDirection { true };
+float curSize = 0.4f;
+float maxSize	{ 0.8f };
+float minSize	{ 0.1f };
+
 static const char* vShader =
 "																		\n\
 #version 330															\n\
@@ -34,7 +39,7 @@ uniform mat4 model;														\n\
 																		\n\
 void main()																\n\
 {																		\n\
-	gl_Position = model * vec4(0.4 * pos.x, 0.4 * pos.y, pos.z, 1.0);	\n\
+	gl_Position = model * vec4(pos, 1.0);								\n\
 }";
 
 // Fragment Shader
@@ -214,9 +219,25 @@ int main()
 		}
 
 		curAngle += 0.1f;
+
 		if (curAngle >= 360)
 		{
 			curAngle -= 360;
+		}
+
+		if (sizeDirection)
+		{
+			curSize += 0.01f;
+		}
+		else
+		{
+			curSize -= 0.01f;
+		}
+
+		if (curSize >= maxSize || 
+			curSize <= minSize)
+		{
+			sizeDirection = !sizeDirection;
 		}
 
 		// Clear Window
@@ -225,11 +246,10 @@ int main()
 
 		glUseProgram(shader);
 
-		glm::mat4 model;	// model matrix is full of zeroes
+		glm::mat4 model;	// model matrix is full of zeroes		
 		model = glm::translate(model, glm::vec3(triOffset, 0.0f, 0.0f));	//just multiplies model matrix with a Уtranslation matrixФ and dot produc it to vec3
 		model = glm::rotate(model, curAngle * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-		
-		
+		model = glm::scale(model, glm::vec3(curSize, curSize, 1.0f));
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model)); // матрица не может быть на пр€мую передана в шейдер, поэтому передаем указатель на нее
 
