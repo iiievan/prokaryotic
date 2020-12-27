@@ -8,12 +8,14 @@
 class Shader
 {
 public:
-	Shader() {}
-	  void CreateFromFiles(const char* vShader, const char* fShader);
-	  void UseShader()				{ glUseProgram(this->shader); }
-	GLuint GetModelLocation()		{ return this->uniformModel; }
-	GLuint GetProjectionLocation()  { return this->uniformProjection; }
-		  ~Shader() {}
+			Shader() {}
+		   ~Shader() {}
+	  void	CreateFromFiles(const char* vShader, const char* fShader);
+	  void	UseShader()				{ glUseProgram(this->shader); }
+	GLuint	GetModelLocation()		{ return this->uniformModel; }
+	GLuint	GetProjectionLocation() { return this->uniformProjection; }
+	GLuint	getViewLocation()		{ return this->uniformView; }
+		   
 private:
 	     
 	std::string readShaderCodeFromFile(const char* shaderPath);
@@ -23,4 +25,5 @@ private:
 		 GLuint shader {0};
 		 GLuint uniformModel {0};
 		 GLuint uniformProjection {0};
+		 GLuint uniformView{ 0 };
 };
