@@ -3,64 +3,37 @@
 #include <stdlib.h>
 #include <cmath>
 
+#include <vector>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-#include <glm\glm.hpp>
-#include <glm\gtc\matrix_transform.hpp>
-#include <glm\gtc\type_ptr.hpp>
+#include "Window.h"
+#include "Mesh.h"
+#include "Shader.h"
+#include "Camera.h"
 
-
-// Window dimensions
-const GLint WIDTH = 800, HEIGHT = 600;
 const float toRadians = 3.14159265f / 180.0f;
 
-GLuint VAO, VBO, IBO, shader, uniformModel, uniformProjection;
+Window mainWindow;
+std::vector<Mesh*> meshList;
+std::vector<Shader> shaderList;
+Camera camera;
 
-bool direction	{ true };
-float triOffset	{ 0.0f };
-float triMaxoffset = 0.7f;
-float triIncrement = 0.005f;
+GLfloat dT { 0.0f };
+GLfloat lastT{ 0.0f };
 
-float curAngle = 0.0f;
-
- bool sizeDirection { true };
-float curSize = 0.4f;
-float maxSize	{ 0.8f };
-float minSize	{ 0.1f };
-
-static const char* vShader =
-"																		\n\
-#version 330															\n\
-																		\n\
-layout(location = 0) in vec3 pos;										\n\
-																		\n\
-out vec4 vCol;															\n\
-																		\n\
-uniform mat4 model;														\n\
-uniform mat4 projection;												\n\
-																		\n\
-void main()																\n\
-{																		\n\
-	gl_Position = projection * model * vec4(pos, 1.0);					\n\
-	vCol = vec4(clamp(pos, 0.0f, 1.0f), 1.0f);							\n\
-}";
+// Vertex Shader
+static const char* vShader = "shaders/vertex.shader";
 
 // Fragment Shader
-static const char* fShader =
-"																		\n\
-#version 330															\n\
-																		\n\
-in vec4 vCol;															\n\
-																		\n\
-out vec4 colour;														\n\
-																		\n\
-void main()																\n\
-{																		\n\
-	colour = vCol;														\n\
-}";
+static const char* fShader = "shaders/fragment.shader";
 
-void CreateTriangle() 
+
+void CreateObject() 
 {
 	// индексы вершин, образующих пирамиду с треугольным основанием.
 	unsigned int indices[] =
@@ -79,24 +52,13 @@ void CreateTriangle()
 		0.0f,  1.0f, 0.0f,
 	};
 
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	Mesh* obj1 = new Mesh();
+	obj1->CreateMesh(vertices, indices, 12, 12);
+	meshList.push_back(obj1);
 
-	glGenBuffers(1, &IBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(0);
-
-	// free VBO and VAO and IBO ID's, другими словами освобождаем буфферы
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
+	Mesh* obj2 = new Mesh();
+	obj2->CreateMesh(vertices, indices, 12, 12);
+	meshList.push_back(obj2);
 }
 
 void AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
@@ -128,167 +90,70 @@ void AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
 	glAttachShader(theProgram, theShader);
 }
 
-void CompileShaders()
+void CreateShaders()
 {
-	shader = glCreateProgram();
-	if (!shader)
-	{
-		printf("Error creating shader program!\n");
-		return;
-	}
-
-	AddShader(shader, vShader, GL_VERTEX_SHADER);
-	AddShader(shader, fShader, GL_FRAGMENT_SHADER);
-
-	GLint result = 0;
-	GLchar eLog[1024] { 0 };
-
-	glLinkProgram(shader);
-	glGetProgramiv(shader, GL_LINK_STATUS, &result);
-
-	if (!result)
-	{
-		glGetProgramInfoLog(shader, sizeof(eLog), nullptr, eLog);
-		printf("Error linking program: '%s'\n", eLog);
-		return;
-	}
-
-	glValidateProgram(shader);
-	glGetProgramiv(shader, GL_VALIDATE_STATUS, &result);
-
-	if (!result)
-	{
-		glGetProgramInfoLog(shader, sizeof(eLog), nullptr, eLog);
-		printf("Error validate program: '%s'\n", eLog);
-		return;
-	}
-
-	uniformModel = glGetUniformLocation(shader, "model");
-	uniformProjection = glGetUniformLocation(shader, "projection");
+	Shader* shader1 = new Shader();
+	shader1->CreateFromFiles(vShader, fShader);
+	shaderList.push_back(*shader1);
 }
 
 int main()
 {
-	// Initialise GLFW
-	if (!glfwInit())
-	{
-		printf("GLFW Initialisation failed!");
-		glfwTerminate();
-		return 1;
-	}
+	GLuint uniformModel {0}, uniformProjection {0}, uniformView {0};
 
-	// Setup GLFW window properties
-	// OpenGL version
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	mainWindow.initialize();	
 
-	// Core profile = No Backwards Compatibility
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	// Allow forward compatibility
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	CreateObject();
+	CreateShaders();
 
-	GLFWwindow *mainWindow = glfwCreateWindow(WIDTH, HEIGHT, "Test Window", NULL, NULL);
-	if (!mainWindow)
-	{
-		printf("GLFW window creation failed!");
-		glfwTerminate();
-		return 1;
-	}
+	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 5.0f, 0.1f);
 
-	//Get Buffer size information
-	int bufferWidth, bufferHight;
-	glfwGetFramebufferSize(mainWindow, &bufferWidth, &bufferHight);
-
-	// Set context for GLEW to use
-	glfwMakeContextCurrent(mainWindow);
-
-	//Allow modern extension features
-	glewExperimental = GL_TRUE;
-
-	if (glewInit() != GLEW_OK)
-	{
-		printf("GLEW Initialisation failed!");
-		glfwDestroyWindow(mainWindow);
-		glfwTerminate();
-		return 1;
-	}
-
-	glEnable(GL_DEPTH_TEST);	// дл€ возможности задани€ глубины сцены.
-
-	// Setup Viewport size
-	glViewport(0, 0, bufferWidth, bufferHight);
-
-	CreateTriangle();
-	CompileShaders();
-
-	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)bufferWidth / (GLfloat)bufferHight, 1.0f, 100.0f);
+	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / (GLfloat)mainWindow.getBufferHeight(), 1.0f, 100.0f);
 
 	// loop until window is closed
-	while (!glfwWindowShouldClose(mainWindow))
+	while (!mainWindow.getShouldClose())
 	{
+		GLfloat now = glfwGetTime();	// SDL_GetPerformanceCounter();
+		dT = now - lastT;				// (now - lastT)*1000/SDL_GetPerformanceFrequency();
+		lastT = now;
+
 		// Handle user input events(keyboard, mouse etc.)
 		glfwPollEvents();
 
-		if (direction)
-		{
-			triOffset += triIncrement;
-		}
-		else
-		{
-			triOffset -= triIncrement;
-		}
-
-		if (abs(triOffset) >= triMaxoffset)
-		{
-			direction = !direction;
-		}
-
-		curAngle += 0.5f;
-
-		if (curAngle >= 360)
-		{
-			curAngle -= 360;
-		}
-
-		if (sizeDirection)
-		{
-			curSize += 0.01f;
-		}
-		else
-		{
-			curSize -= 0.01f;
-		}
-
-		if (curSize >= maxSize || 
-			curSize <= minSize)
-		{
-			sizeDirection = !sizeDirection;
-		}
+		camera.keyControl(mainWindow.getsKeys(), dT);
+		camera.mouseControl(mainWindow.get_dX(), mainWindow.get_dY());
 
 		// Clear Window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glUseProgram(shader);
+		shaderList[0].UseShader();
+		uniformModel = shaderList[0].GetModelLocation();
+		uniformProjection = shaderList[0].GetProjectionLocation();
+		uniformView = shaderList[0].getViewLocation();
 
-		glm::mat4 model;	// model matrix is full of zeroes		
-		model = glm::translate(model, glm::vec3(triOffset, 0.0f, -2.5f));	//just multiplies model matrix with a Уtranslation matrixФ and dot produc it to vec3
-		//model = glm::rotate(model, curAngle * toRadians, glm::vec3(0.0f, 1.0f, 1.0f));
+		glm::mat4 model;	// model matrix is full of zeroes
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -2.5f));	//just multiplies model matrix with a Уtranslation matrixФ and dot produc it to vec3
+		model = glm::rotate(model, 60.0f * toRadians, glm::vec3(0.0f, 1.0f, 1.0f));
 		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
-
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model)); // матрица не может быть на пр€мую передана в шейдер, поэтому передаем указатель на нее
-		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection)); // матрица не может быть на пр€мую передана в шейдер, поэтому передаем указатель на нее
+		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection)); 
+		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
+		meshList[0]->RenderMesh();
 
-		glBindVertexArray(VAO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 1.0f, -2.5f));	
+		model = glm::rotate(model, 30.0f * toRadians, glm::vec3(0.0f, 1.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model)); 
+		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection)); 
+		meshList[1]->RenderMesh();
 
-		glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
 		glUseProgram(0);
-
-		glfwSwapBuffers(mainWindow);
+		mainWindow.swapBuffers();
 	}
 
 
