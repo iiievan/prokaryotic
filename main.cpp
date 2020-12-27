@@ -7,65 +7,26 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <glm\glm.hpp>
-#include <glm\gtc\matrix_transform.hpp>
-#include <glm\gtc\type_ptr.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Window.h"
 #include "Mesh.h"
-
-
+#include "Shader.h"
 
 const float toRadians = 3.14159265f / 180.0f;
 
 Window mainWindow;
 std::vector<Mesh*> meshList;
+std::vector<Shader> shaderList;
 
-GLuint VAO, VBO, IBO, shader, uniformModel, uniformProjection;
-
-bool direction	{ true };
-float triOffset	{ 0.0f };
-float triMaxoffset = 0.7f;
-float triIncrement = 0.005f;
-
-float curAngle = 0.0f;
-
- bool sizeDirection { true };
-float curSize = 0.4f;
-float maxSize	{ 0.8f };
-float minSize	{ 0.1f };
-
-// Vertex shader
-static const char* vShader =
-"																		\n\
-#version 330															\n\
-																		\n\
-layout(location = 0) in vec3 pos;										\n\
-																		\n\
-out vec4 vCol;															\n\
-																		\n\
-uniform mat4 model;														\n\
-uniform mat4 projection;												\n\
-																		\n\
-void main()																\n\
-{																		\n\
-	gl_Position = projection * model * vec4(pos, 1.0);					\n\
-	vCol = vec4(clamp(pos, 0.0f, 1.0f), 1.0f);							\n\
-}";
+// Vertex Shader
+static const char* vShader = "shaders/vertex.shader";
 
 // Fragment Shader
-static const char* fShader =
-"																		\n\
-#version 330															\n\
-																		\n\
-in vec4 vCol;															\n\
-																		\n\
-out vec4 colour;														\n\
-																		\n\
-void main()																\n\
-{																		\n\
-	colour = vCol;														\n\
-}";
+static const char* fShader = "shaders/fragment.shader";
+
 
 void CreateObject() 
 {
@@ -89,6 +50,10 @@ void CreateObject()
 	Mesh* obj1 = new Mesh();
 	obj1->CreateMesh(vertices, indices, 12, 12);
 	meshList.push_back(obj1);
+
+	Mesh* obj2 = new Mesh();
+	obj2->CreateMesh(vertices, indices, 12, 12);
+	meshList.push_back(obj2);
 }
 
 void AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
@@ -122,45 +87,15 @@ void AddShader(GLuint theProgram, const char* shaderCode, GLenum shaderType)
 
 void CreateShaders()
 {
-	shader = glCreateProgram();
-	if (!shader)
-	{
-		printf("Error creating shader program!\n");
-		return;
-	}
-
-	AddShader(shader, vShader, GL_VERTEX_SHADER);
-	AddShader(shader, fShader, GL_FRAGMENT_SHADER);
-
-	GLint result = 0;
-	GLchar eLog[1024] { 0 };
-
-	glLinkProgram(shader);
-	glGetProgramiv(shader, GL_LINK_STATUS, &result);
-
-	if (!result)
-	{
-		glGetProgramInfoLog(shader, sizeof(eLog), nullptr, eLog);
-		printf("Error linking program: '%s'\n", eLog);
-		return;
-	}
-
-	glValidateProgram(shader);
-	glGetProgramiv(shader, GL_VALIDATE_STATUS, &result);
-
-	if (!result)
-	{
-		glGetProgramInfoLog(shader, sizeof(eLog), nullptr, eLog);
-		printf("Error validate program: '%s'\n", eLog);
-		return;
-	}
-
-	uniformModel = glGetUniformLocation(shader, "model");
-	uniformProjection = glGetUniformLocation(shader, "projection");
+	Shader* shader1 = new Shader();
+	shader1->CreateFromFiles(vShader, fShader);
+	shaderList.push_back(*shader1);
 }
 
 int main()
 {
+	GLuint uniformModel, uniformProjection;
+
 	mainWindow.initialize();	
 
 	CreateObject();
@@ -174,60 +109,34 @@ int main()
 		// Handle user input events(keyboard, mouse etc.)
 		glfwPollEvents();
 
-		if (direction)
-		{
-			triOffset += triIncrement;
-		}
-		else
-		{
-			triOffset -= triIncrement;
-		}
-
-		if (abs(triOffset) >= triMaxoffset)
-		{
-			direction = !direction;
-		}
-
-		curAngle += 0.5f;
-
-		if (curAngle >= 360)
-		{
-			curAngle -= 360;
-		}
-
-		if (sizeDirection)
-		{
-			curSize += 0.01f;
-		}
-		else
-		{
-			curSize -= 0.01f;
-		}
-
-		if (curSize >= maxSize || 
-			curSize <= minSize)
-		{
-			sizeDirection = !sizeDirection;
-		}
-
 		// Clear Window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glUseProgram(shader);
+		shaderList[0].UseShader();
+		uniformModel = shaderList[0].GetModelLocation();
+		uniformProjection = shaderList[0].GetProjectionLocation();
 
-		glm::mat4 model;	// model matrix is full of zeroes		
-		model = glm::translate(model, glm::vec3(triOffset, 0.0f, -2.5f));	//just multiplies model matrix with a Уtranslation matrixФ and dot produc it to vec3
-		//model = glm::rotate(model, curAngle * toRadians, glm::vec3(0.0f, 1.0f, 1.0f));
+		glm::mat4 model;	// model matrix is full of zeroes
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -2.5f));	//just multiplies model matrix with a Уtranslation matrixФ and dot produc it to vec3
+		model = glm::rotate(model, 60.0f * toRadians, glm::vec3(0.0f, 1.0f, 1.0f));
 		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
-
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model)); // матрица не может быть на пр€мую передана в шейдер, поэтому передаем указатель на нее
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection)); // матрица не может быть на пр€мую передана в шейдер, поэтому передаем указатель на нее
-
 		meshList[0]->RenderMesh();
 
-		glUseProgram(0);
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 1.0f, -2.5f));	//just multiplies model matrix with a Уtranslation matrixФ and dot produc it to vec3
+		model = glm::rotate(model, 30.0f * toRadians, glm::vec3(0.0f, 1.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model)); // матрица не может быть на пр€мую передана в шейдер, поэтому передаем указатель на нее
+		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection)); // матрица не может быть на пр€мую передана в шейдер, поэтому передаем указатель на нее
+		meshList[1]->RenderMesh();
 
+
+		glUseProgram(0);
 		mainWindow.swapBuffers();
 	}
 
