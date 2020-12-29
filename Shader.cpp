@@ -64,40 +64,43 @@ void Shader::addShader(GLuint theProgram, const char* shaderCode, GLenum shaderT
 
 void Shader::compileShaders(const char* vShaderCode, const char* fShaderCode)
 {
-	shader = glCreateProgram();
+	shaderID = glCreateProgram();
 
-	if (!shader) {
+	if (!shaderID) {
 		std::cerr << "Error creating shader program\n";
 		return;
 	}
 
-	addShader(shader, vShaderCode, GL_VERTEX_SHADER);
-	addShader(shader, fShaderCode, GL_FRAGMENT_SHADER);
+	addShader(shaderID, vShaderCode, GL_VERTEX_SHADER);
+	addShader(shaderID, fShaderCode, GL_FRAGMENT_SHADER);
 
 	GLint result = 0;
 	GLchar errLog[1024] = { 0 };
 
-	glLinkProgram(shader);
-	glGetProgramiv(shader, GL_LINK_STATUS, &result);
+	glLinkProgram(shaderID);
+	glGetProgramiv(shaderID, GL_LINK_STATUS, &result);
 
 	if (!result)
 	{
-		glGetProgramInfoLog(shader, sizeof(errLog), NULL, errLog);
+		glGetProgramInfoLog(shaderID, sizeof(errLog), NULL, errLog);
 		std::cerr << "Error linking program: '" << errLog << "'\n";
 		return;
 	}
 
-	glValidateProgram(shader);
-	glGetProgramiv(shader, GL_VALIDATE_STATUS, &result);
+	glValidateProgram(shaderID);
+	glGetProgramiv(shaderID, GL_VALIDATE_STATUS, &result);
 
 	if (!result)
 	{
-		glGetProgramInfoLog(shader, sizeof(errLog), NULL, errLog);
+		glGetProgramInfoLog(shaderID, sizeof(errLog), NULL, errLog);
 		std::cerr << "Error validating program: '" << errLog << "'\n";
 		return;
 	}
 
-	uniformModel      = glGetUniformLocation(shader, "model");
-	uniformProjection = glGetUniformLocation(shader, "projection");
-	uniformView		  = glGetUniformLocation(shader, "view");
+	// Засовываем модель, проекцю на экран, вид экрана, и освещение непосредственно в шейдер
+	uniformModel		    = glGetUniformLocation(shaderID, "model");
+	uniformProjection	    = glGetUniformLocation(shaderID, "projection");
+	uniformView			    = glGetUniformLocation(shaderID, "view");
+	uniformAmbientColour    = glGetUniformLocation(shaderID, "dirLight.colour");	// look at fragment.shader
+	uniformAmbientIntensity = glGetUniformLocation(shaderID, "dirLight.ambientIntensity");	// look at fragment.shader
 }

@@ -11,10 +11,12 @@ public:
 			Shader() {}
 		   ~Shader() {}
 	  void	CreateFromFiles(const char* vShader, const char* fShader);
-	  void	UseShader()				{ glUseProgram(this->shader); }
+	  void	UseShader()				{ glUseProgram(this->shaderID); }
 	GLuint	GetModelLocation()		{ return this->uniformModel; }
 	GLuint	GetProjectionLocation() { return this->uniformProjection; }
 	GLuint	getViewLocation()		{ return this->uniformView; }
+	GLuint	getAmbientIntencityLocation() { return uniformAmbientIntensity; }
+	GLuint	getAmbientColourLocation()	  { return uniformAmbientColour; }
 		   
 private:
 	     
@@ -22,8 +24,10 @@ private:
 	       void addShader(GLuint theProgram, const char* shaderCode, GLenum shaderType);
 	       void compileShaders(const char* vShaderCode, const char* fShaderCode);
 
-		 GLuint shader {0};
+		 GLuint shaderID {0};
 		 GLuint uniformModel {0};
 		 GLuint uniformProjection {0};
 		 GLuint uniformView{ 0 };
+		 GLuint uniformAmbientIntensity{ 0 };
+		 GLuint uniformAmbientColour{ 0 };
 };
