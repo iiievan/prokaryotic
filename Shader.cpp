@@ -98,11 +98,14 @@ void Shader::compileShaders(const char* vShaderCode, const char* fShaderCode)
 	}
 
 	// Засовываем модель, проекцю на экран, вид экрана, и освещение непосредственно в шейдер
-	uniformModel		    = glGetUniformLocation(shaderID, "model");
-	uniformProjection	    = glGetUniformLocation(shaderID, "projection");
-	uniformView			    = glGetUniformLocation(shaderID, "view");
-	uniformAmbientColour    = glGetUniformLocation(shaderID, "dirLight.colour");			// look at fragment.shader struct
-	uniformAmbientIntensity = glGetUniformLocation(shaderID, "dirLight.ambientIntensity");	// look at fragment.shader struct
-	uniformDirection		= glGetUniformLocation(shaderID, "dirLight.direction");			// look at fragment.shader struct
-	uniformDiffuseIntensity = glGetUniformLocation(shaderID, "dirLight.diffuseIntensity");	// look at fragment.shader struct
+	uniformModel				= glGetUniformLocation(shaderID, "model");
+	uniformProjection			= glGetUniformLocation(shaderID, "projection");
+	uniformView					= glGetUniformLocation(shaderID, "view");
+	uniformEyePosition			= glGetUniformLocation(shaderID, "eyePosition");
+	uniformAmbientColour		= glGetUniformLocation(shaderID, "dirLight.colour");			// look at fragment.shader DirectionalLight struct
+	uniformAmbientIntensity		= glGetUniformLocation(shaderID, "dirLight.ambientIntensity");	// look at fragment.shader DirectionalLight struct
+	uniformDirection			= glGetUniformLocation(shaderID, "dirLight.direction");			// look at fragment.shader DirectionalLight struct
+	uniformDiffuseIntensity		= glGetUniformLocation(shaderID, "dirLight.diffuseIntensity");	// look at fragment.shader DirectionalLight struct
+	uniformShininess			= glGetUniformLocation(shaderID, "material.shininess");			// look at fragment.shader Material struct
+	uniformSpecularIntensity	= glGetUniformLocation(shaderID, "material.specularIntensity");	// look at fragment.shader Material struct
 }

@@ -19,6 +19,7 @@
 #include "Camera.h"
 #include "Texture.h"
 #include "Light.h"
+#include "Material.h"
 
 const float toRadians = 3.14159265f / 180.0f;
 
@@ -29,6 +30,9 @@ Camera camera;
 
 Texture brickTexture;
 Texture dirtTexture;
+
+Material shinyMaterial;
+Material dullMaterial;
 
 Light mainLight;
 
@@ -87,11 +91,11 @@ void CreateObject()
 
 	GLfloat vertices[] =
 	{
-	//	 x		y	  z		  u	   v	 n.x    n.y  n.z
-	   -1.0f, -1.0f, 0.0f,  0.0f, 0.0f,	 0.0f, 0.0f, 0.0f,
-		0.0f, -1.0f, 1.0f,	0.5f, 0.0f,	 0.0f, 0.0f, 0.0f,
-		1.0f, -1.0f, 0.0f,	1.0f, 0.0f,	 0.0f, 0.0f, 0.0f,
-		0.0f,  1.0f, 0.0f,  0.5f, 1.0f,	 0.0f, 0.0f, 0.0f
+	//	 x		y	   z		  u	   v	 n.x    n.y  n.z
+	   -1.0f, -1.0f, -0.6f,  0.0f, 0.0f,	 0.0f, 0.0f, 0.0f,
+		0.0f, -1.0f,  1.0f,	 0.5f, 0.0f,	 0.0f, 0.0f, 0.0f,
+		1.0f, -1.0f, -0.6f,	 1.0f, 0.0f,	 0.0f, 0.0f, 0.0f,
+		0.0f,  1.0f,  0.0f,  0.5f, 1.0f,	 0.0f, 0.0f, 0.0f
 	};
 
 	// рассчитываем нормали по заданным индексам вершин в модели и координатам.
@@ -144,10 +148,11 @@ void CreateShaders()
 
 int main()
 {
-	GLuint uniformModel{ 0 }, uniformProjection{ 0 }, uniformView{ 0 }, 
-		   uniformAmbientIntencity{ 0 }, uniformAmbientColour{ 0 }, uniformDirection{ 0 },
-		   uniformDiffuseIntensity{0};
-
+	GLuint uniformModel			  { 0 },	uniformProjection		 { 0 },	uniformView		 { 0 },		uniformEyePosition { 0 },
+		   uniformAmbientIntencity{ 0 },	uniformAmbientColour	 { 0 },	uniformDirection { 0 },
+		   uniformDiffuseIntensity{ 0 },	uniformSpecularIntensity { 0 },	uniformShininess { 0 };
+	
+	mainWindow = Window(1366, 768);	// 1280x1024 or 1024x768
 	mainWindow.initialize();	
 
 	CreateObject();
@@ -160,8 +165,11 @@ int main()
 	dirtTexture = Texture("textures/dirt.png");
 	dirtTexture.loadTexture();
 
+	shinyMaterial = Material(0.02f, 4);
+	dullMaterial  = Material(0.05f, 1);
+
 	mainLight = Light(1.0f, 1.0f, 1.0f, 0.2f, 
-					 2.0f,-1.0f, -2.0f, 1.0f);
+					 2.0f,-1.0f, -2.0f, 0.7f);
 
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / (GLfloat)mainWindow.getBufferHeight(), 0.1f, 100.0f);
 
@@ -183,35 +191,42 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shaderList[0].UseShader();
-		uniformModel			= shaderList[0].GetModelLocation();
-		uniformProjection		= shaderList[0].GetProjectionLocation();
-		uniformView				= shaderList[0].getViewLocation();
-		uniformAmbientIntencity = shaderList[0].getAmbientIntencityLocation();
-		uniformAmbientColour	= shaderList[0].getAmbientColourLocation();
-		uniformDirection		= shaderList[0].getDirectionLocation();
-		uniformDiffuseIntensity = shaderList[0].getDiffuseIntensityLocation();
+		uniformModel				= shaderList[0].GetModelLocation();
+		uniformProjection			= shaderList[0].GetProjectionLocation();
+		uniformView					= shaderList[0].getViewLocation();
+		uniformEyePosition			= shaderList[0].getEyePositionLocation();
+		uniformAmbientIntencity		= shaderList[0].getAmbientIntencityLocation();
+		uniformAmbientColour		= shaderList[0].getAmbientColourLocation();
+		uniformDirection			= shaderList[0].getDirectionLocation();
+		uniformDiffuseIntensity		= shaderList[0].getDiffuseIntensityLocation();
+		uniformShininess			= shaderList[0].getShininessLocation();
+		uniformSpecularIntensity	= shaderList[0].getSpecularIntensityLocation();
 
 		mainLight.UseLight(uniformAmbientIntencity, uniformAmbientColour, uniformDiffuseIntensity, uniformDirection);
+
+		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
+		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
 		glm::mat4 model;	// model matrix is full of zeroes
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -2.5f));	//just multiplies model matrix with a Уtranslation matrixФ and dot produc it to vec3
-		model = glm::rotate(model, 60.0f * toRadians, glm::vec3(0.0f, 1.0f, 1.0f));
-		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
+		//model = glm::rotate(model, 60.0f * toRadians, glm::vec3(0.0f, 1.0f, 1.0f));
+		//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model)); // матрица не может быть на пр€мую передана в шейдер, поэтому передаем указатель на нее
-		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection)); 
-		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		brickTexture.useTexture();
+		shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[0]->RenderMesh();
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 1.0f, -2.5f));	
-		model = glm::rotate(model, 30.0f * toRadians, glm::vec3(0.0f, 1.0f, 1.0f));
-		model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
+		model = glm::translate(model, glm::vec3(0.0f, 4.0f, -2.5f));	
+		//model = glm::rotate(model, 30.0f * toRadians, glm::vec3(0.0f, 1.0f, 1.0f));
+		//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model)); 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		dirtTexture.useTexture();
+		dullMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[1]->RenderMesh();
 
 

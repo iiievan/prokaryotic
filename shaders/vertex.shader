@@ -7,7 +7,8 @@ layout(location = 2) in vec3 norm; // Задаем нормаль по поверхности для диффузно
 out vec4 vCol; 
 out vec2 TexCoord; 
 //flat out vec3 Normal; // not a Phong shading;    
-out vec3 Normal;    // и отправляем ее на выход на фрагмент шейдер.                                                      
+out vec3 Normal;    // и отправляем ее на выход на фрагмент шейдер. 
+out vec3 FragPos;                                                     
                                                                         
 uniform mat4 model;                                                     
 uniform mat4 projection; 
@@ -26,5 +27,7 @@ void main()
     // поверхности(90градусов) даже если объект перемещается или поворачивается.
     // но это не касается случая масштабирования, тогда нормали искажаются
     // для того чтобы этого не было, мы инициализируем из модели матрицу 3x3(ивертированную),
-    // вместо того чтобы просто умножить model * normal;                 
+    // вместо того чтобы просто умножить model * normal; 
+
+    FragPos = (model * vec4(pos, 1.0)).xyz;         //swizzeling  ->  vec3 a = vec3(1,2,3); a.xyy = vec3(1,2,2)       
 }

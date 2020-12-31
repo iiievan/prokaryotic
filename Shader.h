@@ -11,14 +11,17 @@ public:
 			Shader() {}
 		   ~Shader() {}
 	  void	CreateFromFiles(const char* vShader, const char* fShader);
-	  void	UseShader()				{ glUseProgram(this->shaderID); }
-	GLuint	GetModelLocation()		{ return this->uniformModel; }
-	GLuint	GetProjectionLocation() { return this->uniformProjection; }
-	GLuint	getViewLocation()		{ return this->uniformView; }
+	  void	UseShader()					  { glUseProgram(shaderID); }
+	GLuint	GetModelLocation()			  { return uniformModel; }
+	GLuint	GetProjectionLocation()		  { return uniformProjection; }
+	GLuint	getViewLocation()			  { return uniformView; }
+	GLuint	getEyePositionLocation()	  { return uniformEyePosition; 	}
 	GLuint	getAmbientIntencityLocation() { return uniformAmbientIntensity; }
 	GLuint	getAmbientColourLocation()	  { return uniformAmbientColour; }
 	GLuint	getDiffuseIntensityLocation() { return uniformDiffuseIntensity; }
 	GLuint	getDirectionLocation()        { return uniformDirection; }
+	GLuint	getSpecularIntensityLocation(){ return uniformSpecularIntensity; }
+	GLuint	getShininessLocation()		  { return uniformShininess; }
 		   
 private:
 	     
@@ -30,8 +33,11 @@ private:
 		 GLuint uniformModel			{ 0 };
 		 GLuint uniformProjection		{ 0 };
 		 GLuint uniformView				{ 0 };
+		 GLuint	uniformEyePosition		{ 0 };
 		 GLuint uniformAmbientIntensity	{ 0 };
 		 GLuint uniformAmbientColour	{ 0 };
 		 GLuint uniformDiffuseIntensity	{ 0 };
 		 GLuint uniformDirection		{ 0 };
+		 GLuint uniformSpecularIntensity{ 0 };
+		 GLuint uniformShininess		{ 0 };
 };
