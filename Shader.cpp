@@ -101,6 +101,8 @@ void Shader::compileShaders(const char* vShaderCode, const char* fShaderCode)
 	uniformModel		    = glGetUniformLocation(shaderID, "model");
 	uniformProjection	    = glGetUniformLocation(shaderID, "projection");
 	uniformView			    = glGetUniformLocation(shaderID, "view");
-	uniformAmbientColour    = glGetUniformLocation(shaderID, "dirLight.colour");	// look at fragment.shader
-	uniformAmbientIntensity = glGetUniformLocation(shaderID, "dirLight.ambientIntensity");	// look at fragment.shader
+	uniformAmbientColour    = glGetUniformLocation(shaderID, "dirLight.colour");			// look at fragment.shader struct
+	uniformAmbientIntensity = glGetUniformLocation(shaderID, "dirLight.ambientIntensity");	// look at fragment.shader struct
+	uniformDirection		= glGetUniformLocation(shaderID, "dirLight.direction");			// look at fragment.shader struct
+	uniformDiffuseIntensity = glGetUniformLocation(shaderID, "dirLight.diffuseIntensity");	// look at fragment.shader struct
 }
