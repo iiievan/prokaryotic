@@ -8,6 +8,28 @@ void Shader::CreateFromFiles(const char* vShader, const char* fShader)
 	compileShaders(vShaderCode.c_str(), fShaderCode.c_str());
 }
 
+void Shader::setDirectionalLight(DirectionalLight* dLight)
+{
+	dLight->UseLight(uniformDirectionalLight.uniformAmbientIntensity, uniformDirectionalLight.uniformColour,
+					 uniformDirectionalLight.uniformDiffuseIntensity, uniformDirectionalLight.uniformDirection);
+}
+
+void Shader::setPointLights(PointLight* pLights, unsigned int lightCount)
+{
+	if (lightCount > MAX_POINT_LIGHTS) lightCount = MAX_POINT_LIGHTS;
+
+	glUniform1i(uniformPointLightCount, lightCount);
+
+	for (auto i = 0; i < lightCount; i++)
+	{
+		pLights[i].UseLight(uniformPointLights[i].uniformAmbientIntensity, uniformPointLights[i].uniformColour,
+							uniformPointLights[i].uniformDiffuseIntensity, uniformPointLights[i].uniformPosition,
+							uniformPointLights[i].uniformConstant, uniformPointLights[i].uniformLinear,
+							uniformPointLights[i].uniformExponent);
+	}
+
+}
+
 std::string Shader::readShaderCodeFromFile(const char* shaderPath)
 {
 	std::string code;
@@ -102,10 +124,38 @@ void Shader::compileShaders(const char* vShaderCode, const char* fShaderCode)
 	uniformProjection			= glGetUniformLocation(shaderID, "projection");
 	uniformView					= glGetUniformLocation(shaderID, "view");
 	uniformEyePosition			= glGetUniformLocation(shaderID, "eyePosition");
-	uniformAmbientColour		= glGetUniformLocation(shaderID, "dirLight.colour");			// look at fragment.shader DirectionalLight struct
-	uniformAmbientIntensity		= glGetUniformLocation(shaderID, "dirLight.ambientIntensity");	// look at fragment.shader DirectionalLight struct
-	uniformDirection			= glGetUniformLocation(shaderID, "dirLight.direction");			// look at fragment.shader DirectionalLight struct
-	uniformDiffuseIntensity		= glGetUniformLocation(shaderID, "dirLight.diffuseIntensity");	// look at fragment.shader DirectionalLight struct
+	uniformDirectionalLight.uniformColour		= glGetUniformLocation(shaderID, "dirLight.base.colour");			// look at fragment.shader DirectionalLight struct
+	uniformDirectionalLight.uniformAmbientIntensity		= glGetUniformLocation(shaderID, "dirLight.base.ambientIntensity");	// look at fragment.shader DirectionalLight struct
+	uniformDirectionalLight.uniformDirection			= glGetUniformLocation(shaderID, "dirLight.direction");			// look at fragment.shader DirectionalLight struct
+	uniformDirectionalLight.uniformDiffuseIntensity		= glGetUniformLocation(shaderID, "dirLight.base.diffuseIntensity");	// look at fragment.shader DirectionalLight struct
 	uniformShininess			= glGetUniformLocation(shaderID, "material.shininess");			// look at fragment.shader Material struct
 	uniformSpecularIntensity	= glGetUniformLocation(shaderID, "material.specularIntensity");	// look at fragment.shader Material struct
+
+	uniformPointLightCount = glGetUniformLocation(shaderID, "pointLightCount");
+
+	for (size_t i = 0; i < MAX_POINT_LIGHTS; i++)
+	{
+		char locBuff[100]  = { '\0' };
+
+		sprintf_s(locBuff, sizeof(locBuff), "pntLights[%d].base.colour", i);
+		uniformPointLights[i].uniformColour = glGetUniformLocation(shaderID, locBuff);
+
+		sprintf_s(locBuff, sizeof(locBuff), "pntLights[%d].base.ambientIntensity", i);
+		uniformPointLights[i].uniformAmbientIntensity = glGetUniformLocation(shaderID, locBuff);
+
+		sprintf_s(locBuff, sizeof(locBuff), "pntLights[%d].base.diffuseIntensity", i);
+		uniformPointLights[i].uniformDiffuseIntensity = glGetUniformLocation(shaderID, locBuff);
+
+		sprintf_s(locBuff, sizeof(locBuff), "pntLights[%d].position", i);
+		uniformPointLights[i].uniformPosition = glGetUniformLocation(shaderID, locBuff);
+
+		sprintf_s(locBuff, sizeof(locBuff), "pntLights[%d].constant", i);
+		uniformPointLights[i].uniformConstant = glGetUniformLocation(shaderID, locBuff);
+
+		sprintf_s(locBuff, sizeof(locBuff), "pntLights[%d].linear", i);
+		uniformPointLights[i].uniformLinear = glGetUniformLocation(shaderID, locBuff);
+
+		sprintf_s(locBuff, sizeof(locBuff), "pntLights[%d].exponent", i);
+		uniformPointLights[i].uniformExponent = glGetUniformLocation(shaderID, locBuff);
+	}
 }
