@@ -10,7 +10,8 @@ public:
 				Texture(const char* fileloc) { fileLocation = fileloc; }
 			   ~Texture()				     { clearTexture(); }
 
-		void	loadTexture();
+		bool	loadTexture();
+		bool	loadTextureA();
 		void	useTexture();
 		void	clearTexture();
 			   

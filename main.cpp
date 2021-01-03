@@ -80,8 +80,6 @@ void calcAverageNormals(unsigned int* indices, unsigned int indicesCount, GLfloa
 		vec = glm::normalize(vec);
 		vertices[nOffset] = vec.x; vertices[nOffset + 1] = vec.y; vertices[nOffset + 2] = vec.z;
 	}
-
-
 }
 
 
