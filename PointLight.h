@@ -19,10 +19,10 @@ public:
 
 	~PointLight() {}
 
-	void UseLight(GLfloat ambientIntnsityLocation, GLfloat ambientColourLocation,
-				  GLfloat diffuseIntensityLocation, GLfloat positionLocation,
-				  GLfloat constantLocation, GLfloat linearLocation, GLfloat exponentLocation);
-private:
+	void UseLight(GLuint ambientIntnsityLocation, GLfloat ambientColourLocation,
+				  GLuint diffuseIntensityLocation, GLuint positionLocation,
+				  GLuint constantLocation, GLuint linearLocation, GLuint exponentLocation);
+protected:
 	glm::vec3	position;
 
 	  // constituents of light attenuation

@@ -22,6 +22,7 @@
 #include "Texture.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
+#include "SpotLight.h"
 #include "Material.h"
 
 const float toRadians = 3.14159265f / 180.0f;
@@ -40,6 +41,7 @@ Material dullMaterial;
 
 DirectionalLight mainLight;
       PointLight pointLights[MAX_POINT_LIGHTS];
+	   SpotLight spotLights[MAX_SPOT_LIGHTS];
 
 GLfloat dT { 0.0f };
 GLfloat lastT{ 0.0f };
@@ -193,20 +195,32 @@ int main()
 	dullMaterial  = Material(0.05f, 1);
 
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-								 0.05f, 0.05f,
+								 0.0f, 0.05f,
 								-1.0f, -2.0f, 0.7f);
 
-	unsigned int pointLightCount	{2};
+	unsigned int pointLightCount	{ 2 };
 	pointLights[0] = PointLight(1.0f, 0.0f, 0.0f,
-							    0.4f, 0.8f,
+							    0.0f, 0.1f,
 							    0.0f, 0.0f, 0.0f,
 								0.3f, 0.2f, 0.1f);
 
 	pointLights[1] = PointLight(0.0f, 0.0f, 1.0f,
-								0.4f, 0.8f,
+								0.0f, 0.1f,
 								4.0f, 0.0f, 0.0f,
 								0.3f, 0.1f, 0.1f);
-	//pointLightCount++;
+
+	unsigned int spotLightCount { 2 };
+	spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
+							  0.0f, 1.0f,
+							  0.0f, 5.0f, 0.0f,
+							  0.0f, -1.0f, 0.0f,
+							  1.0f, 0.0f, 0.0f, 20.0f);
+
+	spotLights[1] = SpotLight(1.0f, 1.0f, 1.0f,
+							  0.0f, 3.0f,
+							  0.0f, -1.5f, 0.0f,
+							  -100.0f, -1.0f, 0.0f,
+							  1.0f, 0.0f, 0.0f, 20.0f);
 
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / (GLfloat)mainWindow.getBufferHeight(), 0.1f, 100.0f);
 
@@ -235,8 +249,15 @@ int main()
 		uniformShininess			= shaderList[0].getShininessLocation();
 		uniformSpecularIntensity	= shaderList[0].getSpecularIntensityLocation();
 
+		// вешаем себе на лоб фонарик
+		glm::vec3 lowerLight = camera.getCameraPosition();
+				  lowerLight.y -= 0.3f;
+
+		spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
+
 		shaderList[0].setDirectionalLight(&mainLight); 
 		shaderList[0].setPointLights(pointLights, pointLightCount);
+		shaderList[0].setSpotLights(spotLights, spotLightCount);
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
@@ -245,7 +266,7 @@ int main()
 		glm::mat4 model;	// model matrix is full of zeroes
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -2.5f));	//just multiplies model matrix with a Уtranslation matrixФ and dot produc it to vec3
+		model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.5f));	//just multiplies model matrix with a Уtranslation matrixФ and dot produc it to vec3
 		//model = glm::rotate(model, 60.0f * toRadians, glm::vec3(0.0f, 1.0f, 1.0f));
 		//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model)); // матрица не может быть на пр€мую передана в шейдер, поэтому передаем указатель на нее
@@ -267,10 +288,9 @@ int main()
 		//model = glm::rotate(model, 30.0f * toRadians, glm::vec3(0.0f, 1.0f, 1.0f));
 		//model = glm::scale(model, glm::vec3(0.4f, 0.4f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		plainTexture.useTexture();
+		dirtTexture.useTexture();
 		shinyMaterial.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[2]->RenderMesh();
-
 
 		glUseProgram(0);
 		mainWindow.swapBuffers();
