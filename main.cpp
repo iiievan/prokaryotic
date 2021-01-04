@@ -1,74 +1,58 @@
-#include <stdio.h>
-#include <string.h>
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include <iostream>
+#include <glad/glad.h>
+#include <GLFW/glfw3.h> 
 
 
-// Window dimensions
-const GLint WIDTH = 800, HEIGHT = 600;
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow* window);
+
+//window dimensions
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 600;
 
 int main()
 {
-	// Initialise GLFW
-	if (!glfwInit())
-	{
-		printf("GLFW Initialisation failed!");
-		glfwTerminate();
-		return 1;
-	}
-
-	// Setup GLFW window properties
-	// OpenGL version
+	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-
-	// Core profile = No Backwards Compatibility
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	// Allow forward compatibility
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	GLFWwindow *mainWindow = glfwCreateWindow(WIDTH, HEIGHT, "Test Window", NULL, NULL);
-	if (!mainWindow)
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+	if (window == NULL)
 	{
-		printf("GLFW window creation failed!");
+		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
-		return 1;
+		return -1;
+	}
+	glfwMakeContextCurrent(window);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	{
+		std::cout << "Failed to initialize GLAD" << std::endl;
+		return -1;
 	}
 
-	//Get Buffer size information
-	int bufferWidth, bufferHight;
-	glfwGetFramebufferSize(mainWindow, &bufferWidth, &bufferHight);
+	
 
-	// Set context for GLEW to use
-	glfwMakeContextCurrent(mainWindow);
-
-	//Allow modern extension features
-	glewExperimental = GL_TRUE;
-
-	if (glewInit() != GLEW_OK)
+	while (!glfwWindowShouldClose(window))
 	{
-		printf("GLEW Initialisation failed!");
-		glfwDestroyWindow(mainWindow);
-		glfwTerminate();
-		return 1;
-	}
-
-	// Setup Viewport size
-	glViewport(0, 0, bufferWidth, bufferHight);
-
-	while (!glfwWindowShouldClose(mainWindow))
-	{
-		// Handle user input events(keyboard, mouse etc.)
+		glfwSwapBuffers(window);
 		glfwPollEvents();
-
-		// Clear Window
-		glClearColor(0.0f, 1.0f, 0.0f, 0.5f);
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		glfwSwapBuffers(mainWindow);
 	}
-
-
+	
+	glfwTerminate();
 	return 0;
+}
+
+void processInput(GLFWwindow* window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
 }
