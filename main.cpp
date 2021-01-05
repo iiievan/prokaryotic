@@ -3,6 +3,11 @@
 
 Shader *ourShader;
 
+bool direction{ true };
+float triOffset{ 0.0f };
+float triMaxoffset = 0.7f;
+float triIncrement = 0.001f;
+
 int main()
 {
 	unsigned int VBO, VAO;
@@ -58,12 +63,26 @@ int main()
 	while (!glfwWindowShouldClose(window))
 	{
 		/* Обработка клавиш и мыши происходит автоматом в каллбэке processInput*/
+		if (direction)
+		{
+			triOffset += triIncrement;
+		}
+		else
+		{
+			triOffset -= triIncrement;
+		}
+
+		if (abs(triOffset) >= triMaxoffset)
+		{
+			direction = !direction;
+		}
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		//render ---------------------------->
 		ourShader->use();
+		ourShader->setFloat("xOffset", triOffset);
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 		//<---------------------------- render
