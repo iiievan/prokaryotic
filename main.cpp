@@ -5,7 +5,7 @@
 
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window);
+void processInput(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 //window dimensions
 const unsigned int SCR_WIDTH = 800;
@@ -16,15 +16,16 @@ const char* vertexShaderSource =
 "layout (location = 0) in vec3 aPos;					\n"
 "void main()											\n"
 "{														\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);	\n"
+"   gl_Position = vec4(aPos, 1.0);						\n"
 "}\0";
 
 const char* fragmentShaderSource = 
 "#version 330 core										\n"
 "out vec4 FragColor;									\n"
+"uniform vec4 ourColor;									\n"
 "void main()											\n"
 "{														\n"
-"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);			\n"
+"   FragColor = ourColor;								\n"
 "}\n\0";
 
 int main()
@@ -43,13 +44,13 @@ int main()
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetKeyCallback(window, processInput);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}	
-
 	
 	int vertexShader = glCreateShader(GL_VERTEX_SHADER);	//vertex shader	
 	int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER); // fragment shader
@@ -114,24 +115,22 @@ int main()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glBindVertexArray(0);
-
-	// uncomment this call to draw in wireframe polygons.
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glBindVertexArray(VAO);
 
 	while (!glfwWindowShouldClose(window))
 	{
-		processInput(window);
+		/* Обработка клавиш и мыши происходит автоматом в каллбэке processInput*/
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+		
+		float timeValue = glfwGetTime();
+		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+		int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
 
-		glUseProgram(shaderProgram);
-		glBindVertexArray(VAO); 
+		glUseProgram(shaderProgram); // be sure to activate the shader before any calls to glUniform
+		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
-
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -146,10 +145,20 @@ int main()
 	return 0;
 }
 
-void processInput(GLFWwindow* window)
+void processInput(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
+	static GLboolean wireframe{ GL_FALSE }; // для отображения режима каркаса.
+
+	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_FILL : GL_LINE);
+		wireframe = !wireframe;
+	}
+
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	{
+		glfwSetWindowShouldClose(window, GL_TRUE);
+	}
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
