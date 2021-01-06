@@ -3,20 +3,22 @@
 
 Shader *ourShader;
 
+float alpha {0.2};
+
 int main()
 {
 	unsigned int VBO, VAO, EBO;
 
-	unsigned int texture;
+	unsigned int texture1, texture2;
 	int width, height, nrChannels;
-	unsigned char* data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
+	unsigned char* data;
 	
 	float vertices[] =
 	{
 		//		vertex coord  /	RGB color values / texture coords
 		//	 v.x	v.y	 v.z    c.r	  c.g	c.b		 u	  v
-		    0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-		    0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+			0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+			0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
 		   -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
 		   -0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
 	};
@@ -54,26 +56,6 @@ int main()
 	// Шейдер создаем ПОСЛЕ создания окна и контекста окна.
 	ourShader =  new Shader(VSHADER_PATH, FSHADER_PATH);
 
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-
-	// set the texture wrapping / filtering options
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-	stbi_image_free(data);
-
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
@@ -95,6 +77,55 @@ int main()
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
+
+	glGenTextures(1, &texture1);
+	glActiveTexture(GL_TEXTURE0); // activate the texture unit first before binding texture
+	glBindTexture(GL_TEXTURE_2D, texture1);
+
+	// set the texture wrapping / filtering options
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	data = stbi_load("textures/container.jpg", &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+	stbi_image_free(data);
+
+	glGenTextures(1, &texture2);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+
+	// set the texture wrapping / filtering options
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	stbi_set_flip_vertically_on_load(true);
+	data = stbi_load("textures/awesomeface.png", &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+	stbi_image_free(data);
+
+	ourShader->use(); // don't forget to activate the shader before setting uniforms!  
+	ourShader->setInt("tex1", 0); 
+	ourShader->setInt("tex2", 1); 
+
 	while (!glfwWindowShouldClose(window))
 	{
 		/* Обработка клавиш и мыши происходит автоматом в каллбэке processInput*/
@@ -103,10 +134,15 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		//render ---------------------------->
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
+
 		ourShader->use();
-		glBindTexture(GL_TEXTURE_2D, texture);
+		ourShader->setFloat("amount", alpha);
 		glBindVertexArray(VAO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+		
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		//<---------------------------- render
 
@@ -137,6 +173,16 @@ void processInput(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);
+	}
+	if (key == GLFW_KEY_UP && action == GLFW_PRESS)
+	{
+		if (alpha < 1.0)
+			alpha += 0.05;
+	}
+	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
+	{
+		if (alpha > 0.0)
+			alpha -= 0.05;
 	}
 }
 
