@@ -15,12 +15,12 @@ int main()
 	
 	float vertices[] =
 	{
-		//		vertex coord  /	RGB color values / texture coords
-		//	 v.x	v.y	 v.z    c.r	  c.g	c.b		 u	  v
-			0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-			0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-		   -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-		   -0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+		//		vertex coord   / texture coords
+		//	 v.x	v.y	 v.z  	 u	  v
+			0.5f,  0.5f, 0.0f,   1.0f, 1.0f,   // top right
+			0.5f, -0.5f, 0.0f,   1.0f, 0.0f,   // bottom right
+		   -0.5f, -0.5f, 0.0f,   0.0f, 0.0f,   // bottom left
+		   -0.5f,  0.5f, 0.0f,   0.0f, 1.0f    // top left 
 	};
 
 	unsigned int indices[] =
@@ -68,14 +68,11 @@ int main()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
-
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(2);
 
 
 	glGenTextures(1, &texture1);
@@ -141,8 +138,14 @@ int main()
 
 		ourShader->use();
 		ourShader->setFloat("amount", alpha);
-		glBindVertexArray(VAO);
-		
+
+		glm::mat4 trans = glm::mat4(1.0f);
+		trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+
+		ourShader->setMat4("transform", trans);
+
+		glBindVertexArray(VAO);		
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		//<---------------------------- render
 

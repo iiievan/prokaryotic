@@ -78,7 +78,7 @@
     <LibraryPath>$(SolutionDir)/libs/GLFW;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)/libs/GLFW/include;$(SolutionDir)/libs/GLAD/include;$(SolutionDir)/libs/GLAD/src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)/libs/GLFW/include;$(SolutionDir)/libs/GLAD/include;$(SolutionDir)/libs/GLAD/src;$(SolutionDir)/libs;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)/libs/GLFW;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -105,7 +105,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)/libs/GLFW/include;$(SolutionDir)/libs/GLAD/include;$(SolutionDir)/libs/GLAD/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/libs/GLFW/include;$(SolutionDir)/libs/GLAD/include;$(SolutionDir)/libs/GLAD/src;$(SolutionDir)/libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
