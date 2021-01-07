@@ -10,8 +10,8 @@
 #include "stb_image.h"
 
 //window dimensions
-#define SCR_WIDTH	(800)
-#define SCR_HEIGHT	(600)
+#define SCR_WIDTH	(1366)
+#define SCR_HEIGHT	(768)
 
 #define VSHADER_PATH  "shaders/vertex.shader"
 #define FSHADER_PATH  "shaders/fragment.shader"
