@@ -155,6 +155,7 @@
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="include.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
