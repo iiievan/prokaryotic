@@ -4,17 +4,8 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
+#include <map>
 #include <vector>
-
-// Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
-enum Camera_Movement
-{
-	FORWARD,
-	BACKWARD,
-	LEFT,
-	RIGHT
-};
 
 // Default camera values
 const float YAW = -90.0f;
@@ -35,12 +26,12 @@ public:
 	glm::vec3 Right;
 	glm::vec3 WorldUp;
 	// euler Angles
-	float Yaw;
-	float Pitch;
+	float Yaw	{ YAW };
+	float Pitch	{ PITCH} ;
 	// camera options
-	float MovementSpeed;
-	float MouseSensitivity;
-	float Zoom;
+	float MovementSpeed { SPEED };
+	float MouseSensitivity { SENSITIVITY };
+	float Zoom { ZOOM };
 
 	// constructor with vectors
 	Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
@@ -54,7 +45,8 @@ public:
 		updateCameraVectors();
 	}
 	// constructor with scalar values
-	Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+	Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) 
+	: Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
 	{
 		Position = glm::vec3(posX, posY, posZ);
 		WorldUp = glm::vec3(upX, upY, upZ);
@@ -70,29 +62,32 @@ public:
 	}
 
 	// processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
-	void ProcessKeyboard(Camera_Movement direction, float deltaTime)
+	void keyControl(std::map<int, GLbyte>& keys, float dT)
 	{
-		float velocity = MovementSpeed * deltaTime;
-		if (direction == FORWARD)
-			Position += Front * velocity;
-		if (direction == BACKWARD)
-			Position -= Front * velocity;
-		if (direction == LEFT)
-			Position -= Right * velocity;
-		if (direction == RIGHT)
-			Position += Right * velocity;
+		float velocity = MovementSpeed * dT;
 
+		for (std::map<int, GLbyte>::iterator it = keys.begin(); it != keys.end(); ++it)
+		{
+			if(it->first == GLFW_KEY_W && it->second != GLFW_RELEASE)
+			{ Position += Front * velocity; }
+			if (it->first == GLFW_KEY_A && it->second != GLFW_RELEASE)
+			{ Position -= Right * velocity;	}
+			if (it->first == GLFW_KEY_S && it->second != GLFW_RELEASE)
+			{ Position -= Front * velocity;	}
+			if (it->first == GLFW_KEY_D && it->second != GLFW_RELEASE)
+			{ Position += Right * velocity;	}
+		}
 		//Position.y = 0.0f; // make FPS camera
 	}
 
 	// processes input received from a mouse input system. Expects the offset value in both the x and y direction.
-	void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
+	void mouseControl(glm::vec2 dXdY, GLboolean constrainPitch = true)
 	{
-		xoffset *= MouseSensitivity;
-		yoffset *= MouseSensitivity;
+		dXdY.x *= MouseSensitivity;
+		dXdY.y *= MouseSensitivity;
 
-		Yaw += xoffset;
-		Pitch += yoffset;
+		Yaw   += dXdY.x;
+		Pitch += dXdY.y;
 
 		// make sure that when pitch is out of bounds, screen doesn't get flipped
 		if (constrainPitch)
@@ -108,9 +103,11 @@ public:
 	}
 
 	// processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
-	void ProcessMouseScroll(float yoffset)
+	void zoomControl(float dY)
 	{
-		Zoom -= (float)yoffset;
+		if (dY != 0.0f)
+			Zoom -= (float)dY;
+
 		if (Zoom < 1.0f)
 			Zoom = 1.0f;
 		if (Zoom > 45.0f)
