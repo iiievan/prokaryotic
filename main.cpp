@@ -4,11 +4,11 @@
 #include "Shader.h"
 #include "Camera.h"
 
-  Window	mainWindow;
-Keyboard	keyboard;
-  Camera	camera(glm::vec3(0.0f, 0.0f, 3.0f));
+   Window	mainWindow;
+ Keyboard	keyboard;
+   Camera	camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
-  glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+glm::vec3	lightPos(1.2f, 1.0f, 2.0f);
 
 int main()
 {
@@ -19,49 +19,49 @@ int main()
 	
 	float vertices[] =
 	{
-		//		vertex coord     
-		//	 v.x	v.y		v.z  
-			-0.5f, -0.5f, -0.5f, 
-			 0.5f, -0.5f, -0.5f, 
-			 0.5f,  0.5f, -0.5f, 
-			 0.5f,  0.5f, -0.5f, 
-			-0.5f,  0.5f, -0.5f, 
-			-0.5f, -0.5f, -0.5f, 
+		//		vertex coord	/ normal coors  
+		//	 v.x	v.y	   v.z	  n.x	 n.y	n.z
+			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+			 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+			 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+			 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+			-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+			-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
-			-0.5f, -0.5f,  0.5f, 
-			 0.5f, -0.5f,  0.5f, 
-			 0.5f,  0.5f,  0.5f, 
-			 0.5f,  0.5f,  0.5f, 
-			-0.5f,  0.5f,  0.5f, 
-			-0.5f, -0.5f,  0.5f, 
+			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+			 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+			 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+			 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+			-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+			-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
 
-			-0.5f,  0.5f,  0.5f, 
-			-0.5f,  0.5f, -0.5f, 
-			-0.5f, -0.5f, -0.5f, 
-			-0.5f, -0.5f, -0.5f, 
-			-0.5f, -0.5f,  0.5f, 
-			-0.5f,  0.5f,  0.5f, 
+			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+			-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
 
-			 0.5f,  0.5f,  0.5f, 
-			 0.5f,  0.5f, -0.5f, 
-			 0.5f, -0.5f, -0.5f, 
-			 0.5f, -0.5f, -0.5f, 
-			 0.5f, -0.5f,  0.5f, 
-			 0.5f,  0.5f,  0.5f, 
+			 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+			 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+			 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+			 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+			 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+			 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
 
-			-0.5f, -0.5f, -0.5f, 
-			 0.5f, -0.5f, -0.5f, 
-			 0.5f, -0.5f,  0.5f, 
-			 0.5f, -0.5f,  0.5f, 
-			-0.5f, -0.5f,  0.5f, 
-			-0.5f, -0.5f, -0.5f, 
+			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+			 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+			 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+			 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+			-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+			-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
 
-			-0.5f,  0.5f, -0.5f, 
-			 0.5f,  0.5f, -0.5f, 
-			 0.5f,  0.5f,  0.5f, 
-			 0.5f,  0.5f,  0.5f, 
-			-0.5f,  0.5f,  0.5f, 
-			-0.5f,  0.5f, -0.5f 
+			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+			 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+			 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+			-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+			-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 	};
 
 	mainWindow.initialize();
@@ -81,13 +81,16 @@ int main()
 
 	glBindVertexArray(cubeVAO);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	glGenVertexArrays(1, &lightVAO);
 	glBindVertexArray(lightVAO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	while (!mainWindow.getShouldClose())
@@ -106,6 +109,8 @@ int main()
 		cubeShader.use();
 		cubeShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
 		cubeShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+		cubeShader.setVec3("lightPos", lightPos);
+		cubeShader.setVec3("viewPos", camera.Position);
 
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
@@ -123,6 +128,7 @@ int main()
 		model = glm::translate(model, lightPos);
 		model = glm::scale(model, glm::vec3(0.2f));
 		lightShader.setMat4("model", model);
+		
 
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
