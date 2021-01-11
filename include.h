@@ -2,6 +2,8 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <filesystem>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <GLM/glm.hpp>
@@ -15,3 +17,5 @@
 #define FSHADER_LIGHT_PATH  "shaders/fragment_light.shader"
 #define VSHADER_CUBE_PATH   "shaders/vertex_cube.shader"
 #define FSHADER_CUBE_PATH   "shaders/fragment_cube.shader"
+
+unsigned int loadTexture(const char* path);
