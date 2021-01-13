@@ -98,12 +98,14 @@ int main()
 // -----------------------------------------------------------------------------
 	unsigned int diffuseMap = loadTexture("textures/container2.png");
 	unsigned int specularMap = loadTexture("textures/container2_specular_map.png");
+	unsigned int emissionMap = loadTexture("textures/container2_emissive.png");
 
 	// shader configuration
 	// --------------------
 	cubeShader.use();
-	cubeShader.setInt("material.diffuse", 0);
+	cubeShader.setInt("material.diffuse",  0);
 	cubeShader.setInt("material.specular", 1);
+	cubeShader.setInt("material.emission", 2);
 
 	while (!mainWindow.getShouldClose())
 	{
@@ -126,7 +128,6 @@ int main()
 		cubeShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 		cubeShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
-		cubeShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
 		cubeShader.setFloat("material.shininess", 64.0f);
 
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -142,6 +143,9 @@ int main()
 
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, specularMap);
+
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, emissionMap);
 
 
 		glBindVertexArray(cubeVAO);
