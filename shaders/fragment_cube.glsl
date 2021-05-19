@@ -1,8 +1,6 @@
 #version 330 core
 out vec4 FragColor;
 
-
-
 struct Material 
 {
     sampler2D diffuse;
@@ -43,7 +41,7 @@ void main()
     // ambient component calculation
     vec3 ambient  = light.ambient * vec3(texture(material.diffuse, TexCoords));;
     vec3 diffuse  = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));
-    vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));    
+    vec3 specular = light.specular * spec * (vec3(1.0) - vec3(texture(material.specular, TexCoords)));   // just inverse specular intensivety from specular bitmap 
 
     vec3 emission =  texture(material.emission, TexCoords).rgb; 
     
