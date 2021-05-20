@@ -63,6 +63,20 @@ int main()
 		 -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
 	};
 
+	glm::vec3 cubePositions[] =
+	{
+		glm::vec3(1.0f,  1.0f,  1.0f),
+		glm::vec3(2.0f,  5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
+
 	mainWindow.initialize();
 	keyboard.setInputWindow(&mainWindow);
 
@@ -71,9 +85,7 @@ int main()
 	Shader cubeShader(VSHADER_CUBE_PATH, FSHADER_CUBE_PATH);
 
 	glGenVertexArrays(1, &cubeVAO);
-	glGenBuffers(1, &VBO);
-
-	glBindVertexArray(cubeVAO);
+	glGenBuffers(1, &VBO);	
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -105,7 +117,7 @@ int main()
 	cubeShader.use();
 	cubeShader.setInt("material.diffuse",  0);
 	cubeShader.setInt("material.specular", 1);
-	cubeShader.setInt("material.emission", 2);
+	//cubeShader.setInt("material.emission", 2);
 
 	while (!mainWindow.getShouldClose())
 	{
@@ -118,7 +130,16 @@ int main()
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//render ---------------------------->
+		//render ---------------------------->	
+
+		// bind diffuse map
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, diffuseMap);
+
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, specularMap);
+		//glActiveTexture(GL_TEXTURE2);
+		//glBindTexture(GL_TEXTURE_2D, emissionMap);
 
 		cubeShader.use();
 		cubeShader.setVec3("light.position", lightPos);
@@ -128,28 +149,29 @@ int main()
 		cubeShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 		cubeShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
-		cubeShader.setFloat("material.shininess", 64.0f);
+		cubeShader.setFloat("material.shininess", 64.0f);	
+
 
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
 		glm::mat4 model = glm::mat4(1.0f);
 		cubeShader.setMat4("projection", projection);
-		cubeShader.setMat4("view", view);		
+		cubeShader.setMat4("view", view);
 		cubeShader.setMat4("model", model);
-
-		// bind diffuse map
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, diffuseMap);
-
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, specularMap);
-
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, emissionMap);
-
-
+		
 		glBindVertexArray(cubeVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			//float angle = glm::radians(30.0f * i) * (float)glfwGetTime();
+			float angle = 20.0f * i;
+
+			model = glm::rotate(model, angle, glm::vec3(1.0f, 0.3f, 0.5f));
+			cubeShader.setMat4("model", model);
+
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 
 		lightShader.use();
 		lightShader.setMat4("projection", projection);
@@ -157,8 +179,7 @@ int main()
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, lightPos);
 		model = glm::scale(model, glm::vec3(0.2f));
-		lightShader.setMat4("model", model);		
-
+		lightShader.setMat4("model", model);
 		glBindVertexArray(lightVAO);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
