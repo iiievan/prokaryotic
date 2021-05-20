@@ -18,6 +18,6 @@ void main()
                                                         // (note: a uniform scale only changes the normal's magnitude, 
                                                         //  not its direction, which is easily fixed by normalizing it)
     TexCoords = aTexCoords;
-    gl_Position = projection * view  * vec4(aPos, 1.0);
+    gl_Position = projection * view  * vec4(FragPos, 1.0);
 
 }
