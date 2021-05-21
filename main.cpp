@@ -142,7 +142,8 @@ int main()
 		glBindTexture(GL_TEXTURE_2D, emissionMap);
 
 		cubeShader.use();
-		cubeShader.setVec3("light.position", lightPos);
+		//cubeShader.setVec3("light.position", lightPos);
+		cubeShader.setVec3("light.direction", -0.2f,-1.0f,-0.3f);
 		cubeShader.setVec3("viewPos", camera.Position);
 
 		cubeShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
@@ -165,8 +166,6 @@ int main()
 			cubeModel = glm::mat4(1.0f);
 			cubeModel = glm::translate(cubeModel, cubePositions[i]);
 			float angle = glm::radians(30.0f * i) * (float)glfwGetTime();
-
-
 			cubeModel = glm::rotate(cubeModel, angle, glm::vec3(1.0f, 0.3f, 0.5f));
 			cubeShader.setMat4("model", cubeModel);
 

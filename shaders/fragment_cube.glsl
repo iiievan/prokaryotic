@@ -10,8 +10,8 @@ struct Material
 }; 
 
 struct Light {
-    vec3 position;    // directional light have not position
-    //vec3 direction;
+    vec3 position;    
+    vec3 direction;
   
     vec3 ambient;
     vec3 diffuse;
@@ -30,7 +30,8 @@ void main()
 {
     // diffuse component calculation
      vec3 norm     = normalize(Normal);
-     vec3 lightDir = normalize(light.position - FragPos);
+     //vec3 lightDir = normalize(light.position - FragPos);
+     vec3 lightDir = normalize(-light.direction);
     float diff     = max(dot(norm, lightDir), 0.0);     // If the angle between both vectors is greater than 90 degrees 
                                                         // then the result of the dot product will actually become negative 
                                                         // and we end up with a negative diffuse component. For that reason we use the max function.
