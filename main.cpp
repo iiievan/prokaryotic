@@ -150,6 +150,10 @@ int main()
 		cubeShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
 		cubeShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
+		cubeShader.setFloat("light.constant", 1.0f);
+		cubeShader.setFloat("light.linear", 0.09f);
+		cubeShader.setFloat("light.quadratic", 0.032f);
+
 		cubeShader.setFloat("material.shininess", 64.0f);	
 
 
