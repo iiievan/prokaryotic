@@ -11,13 +11,12 @@ int main()
     Shader * vertex_shader = new Shader("vertex.GLSL", GL_VERTEX_SHADER);
     Shader * fragment_shader = new Shader("fragment.GLSL", GL_FRAGMENT_SHADER);
     Shader_program* shader_program = new Shader_program();
-    Mesh* trangle = new Mesh(mesh_vertices);
+    Mesh* rectangle = new Mesh(rectangle_vertices, rectangle_indices);
+    Mesh* triangle = new Mesh(triangle_vertices, triangle_indices);
 
     shader_program->load_shader(vertex_shader);
     shader_program->load_shader(fragment_shader);
     shader_program->link_program();    
-
-    trangle->load_to_GPU(3);
  
     while (!glfwWindowShouldClose(window))
     {        
@@ -28,13 +27,15 @@ int main()
 
         shader_program->use();
 
-        trangle->draw();
+        //rectangle->draw();
+        triangle->draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    delete trangle;
+    delete rectangle;
+    delete triangle;
     delete shader_program;
 
     glfwTerminate();

@@ -61,6 +61,9 @@
     <ClInclude Include="src\mesh\Mesh.h">
       <Filter>src\mesh</Filter>
     </ClInclude>
+    <ClInclude Include="src\mesh\Vertex.h">
+      <Filter>src\mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\fragment.glsl">
