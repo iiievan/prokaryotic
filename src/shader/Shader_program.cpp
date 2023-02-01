@@ -11,9 +11,7 @@ Shader_program::~Shader_program()
 }
 
 void Shader_program::load_shader(Shader* p_Sh)
-{
-    glAttachShader(m_gl_ID, p_Sh->get_shader_ID());
-
+{  
     m_Shaders_collection.push_back(p_Sh);
 }
 
@@ -28,6 +26,7 @@ int Shader_program::link_program()
     for (auto shader : m_Shaders_collection)
     {
         shader->compile();
+        glAttachShader(m_gl_ID, shader->get_shader_ID());
     }
 
     // then link the program to GPU
@@ -42,7 +41,7 @@ int Shader_program::link_program()
     }
     else
     {
-        //m_Shaders_collection.clear();
+        m_Shaders_collection.clear();
     }
 
     return success;

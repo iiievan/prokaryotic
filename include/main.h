@@ -9,6 +9,7 @@
 
 #include"shader/Shader.h"
 #include"shader/Shader_program.h"
+#include"mesh/Mesh.h"
 
 void processInput(GLFWwindow* window);
 
