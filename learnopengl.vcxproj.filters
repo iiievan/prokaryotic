@@ -12,6 +12,12 @@
     <Filter Include="src">
       <UniqueIdentifier>{a87bd3f1-92d0-4ecc-8974-0fef31b1b3a4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{0d8d1cf7-3daf-460f-a422-9371513a7a79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\shader">
+      <UniqueIdentifier>{6a4b5822-e722-49ca-ab24-389cbad15bc3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c">
@@ -23,6 +29,13 @@
     <ClCompile Include="src\init.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\shader\Shader.cpp">
+      <Filter>src\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shader\Shader_program.cpp" />
+    <ClCompile Include="src\shader\Shader_program.cpp">
+      <Filter>src\shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\init.h">
@@ -31,5 +44,19 @@
     <ClInclude Include="include\main.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="src\shader\Shader_program.h">
+      <Filter>src\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\shader\Shader.h">
+      <Filter>src\shader</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\fragment.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shaders\vertex.glsl">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -7,6 +7,9 @@
 #include<GLAD/glad.h>
 #include<GLFW/glfw3.h>
 
+#include"shader/Shader.h"
+#include"shader/Shader_program.h"
+
 void processInput(GLFWwindow* window);
 
 #endif //__MAIN_H
