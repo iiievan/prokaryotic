@@ -9,14 +9,22 @@ int main()
         return -1;
 
     Shader * vertex_shader = new Shader("vertex.GLSL", GL_VERTEX_SHADER);
-    Shader * fragment_shader = new Shader("fragment.GLSL", GL_FRAGMENT_SHADER);
-    Shader_program* shader_program = new Shader_program();
-    Mesh* rectangle = new Mesh(rectangle_vertices, rectangle_indices);
-    Mesh* triangle = new Mesh(triangle_vertices, triangle_indices);
+    Shader * fragment_shader_orange = new Shader("fragment_orange.glsl", GL_FRAGMENT_SHADER);
+    Shader*  fragment_shader_yellow = new Shader("fragment_yellow.glsl", GL_FRAGMENT_SHADER);
+    Shader_program* shader_program_1 = new Shader_program();
+    Shader_program* shader_program_2 = new Shader_program();
 
-    shader_program->load_shader(vertex_shader);
-    shader_program->load_shader(fragment_shader);
-    shader_program->link_program();    
+    Mesh* rectangle = new Mesh(rectangle_vertices, rectangle_indices);
+    Mesh* triangle_1 = new Mesh(triangle_vertices, triangle_indices);
+    Mesh* triangle_2 = new Mesh(triangle2_vertices, triangle_indices);
+
+    shader_program_1->load_shader(vertex_shader);
+    shader_program_1->load_shader(fragment_shader_orange);
+    shader_program_1->link_program();  
+
+    shader_program_2->load_shader(vertex_shader);
+    shader_program_2->load_shader(fragment_shader_yellow);
+    shader_program_2->link_program();
  
     while (!glfwWindowShouldClose(window))
     {        
@@ -25,18 +33,21 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        shader_program->use();
-
+        shader_program_1->use();
         //rectangle->draw();
-        triangle->draw();
+        triangle_1->draw_with_EBO(nullptr);
+
+        triangle_2->draw_with_EBO(shader_program_2, true);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
     delete rectangle;
-    delete triangle;
-    delete shader_program;
+    delete triangle_1;
+    delete triangle_2;
+    delete shader_program_1;
+    delete shader_program_2;
 
     glfwTerminate();
 

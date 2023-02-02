@@ -48,9 +48,16 @@ An indexed buffer binding for buffers used as storage for shader storage blocks.
 
 std::vector<Simple_vertex> triangle_vertices =
 {
-    Simple_vertex(-0.5f, -0.5f, 0.0f),
-    Simple_vertex( 0.5f, -0.5f, 0.0f),
-    Simple_vertex( 0.0f,  0.5f, 0.0f)
+    Simple_vertex(-0.51f, -0.51f, 0.0f),
+    Simple_vertex(-0.26f, 0.0f, 0.0f),
+    Simple_vertex( 0.0f,  -0.51f, 0.0f)
+};
+
+std::vector<Simple_vertex> triangle2_vertices =
+{
+    Simple_vertex(-0.24f, 0.0f, 0.0f),
+    Simple_vertex(0.02f, -0.51f, 0.0f),
+    Simple_vertex(0.26f,  0.0f, 0.0f)
 };
 
 std::vector<Simple_vertex> rectangle_vertices =
@@ -82,7 +89,6 @@ Mesh::Mesh(std::vector<Simple_vertex> vertices, std::vector<unsigned int> indice
 
     glGenVertexArrays(1, &m_VAO_ID);    
     glBindVertexArray(m_VAO_ID);
-
    
     glBufferData(GL_ARRAY_BUFFER, sizeof(Simple_vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 
@@ -130,13 +136,34 @@ Mesh::~Mesh()
     glDeleteBuffers(1, &m_EBO_ID);
 }
 
-
-void  Mesh::draw()
+void  Mesh::draw_with_VAO(bool vireframe_mode)
 {
-	//bind the mesh and draw it
-	glBindVertexArray(m_VAO_ID);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO_ID);
-	glDrawElements(GL_TRIANGLES, m_Index_count, GL_UNSIGNED_INT, (void*)0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    if (vireframe_mode)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    else
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+    //bind the mesh and draw it
+    glBindVertexArray(m_VAO_ID);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+}
+
+void  Mesh::draw_with_EBO(Shader_program* p_Sh, bool vireframe_mode)
+{
+    if (vireframe_mode)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    else
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+    // if specify shader program is presented, use it.
+    if (p_Sh != nullptr)
+        p_Sh->use();
+
+    //bind the mesh and draw it
+    glBindVertexArray(m_VAO_ID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO_ID);
+    glDrawElements(GL_TRIANGLES, m_Index_count, GL_UNSIGNED_INT, (void*)0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
