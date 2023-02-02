@@ -32,8 +32,8 @@ int Shader_program::link_program()
     // then link the program to GPU
     glLinkProgram(m_gl_ID);
 
+    //Check linking status
     glGetProgramiv(m_gl_ID, GL_LINK_STATUS, &success);
-
     if (!success)
     {
         glGetProgramInfoLog(m_gl_ID, 512, NULL, m_info_log);

@@ -38,6 +38,7 @@ struct Linked_vertex
 	glm::vec3 p2_3d;		//The second of the other two vertices in the triangle
 };
 
+// This API set input for vertex shader "layout (location = 0) in vec3 aPos;"
 inline void set_Simple_vertex_attribs()
 {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Simple_vertex), (const GLvoid*)0);

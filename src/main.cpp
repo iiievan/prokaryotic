@@ -18,6 +18,8 @@ int main()
     Mesh* triangle_1 = new Mesh(triangle_vertices, triangle_indices);
     Mesh* triangle_2 = new Mesh(triangle2_vertices, triangle_indices);
 
+    rectangle->get_max_vertex_attributes();
+
     shader_program_1->load_shader(vertex_shader);
     shader_program_1->load_shader(fragment_shader_orange);
     shader_program_1->link_program();  

@@ -167,3 +167,14 @@ void  Mesh::draw_with_EBO(Shader_program* p_Sh, bool vireframe_mode)
     glDrawElements(GL_TRIANGLES, m_Index_count, GL_UNSIGNED_INT, (void*)0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
+// @brief OpenGL guarantees there are always at least 16 4-component 
+// vertex attributes available, but some hardware may allow for more 
+// which you can retrieve by querying GL_MAX_VERTEX_ATTRIBS
+int Mesh::get_max_vertex_attributes()
+{
+    int nrAttributes;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
+    std::cout << "Maximum nr of vertex attributes supported: " << nrAttributes << std::endl;
+
+    return nrAttributes;
+}
