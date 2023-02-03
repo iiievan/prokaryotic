@@ -21,7 +21,7 @@ public:
 	              ~Mesh();
 
 	        void  draw_with_VAO(bool vireframe_mode = false);
-            void  draw_with_EBO(Shader_program* p_Sh, bool vireframe_mode = false);
+            void  draw_with_EBO(Shader* p_Sh, bool vireframe_mode = false);
              int  get_max_vertex_attributes();
 
     unsigned int  get_VBO_ID() const { return m_VBO_ID; }

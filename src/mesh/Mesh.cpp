@@ -150,7 +150,7 @@ void  Mesh::draw_with_VAO(bool vireframe_mode)
     glBindVertexArray(0);
 }
 
-void  Mesh::draw_with_EBO(Shader_program* p_Sh, bool vireframe_mode)
+void  Mesh::draw_with_EBO(Shader* p_Sh, bool vireframe_mode)
 {
     if (vireframe_mode)
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

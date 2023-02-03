@@ -38,9 +38,6 @@
     <ClCompile Include="src\shader\Shader_program.cpp">
       <Filter>src\shader</Filter>
     </ClCompile>
-    <ClCompile Include="src\shader\Shader_program.cpp">
-      <Filter>src\shader</Filter>
-    </ClCompile>
     <ClCompile Include="src\mesh\Mesh.cpp">
       <Filter>src\mesh</Filter>
     </ClCompile>
@@ -51,9 +48,6 @@
     </ClInclude>
     <ClInclude Include="include\main.h">
       <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="src\shader\Shader_program.h">
-      <Filter>src\shader</Filter>
     </ClInclude>
     <ClInclude Include="src\shader\Shader.h">
       <Filter>src\shader</Filter>

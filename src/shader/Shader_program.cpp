@@ -26,7 +26,7 @@ int Shader_program::link_program()
     for (auto shader : m_Shaders_collection)
     {
         shader->compile();
-        glAttachShader(m_gl_ID, shader->get_shader_ID());
+        glAttachShader(m_gl_ID, shader->get_ID());
     }
 
     // then link the program to GPU
@@ -38,10 +38,6 @@ int Shader_program::link_program()
     {
         glGetProgramInfoLog(m_gl_ID, 512, NULL, m_info_log);
         std::cout << "ERROR::SHADER::PROGRAM::LINK_FAILED\n" << m_info_log << std::endl;
-    }
-    else
-    {
-        m_Shaders_collection.clear();
     }
 
     return success;

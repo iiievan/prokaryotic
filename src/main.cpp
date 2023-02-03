@@ -8,11 +8,8 @@ int main()
     if (window == nullptr)
         return -1;
 
-    Shader * vertex_shader = new Shader("vertex.GLSL", GL_VERTEX_SHADER);
-    Shader * fragment_shader_orange = new Shader("fragment_orange.glsl", GL_FRAGMENT_SHADER);
-    Shader*  fragment_shader_yellow = new Shader("fragment_yellow.glsl", GL_FRAGMENT_SHADER);
-    Shader_program* shader_program_1 = new Shader_program();
-    Shader_program* shader_program_2 = new Shader_program();
+    Shader * vertex_shader = new Shader("vertex.glsl", VERTEX);
+    Shader * fragment_shader = new Shader("fragment.glsl", FRAGMENT);
 
     Mesh* rectangle = new Mesh(rectangle_vertices, rectangle_indices);
     Mesh* triangle_1 = new Mesh(triangle_vertices, triangle_indices);
@@ -20,13 +17,10 @@ int main()
 
     rectangle->get_max_vertex_attributes();
 
-    shader_program_1->load_shader(vertex_shader);
-    shader_program_1->load_shader(fragment_shader_orange);
-    shader_program_1->link_program();  
-
-    shader_program_2->load_shader(vertex_shader);
-    shader_program_2->load_shader(fragment_shader_yellow);
-    shader_program_2->link_program();
+    vertex_shader->compile();
+    vertex_shader->link_and_validate();
+    fragment_shader->compile();
+    fragment_shader->link_and_validate();
  
     while (!glfwWindowShouldClose(window))
     {        
@@ -35,11 +29,18 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        shader_program_1->use();
-        //rectangle->draw();
-        triangle_1->draw_with_EBO(nullptr);
+        vertex_shader->use();
+        fragment_shader->use();
 
-        triangle_2->draw_with_EBO(shader_program_2, true);
+        // update the uniform color
+        float timeValue = glfwGetTime();
+        float greenValue = sin(timeValue) / 2.0f + 0.5f;
+        int vertexColorLocation = fragment_shader->get_Uniform_location("Color_from_PCU");
+        fragment_shader->set_Uniform(vertexColorLocation, 
+                                     glm::vec4(0.0f, greenValue, 0.0f, 1.0f));
+
+        triangle_1->draw_with_EBO(nullptr);
+        triangle_2->draw_with_EBO(nullptr, true);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -48,8 +49,6 @@ int main()
     delete rectangle;
     delete triangle_1;
     delete triangle_2;
-    delete shader_program_1;
-    delete shader_program_2;
 
     glfwTerminate();
 

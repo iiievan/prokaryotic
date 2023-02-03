@@ -15,7 +15,7 @@ public:
 		void  load_shader(Shader* p_Sh);
 		 int  link_program();
 		void  use();
-unsigned int  get_shader_ID() const { return m_gl_ID; }
+unsigned int  get_ID() const { return m_gl_ID; }
 
 private:
 	        unsigned int  m_gl_ID;
