@@ -10,18 +10,17 @@ int main()
 
     Shader * vertex_shader = new Shader("vertex.glsl", VERTEX);
     Shader * fragment_shader = new Shader("fragment.glsl", FRAGMENT);
+    Shader_program* shader_program = new Shader_program();
 
     Mesh* rectangle = new Mesh(rectangle_vertices, rectangle_indices);
     Mesh* triangle_1 = new Mesh(triangle_vertices, triangle_indices);
     Mesh* triangle_2 = new Mesh(triangle2_vertices, triangle_indices);
 
     rectangle->get_max_vertex_attributes();
-
-    vertex_shader->compile();
-    vertex_shader->link_and_validate();
-    fragment_shader->compile();
-    fragment_shader->link_and_validate();
  
+    shader_program->load_shader(vertex_shader);
+    shader_program->load_shader(fragment_shader);
+
     while (!glfwWindowShouldClose(window))
     {        
         processInput(window);   // process key input
@@ -35,8 +34,8 @@ int main()
         // update the uniform color
         float timeValue = glfwGetTime();
         float greenValue = sin(timeValue) / 2.0f + 0.5f;
-        int vertexColorLocation = fragment_shader->get_Uniform_location("Color_from_PCU");
-        fragment_shader->set_Uniform(vertexColorLocation, 
+        int vertexColorLocation = shader_program->get_Uniform_location("Color_from_PCU");
+        shader_program->set_Uniform(vertexColorLocation,
                                      glm::vec4(0.0f, greenValue, 0.0f, 1.0f));
 
         triangle_1->draw_with_EBO(nullptr);

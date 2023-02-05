@@ -26,52 +26,34 @@ class Shader
 public:
     	         Shader(const std::string &GLSL_filename, e_GLSL_shader_type type);
                 ~Shader();
+            char* get_shader_path(const std::string& cfg_filename);
+     std::string  operator-(std::string source, const std::string& target);
+     std::string  read_file(const char* filePath);
 
-            void  print_log();
-    	    bool  compile();
-            bool  link();
-            bool  validate();
-            bool  link_and_validate();
+    	    bool  compile(GLuint shader_program_ID);
+            bool  link(GLuint shader_program_ID);
+            bool  validate(GLuint shader_program_ID);
+            bool  link_and_validate(GLuint shader_program_ID);
             void  use();
 
-          GLuint  get_ID() const { return m_shader_ID; }
-          GLuint  get_shader_program_ID() const { return m_shader_program_ID; }
-            bool  get_linked_sts() const { return m_Linked; }
-            bool  get_validated_sts() const { return m_Validated; }
+          GLuint  get_ID() const { return m_ID; }
 
-            void  bind_Attrib_location(GLuint location, const char* name);
-            void  bind_Frag_data_location(GLuint location, const char* name);
-
-     int get_Uniform_location(const char* name);
-    void set_Uniform(GLint location, float x, float y);
-    void set_Uniform(GLint location, float x, float y, float z);
-    void set_Uniform(GLint location, const glm::vec2& v);
-    void set_Uniform(GLint location, const glm::vec3& v);
-    void set_Uniform(GLint location, const glm::vec4& v);
-    void set_Uniform(GLint location, const glm::mat4& m);
-    void set_Uniform(GLint location, const glm::mat3& m);
-    void set_Uniform(GLint location, float val);
-    void set_Uniform(GLint location, int val);
-    void set_Uniform(GLint location, bool val);
-    void print_Active_uniforms();
-    void print_Active_attribs();
+            bool  linked    { false };
+            bool  validated { false };
 
 private:
+            char* m_Get_shader_path(const std::string& cfg_filename);
+     std::string  operator-(std::string source, const std::string& target);
+     std::string  m_Read_file(const char* filePath);
+
     e_GLSL_shader_type  m_Shader_type { SHADER_NA };
 	   std::string  m_Shader_source_code;
-            GLuint  m_shader_ID { 0 };
+            GLuint  m_ID { 0 };
             GLuint  m_shader_program_ID { 0 };
-	   std::string  m_info_log;
-
-              bool  m_Linked {false};
-              bool  m_Validated {false};
 };
 
 
-extern        char* get_shader_path(const std::string& cfg_filename);
-extern std::string  operator-(std::string source, const std::string& target);
-extern std::string  Read_file(const char* filePath);
-//extern      GLuint  Load_shader(const char* vertex_path, const char* fragment_path);
+
 
 
 #endif	//__SHADER_H

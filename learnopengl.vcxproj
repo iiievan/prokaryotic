@@ -24,6 +24,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mesh\Mesh.cpp" />
     <ClCompile Include="src\shader\Shader.cpp" />
+    <ClCompile Include="src\shader\Shader_program.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\init.h" />
@@ -31,6 +32,7 @@
     <ClInclude Include="src\mesh\Mesh.h" />
     <ClInclude Include="src\mesh\Vertex.h" />
     <ClInclude Include="src\shader\Shader.h" />
+    <ClInclude Include="src\shader\Shader_program.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\fragment.glsl">

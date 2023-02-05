@@ -21,6 +21,9 @@
     <Filter Include="src\mesh">
       <UniqueIdentifier>{4b9fe762-5735-4010-868f-0bcfa8a663c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\utils">
+      <UniqueIdentifier>{ec7d9116-1810-4725-9ac1-c17a405858a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c">
@@ -35,11 +38,11 @@
     <ClCompile Include="src\shader\Shader.cpp">
       <Filter>src\shader</Filter>
     </ClCompile>
-    <ClCompile Include="src\shader\Shader_program.cpp">
-      <Filter>src\shader</Filter>
-    </ClCompile>
     <ClCompile Include="src\mesh\Mesh.cpp">
       <Filter>src\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shader\Shader_program.cpp">
+      <Filter>src\shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +60,9 @@
     </ClInclude>
     <ClInclude Include="src\mesh\Vertex.h">
       <Filter>src\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\shader\Shader_program.h">
+      <Filter>src\shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
