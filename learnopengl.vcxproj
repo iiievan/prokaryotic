@@ -25,6 +25,7 @@
     <ClCompile Include="src\mesh\Mesh.cpp" />
     <ClCompile Include="src\shader\Shader.cpp" />
     <ClCompile Include="src\shader\Shader_program.cpp" />
+    <ClCompile Include="src\utils\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\init.h" />
@@ -33,6 +34,7 @@
     <ClInclude Include="src\mesh\Vertex.h" />
     <ClInclude Include="src\shader\Shader.h" />
     <ClInclude Include="src\shader\Shader_program.h" />
+    <ClInclude Include="src\utils\utils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\fragment.glsl">
@@ -102,7 +104,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\include;$(SolutionDir)\src;$(SolutionDir)\src\shader;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\src\mesh;$(SolutionDir)\include\glm-0.9.9.7;</IncludePath>
+    <IncludePath>$(SolutionDir)\include;$(SolutionDir)\src;$(SolutionDir)\src\shader;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\src\mesh;$(SolutionDir)\include\glm-0.9.9.7;$(SolutionDir)\src\utils</IncludePath>
     <LibraryPath>$(SolutionDir)\libs;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -142,7 +144,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\src;$(SolutionDir)\src\shader;$(SolutionDir)\src\mesh;$(SolutionDir)\include\glm-0.9.9.7;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\src;$(SolutionDir)\src\shader;$(SolutionDir)\src\mesh;$(SolutionDir)\include\glm-0.9.9.7;$(SolutionDir)\src\utils;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

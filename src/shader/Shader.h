@@ -13,6 +13,8 @@
 #include <windows.h>
 #include <stdint.h>
 
+#include "utils/utils.h"
+
 enum e_GLSL_shader_type : int8_t 
 {
     SHADER_NA = -1,
@@ -26,9 +28,6 @@ class Shader
 public:
     	         Shader(const std::string &GLSL_filename, e_GLSL_shader_type type);
                 ~Shader();
-            char* get_shader_path(const std::string& cfg_filename);
-     std::string  operator-(std::string source, const std::string& target);
-     std::string  read_file(const char* filePath);
 
     	    bool  compile(GLuint shader_program_ID);
             bool  link(GLuint shader_program_ID);
@@ -43,7 +42,6 @@ public:
 
 private:
             char* m_Get_shader_path(const std::string& cfg_filename);
-     std::string  operator-(std::string source, const std::string& target);
      std::string  m_Read_file(const char* filePath);
 
     e_GLSL_shader_type  m_Shader_type { SHADER_NA };

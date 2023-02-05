@@ -28,8 +28,7 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        vertex_shader->use();
-        fragment_shader->use();
+        shader_program->use();
 
         // update the uniform color
         float timeValue = glfwGetTime();
@@ -39,7 +38,7 @@ int main()
                                      glm::vec4(0.0f, greenValue, 0.0f, 1.0f));
 
         triangle_1->draw_with_EBO(nullptr);
-        triangle_2->draw_with_EBO(nullptr, true);
+        triangle_2->draw_with_EBO(nullptr);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

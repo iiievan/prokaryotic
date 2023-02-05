@@ -26,17 +26,17 @@ void Shader_program::use()
     }
 }
 
-void Shader::bind_Attrib_location(GLuint location, const char* name)
+void Shader_program::bind_Attrib_location(GLuint location, const char* name)
 {
     glBindAttribLocation(m_ID, location, name);
 }
 
-void Shader::bind_Frag_data_location(GLuint location, const char* name)
+void Shader_program::bind_Frag_data_location(GLuint location, const char* name)
 {
     glBindFragDataLocation(m_ID, location, name);
 }
 
-int Shader::get_Uniform_location(const char* name)
+int Shader_program::get_Uniform_location(const char* name)
 {
     int result = glGetUniformLocation(m_ID, name);
     if (glGetError() != GL_NO_ERROR)
@@ -48,7 +48,7 @@ int Shader::get_Uniform_location(const char* name)
     return result;
 }
 
-void Shader::set_Uniform(GLint location, float x, float y)
+void Shader_program::set_Uniform(GLint location, float x, float y)
 {
     if (location >= 0)
     {
@@ -60,7 +60,7 @@ void Shader::set_Uniform(GLint location, float x, float y)
     }
 }
 
-void Shader::set_Uniform(GLint location, float x, float y, float z)
+void Shader_program::set_Uniform(GLint location, float x, float y, float z)
 {
     if (location >= 0)
     {
@@ -72,7 +72,7 @@ void Shader::set_Uniform(GLint location, float x, float y, float z)
     }
 }
 
-void Shader::set_Uniform(GLint location, const glm::vec2& v)
+void Shader_program::set_Uniform(GLint location, const glm::vec2& v)
 {
     if (location >= 0)
     {
@@ -84,7 +84,7 @@ void Shader::set_Uniform(GLint location, const glm::vec2& v)
     }
 }
 
-void Shader::set_Uniform(GLint location, const glm::vec3& v)
+void Shader_program::set_Uniform(GLint location, const glm::vec3& v)
 {
     if (location >= 0)
     {
@@ -96,7 +96,7 @@ void Shader::set_Uniform(GLint location, const glm::vec3& v)
     }
 }
 
-void Shader::set_Uniform(GLint location, const glm::vec4& v)
+void Shader_program::set_Uniform(GLint location, const glm::vec4& v)
 {
     if (location >= 0)
     {
@@ -108,7 +108,7 @@ void Shader::set_Uniform(GLint location, const glm::vec4& v)
     }
 }
 
-void Shader::set_Uniform(GLint location, const glm::mat4& m)
+void Shader_program::set_Uniform(GLint location, const glm::mat4& m)
 {
     if (location >= 0)
     {
@@ -120,7 +120,7 @@ void Shader::set_Uniform(GLint location, const glm::mat4& m)
     }
 }
 
-void Shader::set_Uniform(GLint location, const glm::mat3& m)
+void Shader_program::set_Uniform(GLint location, const glm::mat3& m)
 {
     if (location >= 0)
     {
@@ -132,7 +132,7 @@ void Shader::set_Uniform(GLint location, const glm::mat3& m)
     }
 }
 
-void Shader::set_Uniform(GLint location, float val)
+void Shader_program::set_Uniform(GLint location, float val)
 {
     if (location >= 0)
     {
@@ -144,7 +144,7 @@ void Shader::set_Uniform(GLint location, float val)
     }
 }
 
-void Shader::set_Uniform(GLint location, int val)
+void Shader_program::set_Uniform(GLint location, int val)
 {
     if (location >= 0)
     {
@@ -156,7 +156,7 @@ void Shader::set_Uniform(GLint location, int val)
     }
 }
 
-void Shader::set_Uniform(GLint location, bool val)
+void Shader_program::set_Uniform(GLint location, bool val)
 {
     if (location >= 0)
     {
@@ -168,10 +168,9 @@ void Shader::set_Uniform(GLint location, bool val)
     }
 }
 
-void Shader::print_Active_uniforms()
+void Shader_program::print_Active_uniforms()
 {
     GLint numUniforms, size, location, maxLength;
-    GLchar* name;
     GLsizei written;
     GLenum type;
 
@@ -194,11 +193,10 @@ void Shader::print_Active_uniforms()
      delete [] name;
 }
 
-void Shader::print_Active_attribs()
+void Shader_program::print_Active_attribs()
 {
     GLint written, size, location, maxLength, numAttribs;
     GLenum type;
-    GLchar* name;
 
     glGetProgramiv(m_ID, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxLength);
     glGetProgramiv(m_ID, GL_ACTIVE_ATTRIBUTES, &numAttribs);
