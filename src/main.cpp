@@ -31,9 +31,9 @@ int main()
 
         shader_program->use();
 
-        float uOffset = 0.5;
-        int uOffset_location = shader_program->get_Uniform_location("u_Offset");
-        shader_program->set_Uniform(uOffset_location, uOffset);
+        //float uOffset = 0.5;
+        //int uOffset_location = shader_program->get_Uniform_location("u_Offset");
+        //shader_program->set_Uniform(uOffset_location, uOffset);
         // update the uniform color
         //float timeValue = glfwGetTime();
         //float greenValue = sin(timeValue) / 2.0f + 0.5f;
