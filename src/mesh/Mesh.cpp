@@ -68,6 +68,13 @@ std::vector<Simple_vertex> rectangle_vertices =
      Simple_vertex(- 0.5f,  0.5f, 0.0f)     // top left 
 };
 
+std::vector<Vertex> coloured_triangle =
+{
+    Vertex( 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f),
+    Vertex(-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f),
+    Vertex( 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f)
+};
+
 std::vector<unsigned int> rectangle_indices =
 {  
     0, 1, 3,   // first triangle

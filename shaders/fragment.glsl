@@ -1,9 +1,9 @@
 #version 330 core
 
-uniform vec4  Color_from_PCU;
-    out vec4  Frag_color;
+in vec3  our_Color;
+out vec4  frag_Color;
 
 void main()
 {
-    Frag_color = Color_from_PCU;
+    frag_Color = vec4(our_Color, 1.0);
 } 

@@ -15,8 +15,11 @@ struct Simple_vertex
 struct Vertex
 {
 	glm::vec3  position;
-	glm::vec2  tex_coords;
-	glm::vec3  normal;
+	glm::vec3  color;
+	//glm::vec2  tex_coords;
+	//glm::vec3  normal;
+	Vertex(glm::vec3 pos, glm::vec3 col) { position = pos; color = col;  }
+	Vertex(float x, float y, float z, float r, float g, float b) { position = glm::vec3(x, y, z); color = glm::vec3(r, g, b); }
 };
 
 struct Coloured_vertex
@@ -51,6 +54,10 @@ inline void set_Vertex_attribs()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)0);
 	glEnableVertexAttribArray(0);
 
+	//color
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)(3*sizeof(float)));
+	glEnableVertexAttribArray(1);
+/*
 	//texcoords
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)12);
 	glEnableVertexAttribArray(1);
@@ -58,6 +65,7 @@ inline void set_Vertex_attribs()
 	//normal
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)20);
 	glEnableVertexAttribArray(2);
+*/
 }
 
 inline void set_Coloured_vertex_attribs()

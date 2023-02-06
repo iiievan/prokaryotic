@@ -15,6 +15,7 @@ int main()
     Mesh* rectangle = new Mesh(rectangle_vertices, rectangle_indices);
     Mesh* triangle_1 = new Mesh(triangle_vertices, triangle_indices);
     Mesh* triangle_2 = new Mesh(triangle2_vertices, triangle_indices);
+    Mesh* interpolated_triangle = new Mesh(coloured_triangle, triangle_indices);
 
     rectangle->get_max_vertex_attributes();
  
@@ -31,14 +32,15 @@ int main()
         shader_program->use();
 
         // update the uniform color
-        float timeValue = glfwGetTime();
-        float greenValue = sin(timeValue) / 2.0f + 0.5f;
-        int vertexColorLocation = shader_program->get_Uniform_location("Color_from_PCU");
-        shader_program->set_Uniform(vertexColorLocation,
-                                     glm::vec4(0.0f, greenValue, 0.0f, 1.0f));
+        //float timeValue = glfwGetTime();
+        //float greenValue = sin(timeValue) / 2.0f + 0.5f;
+        //int vertexColorLocation = shader_program->get_Uniform_location("Color_from_PCU");
+        //shader_program->set_Uniform(vertexColorLocation,
+        //                             glm::vec4(0.0f, greenValue, 0.0f, 1.0f));
 
-        triangle_1->draw_with_EBO(nullptr);
-        triangle_2->draw_with_EBO(nullptr);
+        //triangle_1->draw_with_EBO(nullptr);
+        //triangle_2->draw_with_EBO(nullptr);
+        interpolated_triangle->draw_with_EBO(nullptr);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
