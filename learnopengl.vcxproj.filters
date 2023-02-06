@@ -24,6 +24,9 @@
     <Filter Include="src\utils">
       <UniqueIdentifier>{ec7d9116-1810-4725-9ac1-c17a405858a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\stb">
+      <UniqueIdentifier>{86168c18-6ad1-4e7c-9d4a-3aa5a4c5f98e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c">
@@ -47,6 +50,12 @@
     <ClCompile Include="src\utils\utils.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\mesh\Texture.cpp">
+      <Filter>src\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mesh\Texture_loader.cpp">
+      <Filter>src\mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\init.h">
@@ -69,6 +78,15 @@
     </ClInclude>
     <ClInclude Include="src\utils\utils.h">
       <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stb\stb_image.h">
+      <Filter>src\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mesh\Texture.h">
+      <Filter>src\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mesh\Texture_loader.h">
+      <Filter>src\mesh</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

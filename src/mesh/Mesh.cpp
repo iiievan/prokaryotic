@@ -60,12 +60,12 @@ std::vector<Simple_vertex> triangle2_vertices =
     Simple_vertex(0.26f,  0.0f, 0.0f)
 };
 
-std::vector<Simple_vertex> rectangle_vertices =
+std::vector<Vertex> rectangle_vertices =
 {
-     Simple_vertex(0.5f,  0.5f, 0.0f),      // top right
-     Simple_vertex(0.5f, -0.5f, 0.0f),      // bottom right
-     Simple_vertex(- 0.5f, -0.5f, 0.0f),    // bottom left
-     Simple_vertex(- 0.5f,  0.5f, 0.0f)     // top left 
+    Vertex(glm::vec3( 0.5f,  0.5f, 0.0f),  glm::vec2(1.0f,1.0f), glm::vec3(1.0f, 0.0f, 0.0f)),
+    Vertex(glm::vec3( 0.5f, -0.5f, 0.0f),  glm::vec2(1.0f,0.0f), glm::vec3(0.0f, 1.0f, 0.0f)),
+    Vertex(glm::vec3(-0.5f, -0.5f, 0.0f),  glm::vec2(0.0f,0.0f), glm::vec3(0.0f, 0.0f, 1.0f)),
+    Vertex(glm::vec3(-0.5f,  0.5f, 0.0f),  glm::vec2(0.0f,1.0f), glm::vec3(1.0f, 1.0f, 0.0f))
 };
 
 std::vector<Vertex> coloured_triangle =

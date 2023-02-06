@@ -12,6 +12,11 @@
 #include"shader/Shader_program.h"
 #include"mesh/Mesh.h"
 #include"mesh/Vertex.h"
+#include"mesh/Texture.h"
+#include"mesh/Texture_loader.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+
 
 void processInput(GLFWwindow* window);
 

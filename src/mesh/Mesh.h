@@ -9,7 +9,7 @@ class Shader_program;
 
 extern std::vector<Simple_vertex> triangle_vertices;
 extern std::vector<Simple_vertex> triangle2_vertices;
-extern std::vector<Simple_vertex> rectangle_vertices;
+extern std::vector<Vertex> rectangle_vertices;
 extern std::vector<Vertex> coloured_triangle;
 extern std::vector<unsigned int> rectangle_indices;
 extern std::vector<unsigned int> triangle_indices;

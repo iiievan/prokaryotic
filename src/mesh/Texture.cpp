@@ -9,7 +9,7 @@ void Texture::Generate(unsigned int width, GLenum internalFormat, GLenum format,
     m_Width          = width;
     m_Height         = 0;
     m_Depth          = 0;
-    m_Internation_format = internalFormat;
+    m_Internal_format = internalFormat;
     m_Format         = format;
     m_Type           = type;
 
@@ -34,7 +34,7 @@ void Texture::Generate(unsigned int width, unsigned int height, GLenum internalF
     m_Width          = width;
     m_Height         = height;
     m_Depth          = 0;
-    m_Internation_format = internalFormat;
+    m_Internal_format = internalFormat;
     m_Format         = format;
     m_Type           = type;
 
@@ -60,7 +60,7 @@ void Texture::Generate(unsigned int width, unsigned int height, unsigned int dep
     m_Width          = width;
     m_Height         = height;
     m_Depth          = depth;
-    m_Internation_format = internalFormat;
+    m_Internal_format = internalFormat;
     m_Format         = format;
     m_Type           = type;
 
@@ -80,26 +80,25 @@ void Texture::Generate(unsigned int width, unsigned int height, unsigned int dep
     Unbind();
 }
 
-
 void Texture::Resize(unsigned int width, unsigned int height, unsigned int depth)
 {
     Bind();
 
     if (m_Target == GL_TEXTURE_1D)
     {
-        glTexImage1D(GL_TEXTURE_1D, 0, m_Internation_format, width, 0, m_Format, m_Type, 0);
+        glTexImage1D(GL_TEXTURE_1D, 0, m_Internal_format, width, 0, m_Format, m_Type, 0);
     }
     else 
     if (m_Target == GL_TEXTURE_2D)
     {
         assert(height > 0);
-        glTexImage2D(GL_TEXTURE_2D, 0, m_Internation_format, width, height, 0, m_Format, m_Type, 0);
+        glTexImage2D(GL_TEXTURE_2D, 0, m_Internal_format, width, height, 0, m_Format, m_Type, 0);
     }
     else
     if (m_Target == GL_TEXTURE_3D)
     {
         assert(height > 0 && depth > 0);
-        glTexImage3D(GL_TEXTURE_3D, 0, m_Internation_format, width, height, depth, 0, m_Format, m_Type, 0);
+        glTexImage3D(GL_TEXTURE_3D, 0, m_Internal_format, width, height, depth, 0, m_Format, m_Type, 0);
     }
 }
 
@@ -116,7 +115,7 @@ void Texture::Unbind()
     glBindTexture(m_Target, 0);
 }
 
-void Texture::set_Wrap_mode(GLenum wrapMode, bool bind)
+void Texture::set_GL_Wrap_mode(GLenum wrapMode, bool bind)
 {
     if(bind)
         Bind();
@@ -146,18 +145,11 @@ void Texture::set_Wrap_mode(GLenum wrapMode, bool bind)
     }
 }
 
-void Texture::set_Filter_min(GLenum filter, bool bind)
-{
-    if(bind)
-        Bind();
-
-    glTexParameteri(m_Target, GL_TEXTURE_MIN_FILTER, filter);
-}
-
-void Texture::set_Filter_max(GLenum filter, bool bind)
+void Texture::set_GL_Filter(GLenum filter_min, GLenum filter_max, bool bind)
 {
     if (bind)
         Bind();
 
-    glTexParameteri(m_Target, GL_TEXTURE_MAG_FILTER, filter);
+    glTexParameteri(m_Target, GL_TEXTURE_MIN_FILTER, filter_min);
+    glTexParameteri(m_Target, GL_TEXTURE_MAG_FILTER, filter_max);
 }

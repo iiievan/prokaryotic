@@ -15,11 +15,12 @@ struct Simple_vertex
 struct Vertex
 {
 	glm::vec3  position;
-	glm::vec3  color;
 	glm::vec2  texture;
+	glm::vec3  color;
 	//glm::vec3  normal;
 	Vertex(glm::vec3 pos, glm::vec2 tex, glm::vec3 col) 
-	{ position = pos; color = col;  }
+	{ position = pos; texture = tex; color = col; }
+
 	Vertex(float x, float y, float z, float t_X, float t_Y, float r, float g, float b)
 	{ 
 		position = glm::vec3(x, y, z);
@@ -59,13 +60,15 @@ inline void set_Vertex_attribs()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)0);
 	glEnableVertexAttribArray(0);
 
-	//color
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)(3*sizeof(float)));
+	//texcoords
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	//texcoords
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)(3*3*sizeof(float)));
+	//color
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)((3 + 2)*sizeof(float)));
 	glEnableVertexAttribArray(2);
+
+
 
 /*
 	//normal

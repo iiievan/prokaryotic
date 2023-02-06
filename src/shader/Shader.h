@@ -33,7 +33,6 @@ public:
             bool  link(GLuint shader_program_ID);
             bool  validate(GLuint shader_program_ID);
             bool  link_and_validate(GLuint shader_program_ID);
-            void  use();
 
           GLuint  get_ID() const { return m_ID; }
 
