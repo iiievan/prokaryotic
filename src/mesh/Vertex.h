@@ -16,10 +16,15 @@ struct Vertex
 {
 	glm::vec3  position;
 	glm::vec3  color;
-	//glm::vec2  tex_coords;
+	glm::vec2  texture;
 	//glm::vec3  normal;
-	Vertex(glm::vec3 pos, glm::vec3 col) { position = pos; color = col;  }
-	Vertex(float x, float y, float z, float r, float g, float b) { position = glm::vec3(x, y, z); color = glm::vec3(r, g, b); }
+	Vertex(glm::vec3 pos, glm::vec2 tex, glm::vec3 col) 
+	{ position = pos; color = col;  }
+	Vertex(float x, float y, float z, float t_X, float t_Y, float r, float g, float b)
+	{ 
+		position = glm::vec3(x, y, z);
+		 texture = glm::vec2(t_X, t_Y);
+		   color = glm::vec3(r, g, b); }
 };
 
 struct Coloured_vertex
@@ -57,11 +62,12 @@ inline void set_Vertex_attribs()
 	//color
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)(3*sizeof(float)));
 	glEnableVertexAttribArray(1);
-/*
-	//texcoords
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)12);
-	glEnableVertexAttribArray(1);
 
+	//texcoords
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)(3*3*sizeof(float)));
+	glEnableVertexAttribArray(2);
+
+/*
 	//normal
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)20);
 	glEnableVertexAttribArray(2);
