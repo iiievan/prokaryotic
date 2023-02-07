@@ -16,7 +16,10 @@ int main()
 
     Texture wood_box = Texture_loader::Load_texture("wooden_container.jpg", GL_TEXTURE_2D ,GL_RGB);
     Texture awesomeface= Texture_loader::Load_texture("awesomeface.png", GL_TEXTURE_2D, GL_RGBA);
- 
+
+    wood_box.set_GL_Filter(GL_NEAREST, GL_NEAREST, true);
+    awesomeface.set_GL_Filter(GL_NEAREST, GL_NEAREST, true);
+
     shader_program->load_shader(vertex_shader);
     shader_program->load_shader(fragment_shader);
 
