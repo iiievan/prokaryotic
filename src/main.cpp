@@ -15,11 +15,17 @@ int main()
     Mesh* rectangle = new Mesh(rectangle_vertices, rectangle_indices);
 
     Texture wood_box = Texture_loader::Load_texture("wooden_container.jpg", GL_TEXTURE_2D ,GL_RGB);
-
-    rectangle->get_max_vertex_attributes();
+    Texture awesomeface= Texture_loader::Load_texture("awesomeface.png", GL_TEXTURE_2D, GL_RGBA);
  
     shader_program->load_shader(vertex_shader);
     shader_program->load_shader(fragment_shader);
+
+    shader_program->use();
+
+    int texture_1_loc = shader_program->get_Uniform_location("s_Texture_1");
+    int texture_2_loc = shader_program->get_Uniform_location("s_Texture_2");
+    shader_program->set_Uniform(texture_1_loc, (int)0);
+    shader_program->set_Uniform(texture_2_loc, (int)1);
 
     while (!glfwWindowShouldClose(window))
     {        
@@ -28,8 +34,8 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        wood_box.Bind();
-
+        wood_box.Bind(0);
+        awesomeface.Bind(1);
         shader_program->use();
 
         rectangle->draw_with_EBO(nullptr);
