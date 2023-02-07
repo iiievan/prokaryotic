@@ -24,13 +24,8 @@ int main()
 
     shader_program->use();
 
-    int texture_1_loc = shader_program->get_Uniform_location("s_Texture_1");
-    int texture_2_loc = shader_program->get_Uniform_location("s_Texture_2");
-    shader_program->set_Uniform(texture_1_loc, (int)0);
-    shader_program->set_Uniform(texture_2_loc, (int)1);
-
-    int alpha_loc;
-    int mirror_loc;
+    shader_program->set_Uniform("s_Texture_1", (int)0);
+    shader_program->set_Uniform("s_Texture_2", (int)1);
 
     while (!glfwWindowShouldClose(window))
     {        
@@ -43,10 +38,8 @@ int main()
         awesomeface.Bind(1);
         shader_program->use();
 
-        alpha_loc = shader_program->get_Uniform_location("f_Alpha");
-        mirror_loc = shader_program->get_Uniform_location("b_Mirror");
-        shader_program->set_Uniform(alpha_loc, alpha);
-        shader_program->set_Uniform(mirror_loc, mirror);
+        shader_program->set_Uniform("f_Alpha", alpha);
+        shader_program->set_Uniform("b_Mirror", mirror);
 
         rectangle->draw_with_EBO(nullptr);
 
