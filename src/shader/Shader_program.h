@@ -19,17 +19,29 @@ unsigned int  get_ID() const { return m_ID; }
        void  bind_Attrib_location(GLuint location, const char* name);
        void  bind_Frag_data_location(GLuint location, const char* name);
 
-        int  get_Uniform_location(const char* name);
-       void  set_Uniform(GLint location, float x, float y);
-       void  set_Uniform(GLint location, float x, float y, float z);
-       void  set_Uniform(GLint location, const glm::vec2& v);
-       void  set_Uniform(GLint location, const glm::vec3& v);
-       void  set_Uniform(GLint location, const glm::vec4& v);
-       void  set_Uniform(GLint location, const glm::mat4& m);
-       void  set_Uniform(GLint location, const glm::mat3& m);
-       void  set_Uniform(GLint location, float val);
-       void  set_Uniform(GLint location, int val);
-       void  set_Uniform(GLint location, bool val);
+        int  get_Uniform_location(const char* name) const ;
+       void  set_Uniform(GLint location, float x, float y) const;
+       void  set_Uniform(GLint location, float x, float y, float z) const;
+       void  set_Uniform(GLint location, const glm::vec2& v) const;
+       void  set_Uniform(GLint location, const glm::vec3& v) const;
+       void  set_Uniform(GLint location, const glm::vec4& v) const;
+       void  set_Uniform(GLint location, const glm::mat4& m) const;
+       void  set_Uniform(GLint location, const glm::mat3& m) const;
+       void  set_Uniform(GLint location, float val) const;
+       void  set_Uniform(GLint location, int val) const;
+       void  set_Uniform(GLint location, bool val) const;
+
+       void  set_Uniform(const std::string& name, float x, float y) const;
+       void  set_Uniform(const std::string& name, float x, float y, float z) const;
+       void  set_Uniform(const std::string& name, const glm::vec2& v) const;
+       void  set_Uniform(const std::string& name, const glm::vec3& v) const;
+       void  set_Uniform(const std::string& name, const glm::vec4& v) const;
+       void  set_Uniform(const std::string& name, const glm::mat4& m) const;
+       void  set_Uniform(const std::string& name, const glm::mat3& m) const;
+       void  set_Uniform(const std::string& name, float val) const;
+       void  set_Uniform(const std::string& name, int val) const;
+       void  set_Uniform(const std::string& name, bool val) const;
+
        void  print_Active_uniforms();
        void  print_Active_attribs();
 
