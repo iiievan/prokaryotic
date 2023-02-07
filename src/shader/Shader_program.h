@@ -47,7 +47,6 @@ unsigned int  get_ID() const { return m_ID; }
 
 private:
 	        unsigned int  m_ID;
-				    char  m_info_log[512];
 	std::vector<Shader*>  m_Shaders_collection;
 };
 

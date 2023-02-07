@@ -27,6 +27,9 @@
     <Filter Include="src\stb">
       <UniqueIdentifier>{86168c18-6ad1-4e7c-9d4a-3aa5a4c5f98e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\scene">
+      <UniqueIdentifier>{44e3ae01-9387-451b-a172-30c713b1c2db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c">
@@ -55,6 +58,9 @@
     </ClCompile>
     <ClCompile Include="src\mesh\Texture_loader.cpp">
       <Filter>src\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\Scene_object.cpp">
+      <Filter>src\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +93,9 @@
     </ClInclude>
     <ClInclude Include="src\mesh\Texture_loader.h">
       <Filter>src\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\Scene_object.h">
+      <Filter>src\scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
