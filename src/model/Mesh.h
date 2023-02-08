@@ -2,7 +2,7 @@
 #define __MESH_H
 
 #include "main.h"
-#include "mesh/Vertex.h"
+#include "model/Vertex.h"
 #include "shader/Shader_program.h"
 
 class Shader_program;

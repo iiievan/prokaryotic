@@ -12,10 +12,11 @@
 
 #include"shader/Shader.h"
 #include"shader/Shader_program.h"
-#include"mesh/Mesh.h"
-#include"mesh/Vertex.h"
-#include"mesh/Texture.h"
-#include"mesh/Texture_loader.h"
+#include"model/Mesh.h"
+#include"model/Vertex.h"
+#include"model/Texture.h"
+#include"model/Texture_loader.h"
+#include"model/Material.h"
 #include"scene/Scene_object.h"
 
 #define STB_IMAGE_IMPLEMENTATION

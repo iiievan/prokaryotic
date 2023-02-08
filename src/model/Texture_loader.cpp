@@ -1,7 +1,7 @@
 #include "texture_loader.h"
 
-#include "mesh/Texture.h"
-//#include "mesh/texture_cube.h"
+#include "model/Texture.h"
+//#include "model/texture_cube.h"
 
 #include "stb\stb_image.h"
 

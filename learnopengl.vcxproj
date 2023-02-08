@@ -22,9 +22,10 @@
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\init.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\mesh\Mesh.cpp" />
-    <ClCompile Include="src\mesh\Texture.cpp" />
-    <ClCompile Include="src\mesh\Texture_loader.cpp" />
+    <ClCompile Include="src\model\Material.cpp" />
+    <ClCompile Include="src\model\Mesh.cpp" />
+    <ClCompile Include="src\model\Texture.cpp" />
+    <ClCompile Include="src\model\Texture_loader.cpp" />
     <ClCompile Include="src\scene\Scene_object.cpp" />
     <ClCompile Include="src\shader\Shader.cpp" />
     <ClCompile Include="src\shader\Shader_program.cpp" />
@@ -33,10 +34,12 @@
   <ItemGroup>
     <ClInclude Include="include\init.h" />
     <ClInclude Include="include\main.h" />
-    <ClInclude Include="src\mesh\Mesh.h" />
-    <ClInclude Include="src\mesh\Texture.h" />
-    <ClInclude Include="src\mesh\Texture_loader.h" />
-    <ClInclude Include="src\mesh\Vertex.h" />
+    <ClInclude Include="src\model\Material.h" />
+    <ClInclude Include="src\model\Mesh.h" />
+    <ClInclude Include="src\model\Texture.h" />
+    <ClInclude Include="src\model\Texture_loader.h" />
+    <ClInclude Include="src\model\Uniform_types.h" />
+    <ClInclude Include="src\model\Vertex.h" />
     <ClInclude Include="src\scene\Scene_object.h" />
     <ClInclude Include="src\shader\Shader.h" />
     <ClInclude Include="src\shader\Shader_program.h" />
@@ -111,7 +114,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\include;$(SolutionDir)\src;$(SolutionDir)\src\shader;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\src\mesh;$(SolutionDir)\include\glm-0.9.9.7;$(SolutionDir)\src\utils;$(SolutionDir)\src\stb;$(SolutionDir)\src\scene;</IncludePath>
+    <IncludePath>$(SolutionDir)\include;$(SolutionDir)\src;$(SolutionDir)\src\shader;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\src\model;$(SolutionDir)\include\glm-0.9.9.7;$(SolutionDir)\src\utils;$(SolutionDir)\src\stb;$(SolutionDir)\src\scene</IncludePath>
     <LibraryPath>$(SolutionDir)\libs;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -151,7 +154,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\src\scene;$(SolutionDir)\include;$(SolutionDir)\src;$(SolutionDir)\src\shader;$(SolutionDir)\src\mesh;$(SolutionDir)\include\glm-0.9.9.7;$(SolutionDir)\src\utils;$(SolutionDir)\src\stb;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\src\scene;$(SolutionDir)\include;$(SolutionDir)\src;$(SolutionDir)\src\shader;$(SolutionDir)\src\model;$(SolutionDir)\include\glm-0.9.9.7;$(SolutionDir)\src\utils;$(SolutionDir)\src\stb</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

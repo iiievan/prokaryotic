@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "mesh/Mesh.h"
+#include "model/Mesh.h"
 
 class Mesh;
 
