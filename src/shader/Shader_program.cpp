@@ -108,11 +108,11 @@ void Shader_program::set_Uniform(GLint location, const glm::vec4& v) const
     }
 }
 
-void Shader_program::set_Uniform(GLint location, const glm::mat4& m) const
+void Shader_program::set_Uniform(GLint location, const glm::mat2& m) const
 {
     if (location >= 0)
     {
-        glUniformMatrix4fv(location, 1, GL_FALSE, &m[0][0]);
+        glUniformMatrix2fv(location, 1, GL_FALSE, &m[0][0]);
     }
     else
     {
@@ -125,6 +125,18 @@ void Shader_program::set_Uniform(GLint location, const glm::mat3& m) const
     if (location >= 0)
     {
         glUniformMatrix3fv(location, 1, GL_FALSE, &m[0][0]);
+    }
+    else
+    {
+        printf("Uniform: %d not found.\n", location);
+    }
+}
+
+void Shader_program::set_Uniform(GLint location, const glm::mat4& m) const
+{
+    if (location >= 0)
+    {
+        glUniformMatrix4fv(location, 1, GL_FALSE, &m[0][0]);
     }
     else
     {
@@ -268,7 +280,7 @@ void  Shader_program::set_Uniform(const std::string& name, const glm::vec4& v) c
     }
 }
 
-void  Shader_program::set_Uniform(const std::string& name, const glm::mat4& m) const
+void  Shader_program::set_Uniform(const std::string& name, const glm::mat2& m) const
 {
     int location = glGetUniformLocation(m_ID, name.c_str());
     if (glGetError() != GL_NO_ERROR)
@@ -280,7 +292,7 @@ void  Shader_program::set_Uniform(const std::string& name, const glm::mat4& m) c
 
     if (location >= 0)
     {
-        glUniformMatrix4fv(location, 1, GL_FALSE, &m[0][0]);
+        glUniformMatrix2fv(location, 1, GL_FALSE, &m[0][0]);
     }
     else
     {
@@ -301,6 +313,26 @@ void  Shader_program::set_Uniform(const std::string& name, const glm::mat3& m) c
     if (location >= 0)
     {
         glUniformMatrix3fv(location, 1, GL_FALSE, &m[0][0]);
+    }
+    else
+    {
+        printf("Uniform: %d not found.\n", location);
+    }
+}
+
+void  Shader_program::set_Uniform(const std::string& name, const glm::mat4& m) const
+{
+    int location = glGetUniformLocation(m_ID, name.c_str());
+    if (glGetError() != GL_NO_ERROR)
+    {
+        printf("Error occured retrieving uniform location: ");
+        printf(name.c_str());
+        printf("\n");
+    }
+
+    if (location >= 0)
+    {
+        glUniformMatrix4fv(location, 1, GL_FALSE, &m[0][0]);
     }
     else
     {

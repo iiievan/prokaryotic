@@ -40,7 +40,6 @@ class Material
               bool  Shadow_receive { true };
 
 public:
-                Material() { }
                 Material(Shader_program* sh_prg) 
                 : m_Shader_program(sh_prg) 
                 { }
@@ -53,14 +52,15 @@ Shader_program* get_Shader_program()                 const { return m_Shader_pro
           void  set_Bool(std::string name, bool value);
           void  set_Int(std::string name, int value);
           void  set_Float(std::string name, float value);
-          void  set_Texture(std::string name, Texture* value, unsigned int unit = 0);
-        //void  set_Texture_cube(std::string name, TextureCube* value, unsigned int unit = 0);
           void  set_Vector(std::string name, glm::vec2 value);
           void  set_Vector(std::string name, glm::vec3 value);
           void  set_Vector(std::string name, glm::vec4 value);
           void  set_Matrix(std::string name, glm::mat2 value);
           void  set_Matrix(std::string name, glm::mat3 value);
           void  set_Matrix(std::string name, glm::mat4 value);
+
+          void  set_Texture(std::string name, Texture* value, unsigned int unit = 0);
+        //void  set_Texture_cube(std::string name, TextureCube* value, unsigned int unit = 0);
 
         std::map<std::string, Uniform_value>* get_Uniforms()         { return &m_Uniforms; }
 std::map<std::string, Uniform_value_sampler>* get_Sampler_uniforms() { return &m_Sampler_uniforms; }

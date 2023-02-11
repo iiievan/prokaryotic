@@ -51,8 +51,6 @@ struct Uniform_value
          glm::mat3  Mat3;
          glm::mat4  Mat4;
     };
-
-    Uniform_value() {}
 };
 
 struct Uniform_value_sampler
@@ -65,8 +63,6 @@ struct Uniform_value_sampler
             Texture *Texture;
 //        TextureCube *Texture_cube;
     };
-
-    Uniform_value_sampler() {}
 };
 
 struct Vertex_attribute

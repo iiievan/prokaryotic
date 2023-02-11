@@ -46,47 +46,6 @@ void  Material::set_Float(std::string name, float value)
     m_Uniforms[name].Float = value;
 }
 
-void  Material::set_Texture(std::string name, Texture* value, unsigned int unit)
-{
-    m_Sampler_uniforms[name].Unit    = unit;
-    m_Sampler_uniforms[name].Texture = value;
-
-    switch (value->get_Target())
-    {
-        case GL_TEXTURE_1D:
-            m_Sampler_uniforms[name].Type = UNIFORM_TYPE_SAMPLER1D;
-            break;
-        case GL_TEXTURE_2D:
-            m_Sampler_uniforms[name].Type = UNIFORM_TYPE_SAMPLER2D;
-            break;
-        case GL_TEXTURE_3D:
-            m_Sampler_uniforms[name].Type = UNIFORM_TYPE_SAMPLER3D;
-            break;
-        case GL_TEXTURE_CUBE_MAP:
-            m_Sampler_uniforms[name].Type = UNIFORM_TYPE_SAMPLERCUBE;
-            break;
-    }
-
-    if (m_Shader_program)
-    {
-        m_Shader_program->use();
-        m_Shader_program->set_Uniform(name, (int)unit);
-    }
-}
-/*
-void  Material::set_Texture_cube(std::string name, TextureCube* value, unsigned int unit = 0)
-{
-    m_Sampler_uniforms[name].Unit         = unit;
-    m_Sampler_uniforms[name].Type         = UNIFORM_TYPE_SAMPLERCUBE;
-    m_Sampler_uniforms[name].Texture_cube = value;
-
-    if (m_Shader_program)
-    {
-        m_Shader_program->use();
-        m_Shader_program->set_Uniform(name, (int)unit);
-    }
-}
-*/
 void  Material::set_Vector(std::string name, glm::vec2 value)
 {
     m_Uniforms[name].Type = UNIFORM_TYPE_VEC2;
@@ -122,3 +81,45 @@ void  Material::set_Matrix(std::string name, glm::mat4 value)
     m_Uniforms[name].Type = UNIFORM_TYPE_MAT4;
     m_Uniforms[name].Mat4 = value;
 }
+
+void  Material::set_Texture(std::string name, Texture* value, unsigned int unit)
+{
+    m_Sampler_uniforms[name].Unit = unit;
+    m_Sampler_uniforms[name].Texture = value;
+
+    switch (value->get_Target())
+    {
+    case GL_TEXTURE_1D:
+        m_Sampler_uniforms[name].Type = UNIFORM_TYPE_SAMPLER1D;
+        break;
+    case GL_TEXTURE_2D:
+        m_Sampler_uniforms[name].Type = UNIFORM_TYPE_SAMPLER2D;
+        break;
+    case GL_TEXTURE_3D:
+        m_Sampler_uniforms[name].Type = UNIFORM_TYPE_SAMPLER3D;
+        break;
+    case GL_TEXTURE_CUBE_MAP:
+        m_Sampler_uniforms[name].Type = UNIFORM_TYPE_SAMPLERCUBE;
+        break;
+    }
+
+    if (m_Shader_program)
+    {
+        m_Shader_program->use();
+        m_Shader_program->set_Uniform(name, (int)unit);
+    }
+}
+/*
+void  Material::set_Texture_cube(std::string name, TextureCube* value, unsigned int unit = 0)
+{
+    m_Sampler_uniforms[name].Unit         = unit;
+    m_Sampler_uniforms[name].Type         = UNIFORM_TYPE_SAMPLERCUBE;
+    m_Sampler_uniforms[name].Texture_cube = value;
+
+    if (m_Shader_program)
+    {
+        m_Shader_program->use();
+        m_Shader_program->set_Uniform(name, (int)unit);
+    }
+}
+*/

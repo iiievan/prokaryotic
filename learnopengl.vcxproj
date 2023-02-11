@@ -26,6 +26,7 @@
     <ClCompile Include="src\model\Mesh.cpp" />
     <ClCompile Include="src\model\Texture.cpp" />
     <ClCompile Include="src\model\Texture_loader.cpp" />
+    <ClCompile Include="src\renderer\Renderer.cpp" />
     <ClCompile Include="src\scene\Scene_object.cpp" />
     <ClCompile Include="src\shader\Shader.cpp" />
     <ClCompile Include="src\shader\Shader_program.cpp" />
@@ -40,6 +41,7 @@
     <ClInclude Include="src\model\Texture_loader.h" />
     <ClInclude Include="src\model\Uniform_types.h" />
     <ClInclude Include="src\model\Vertex.h" />
+    <ClInclude Include="src\renderer\Renderer.h" />
     <ClInclude Include="src\scene\Scene_object.h" />
     <ClInclude Include="src\shader\Shader.h" />
     <ClInclude Include="src\shader\Shader_program.h" />
@@ -114,7 +116,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\include;$(SolutionDir)\src;$(SolutionDir)\src\shader;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\src\model;$(SolutionDir)\include\glm-0.9.9.7;$(SolutionDir)\src\utils;$(SolutionDir)\src\stb;$(SolutionDir)\src\scene</IncludePath>
+    <IncludePath>$(SolutionDir)\include;$(SolutionDir)\src;$(SolutionDir)\src\shader;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\src\model;$(SolutionDir)\include\glm-0.9.9.7;$(SolutionDir)\src\utils;$(SolutionDir)\src\stb;$(SolutionDir)\src\scene;$(SolutionDir)\src\renderer;</IncludePath>
     <LibraryPath>$(SolutionDir)\libs;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -154,7 +156,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\src\scene;$(SolutionDir)\include;$(SolutionDir)\src;$(SolutionDir)\src\shader;$(SolutionDir)\src\model;$(SolutionDir)\include\glm-0.9.9.7;$(SolutionDir)\src\utils;$(SolutionDir)\src\stb</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\src\scene;$(SolutionDir)\include;$(SolutionDir)\src;$(SolutionDir)\src\shader;$(SolutionDir)\src\model;$(SolutionDir)\include\glm-0.9.9.7;$(SolutionDir)\src\utils;$(SolutionDir)\src\stb;$(SolutionDir)\src\renderer;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

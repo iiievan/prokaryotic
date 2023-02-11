@@ -12,7 +12,7 @@ class Mesh;
 class Scene_object
 {
 public:        
-                     Mesh* Mesh;     // each node contains relevant render state
+                Mesh* p_Mesh { nullptr };     // each node contains relevant render state
 
                 /// bounding box /// 
                 glm::vec3  Box_min = glm::vec3(-99999.0f);
@@ -53,15 +53,15 @@ std::vector<Scene_object*> get_Children()       const { return m_Children; }
 
 private:
 std::vector<Scene_object*>  m_Children;
-              Scene_object *m_Parent;
+             Scene_object*  m_Parent{ nullptr };
 
-                 glm::mat4  m_Transform;
-                 glm::mat4  m_Prev_transform;
+                 glm::mat4  m_Transform { glm::mat4(1.0f) };
+                 glm::mat4  m_Prev_transform{ glm::mat4(1.0f) };
                  glm::vec3  m_Position { glm::vec3(0.0f) };
-                 glm::vec4  m_Rotation; // axis-angle for now; test w/ quaternions soon!
+                 glm::vec4  m_Rotation { glm::vec4(0.0f) }; // axis-angle for now; test w/ quaternions soon!
                  glm::vec3  m_Scale    { glm::vec3(1.0f) };
 
-                      bool  m_Recalc;   // mark the current object's tranform as dirty if it needs to be re-calculated this frame
+                      bool  m_Recalc { false };   // mark the current object's tranform as dirty if it needs to be re-calculated this frame
               unsigned int  m_ID;
 };
 

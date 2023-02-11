@@ -25,8 +25,9 @@ unsigned int  get_ID() const { return m_ID; }
        void  set_Uniform(GLint location, const glm::vec2& v) const;
        void  set_Uniform(GLint location, const glm::vec3& v) const;
        void  set_Uniform(GLint location, const glm::vec4& v) const;
-       void  set_Uniform(GLint location, const glm::mat4& m) const;
+       void  set_Uniform(GLint location, const glm::mat2& m) const;
        void  set_Uniform(GLint location, const glm::mat3& m) const;
+       void  set_Uniform(GLint location, const glm::mat4& m) const;       
        void  set_Uniform(GLint location, float val) const;
        void  set_Uniform(GLint location, int val) const;
        void  set_Uniform(GLint location, bool val) const;
@@ -36,8 +37,9 @@ unsigned int  get_ID() const { return m_ID; }
        void  set_Uniform(const std::string& name, const glm::vec2& v) const;
        void  set_Uniform(const std::string& name, const glm::vec3& v) const;
        void  set_Uniform(const std::string& name, const glm::vec4& v) const;
-       void  set_Uniform(const std::string& name, const glm::mat4& m) const;
+       void  set_Uniform(const std::string& name, const glm::mat2& m) const;
        void  set_Uniform(const std::string& name, const glm::mat3& m) const;
+       void  set_Uniform(const std::string& name, const glm::mat4& m) const; 
        void  set_Uniform(const std::string& name, float val) const;
        void  set_Uniform(const std::string& name, int val) const;
        void  set_Uniform(const std::string& name, bool val) const;

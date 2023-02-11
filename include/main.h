@@ -18,6 +18,7 @@
 #include"model/Texture_loader.h"
 #include"model/Material.h"
 #include"scene/Scene_object.h"
+#include"renderer/Renderer.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 
