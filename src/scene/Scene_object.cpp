@@ -56,9 +56,9 @@ void  Scene_object::set_Scale(float scale)
     m_Recalc = true;
 }
  
-void  Scene_object::set_Rotation(glm::vec4 rotation)
+void  Scene_object::set_Rotation(float radians, glm::vec3 axis)
 {
-    m_Rotation = rotation;
+    m_Rotation = glm::vec4(axis,radians);
     m_Recalc = true;
 }
 
@@ -120,6 +120,12 @@ Scene_object* Scene_object::get_Child_by_index(unsigned int index)
     return m_Children[index];
 }
 
+void  Scene_object::set_Transform(glm::mat4 transform)
+{
+    m_Transform = transform;
+    m_Recalc = true;
+}
+
 glm::mat4  Scene_object::get_Transform()
 {
     if (m_Recalc)
@@ -138,17 +144,9 @@ void  Scene_object::update_Transform(bool Update_prev_transform)
     if (m_Recalc)
     {
         // first translation , then scale, then rotate.
-        glm::vec4 vec(m_Position.x, m_Position.y, m_Position.z, 1.0f);;
-        m_Transform = glm::mat4(1.0f);
-        m_Transform = glm::translate(m_Transform, glm::vec3(1.0f, 1.0f, 0.0f));
-        vec = m_Transform * vec;
-        m_Position = glm::vec3(vec);
-
-        printf("m_Position:%s\n", glm::to_string(m_Position).c_str());
-
-        //m_Transform = glm::translate(m_Position);
-        //m_Transform = glm::scale(m_Transform, m_Scale); // TODO: order is off here for some reason, figure out why
-        //m_Transform = glm::rotate(m_Transform, m_Rotation.xyz, m_Rotation.w);
+        m_Transform = glm::translate(m_Transform, m_Position);
+        m_Transform = glm::scale(m_Transform, m_Scale); 
+        m_Transform = glm::rotate(m_Transform, m_Rotation.w, glm::vec3(m_Rotation));
 
         if (m_Parent)
         {

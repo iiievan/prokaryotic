@@ -1,6 +1,5 @@
 #version 330 core
 
-in vec3  our_Color;
 in vec2  our_Texture_coord;
 
 uniform sampler2D  s_Texture_1;
@@ -19,6 +18,5 @@ void main()
     else
         Tex_smileface_coord =  our_Texture_coord;
 
-    //frag_Color = texture(s_Texture, our_Texture_coord) * vec4(our_Color, 1.0);
     frag_Color = mix(texture(s_Texture_1, our_Texture_coord),texture(s_Texture_2, Tex_smileface_coord), f_Alpha);
 } 

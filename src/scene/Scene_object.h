@@ -58,7 +58,7 @@ public:
                      void  set_Position(glm::vec3 position);
                      void  set_Scale(glm::vec3 scale);
                      void  set_Scale(float scale);
-                     void  set_Rotation(glm::vec4 rotation);
+                     void  set_Rotation(float degrees, glm::vec3 axis);
 
             std::uint64_t  get_ID()             const { return m_ID.raw; }
                 glm::vec3  get_Local_position() const { return m_Position; }
@@ -77,6 +77,7 @@ std::vector<Scene_object*> get_Children()       const { return m_Children; }
                                                           // (w/ incrementing node ID or stringed hash ID?)
 
                 // returns the transform of the current node combined with its parent(s)' transform.
+                     void  set_Transform(glm::mat4 transform);
                 glm::mat4  get_Transform();
                 glm::mat4  get_Prev_transform() const { return m_Prev_transform; }
 
@@ -91,7 +92,7 @@ private:
                      glm::mat4  m_Transform { glm::mat4(1.0f) };
                      glm::mat4  m_Prev_transform{ glm::mat4(1.0f) };
                      glm::vec3  m_Position { glm::vec3(0.0f) };
-                     glm::vec4  m_Rotation { glm::vec4(0.0f) }; // axis-angle for now; test w/ quaternions soon!
+                     glm::vec4  m_Rotation { glm::vec4(0.0f,0.0f,1.0f,1.0f) }; // XYZ and W - radians
                      glm::vec3  m_Scale    { glm::vec3(1.0f) };
                      
                           bool  m_Recalc { false };         // mark the current object's tranform as dirty if it needs to be re-calculated this frame

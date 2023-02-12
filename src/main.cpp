@@ -22,14 +22,14 @@ int main()
     shader_program->load_shader(vertex_shader);
     shader_program->load_shader(fragment_shader);
 
-
-
     Material * smiled_wood = new Material(shader_program);
     smiled_wood->set_Texture("s_Texture_1", &wood_box, 0);
     smiled_wood->set_Texture("s_Texture_2", &awesomeface, 1);
 
+    Scene_object* so_korobkins = new Scene_object(rectangle, smiled_wood);   
+
     Renderer renderer;
-    renderer.push_to_render(rectangle, smiled_wood);
+    renderer.push_to_render(so_korobkins);
 
     while (!glfwWindowShouldClose(window))
     {        
@@ -40,6 +40,11 @@ int main()
 
         smiled_wood->set_Float("f_Alpha", alpha);
         smiled_wood->set_Bool("b_Mirror", mirror);
+
+        so_korobkins->set_Transform(glm::mat4(1.0f));
+        so_korobkins->set_Position(glm::vec3(0.5f, -0.5f, 0.0f));
+        so_korobkins->set_Rotation((float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        so_korobkins->p_material->set_Matrix("transform", so_korobkins->get_Transform());
 
         renderer.process_objects();
 
