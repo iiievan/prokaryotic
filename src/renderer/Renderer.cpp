@@ -18,6 +18,8 @@ void  Renderer::process_objects()
 	{
 		it->p_material->get_Shader_program()->use();
 
+        it->p_material->set_Matrix("transform", it->get_Transform());
+
         // bind/active uniform sampler/texture objects
         auto* samplers = it->p_material->get_Sampler_uniforms();
 

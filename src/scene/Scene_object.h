@@ -92,7 +92,7 @@ private:
                      glm::mat4  m_Transform { glm::mat4(1.0f) };
                      glm::mat4  m_Prev_transform{ glm::mat4(1.0f) };
                      glm::vec3  m_Position { glm::vec3(0.0f) };
-                     glm::vec4  m_Rotation { glm::vec4(0.0f,0.0f,1.0f,1.0f) }; // XYZ and W - radians
+                     glm::vec4  m_Rotation { glm::vec4(0.0f,0.0f,1.0f,0.0f) }; // XYZ and W - radians
                      glm::vec3  m_Scale    { glm::vec3(1.0f) };
                      
                           bool  m_Recalc { false };         // mark the current object's tranform as dirty if it needs to be re-calculated this frame
