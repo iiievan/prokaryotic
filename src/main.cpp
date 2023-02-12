@@ -29,7 +29,7 @@ int main()
     smiled_wood->set_Texture("s_Texture_2", &awesomeface, 1);
 
     Renderer renderer;
-    renderer.Push_render(rectangle, smiled_wood);
+    renderer.push_to_render(rectangle, smiled_wood);
 
     while (!glfwWindowShouldClose(window))
     {        
@@ -41,7 +41,7 @@ int main()
         smiled_wood->set_Float("f_Alpha", alpha);
         smiled_wood->set_Bool("b_Mirror", mirror);
 
-        renderer.Render_pushed_objects();
+        renderer.process_objects();
 
         glfwSwapBuffers(window);
         glfwPollEvents();

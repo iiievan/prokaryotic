@@ -10,27 +10,18 @@ class Mesh;
 class Material;
 class Scene_object;
 
-struct Renderer_object
-{
-	    Mesh* p_mesh;
-	Material* p_material;
-
-	Renderer_object(Mesh* mesh, Material* mat) :p_mesh(mesh), p_material(mat) {}
-};
-
 class Renderer
 {
 public:
 			Renderer() {}
 		   ~Renderer() {}
 
-      void  Push_render(Mesh* p_mesh, Material* p_material);
-      void  Push_render(Renderer_object object);
-	  void  Push_render(Scene_object* p_object);
+      void  push_to_render(Mesh* p_mesh, Material* p_material);
+	  void  push_to_render(Scene_object* p_object);
 				 
-	  void  Render_pushed_objects();
+	  void  process_objects();
 
-	  std::vector<Renderer_object> m_objects_buffer;
+	  std::vector<Scene_object*> m_render_objects;
 };
 
 #endif //__RENDERER_H

@@ -13,14 +13,15 @@
 #include <windows.h>
 #include <stdint.h>
 
+#include<GLAD/glad.h>
 #include "utils/utils.h"
 
-enum e_GLSL_shader_type : int8_t 
+enum e_GLSL_shader_type : int
 {
-    SHADER_NA = -1,
-    VERTEX    =  0,
-    FRAGMENT,
-    GEOMETRY
+    SHADER_NA       = -1,
+    VERTEX          = GL_VERTEX_SHADER,
+    FRAGMENT        = GL_FRAGMENT_SHADER,
+    GEOMETRY        = GL_GEOMETRY_SHADER
 };
 
 class Shader

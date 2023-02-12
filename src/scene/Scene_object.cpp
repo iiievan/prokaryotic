@@ -1,5 +1,14 @@
 #include "Scene_object.h"
 #include <glm/gtx/string_cast.hpp>
+#include<cassert>
+
+PROKARYOTIC::unique_id Scene_object::m_Unique_ID(0,0,0, PROKARYOTIC::CLASS_SCENE_OBJECT);
+
+Scene_object::Scene_object(Mesh* mesh, Material* material)
+: p_mesh(mesh), p_material(material), m_ID(0)
+{
+    m_ID.raw = generate_ID();
+}
 
 Scene_object::~Scene_object()
 {
@@ -7,6 +16,26 @@ Scene_object::~Scene_object()
     {
         delete m_Children[i];
     }  
+}
+
+std::uint64_t  Scene_object::generate_ID() 
+{ 
+    if (m_Unique_ID.MIN < 0xFFFF)
+    {
+        m_Unique_ID.MIN++;
+
+        return m_Unique_ID.raw;
+    }
+    else
+    if (m_Unique_ID.MAJ < 0xFFFF)
+    {
+        m_Unique_ID.MIN = 0;
+        m_Unique_ID.MAJ++;
+
+        return m_Unique_ID.raw;
+    }
+
+    assert(m_Unique_ID.MAJ < 0xFFFF);     
 }
 
 void  Scene_object::set_Position(glm::vec3 position)
@@ -59,13 +88,13 @@ void  Scene_object::add_Child(Scene_object *obj)
 { 
     // Scene objects aren't allowed to exist under multiple parents.
     if (obj->m_Parent)
-        obj->m_Parent->remove_Child(obj->m_ID);
+        obj->m_Parent->remove_Child(obj->get_ID());
 
     obj->m_Parent = this;
     m_Children.push_back(obj);
 }
 
-void  Scene_object::remove_Child(unsigned int id) 
+void  Scene_object::remove_Child(std::uint64_t id)
 {
     auto it = std::find(m_Children.begin(), m_Children.end(), get_Child(id));
 
@@ -73,7 +102,7 @@ void  Scene_object::remove_Child(unsigned int id)
         m_Children.erase(it);
 }
 
-Scene_object* Scene_object::get_Child(unsigned int id)
+Scene_object* Scene_object::get_Child(std::uint64_t id)
 {
     for (unsigned int i = 0; i < m_Children.size(); ++i)
     {
