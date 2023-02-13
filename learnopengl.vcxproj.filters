@@ -33,6 +33,9 @@
     <Filter Include="src\renderer">
       <UniqueIdentifier>{adaf5708-da68-402e-ac74-2c2d85466f4a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\camera">
+      <UniqueIdentifier>{fb16bd8e-b34e-47f9-968b-bb33a09ff696}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c">
@@ -68,9 +71,11 @@
     <ClCompile Include="src\model\Material.cpp">
       <Filter>src\model</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="src\renderer\Renderer.cpp">
       <Filter>src\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\camera\Camera.cpp">
+      <Filter>src\camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -113,11 +118,11 @@
     <ClInclude Include="src\model\Uniform_types.h">
       <Filter>src\model</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="src\renderer\Renderer.h">
       <Filter>src\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\camera\Camera.h">
+      <Filter>src\camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

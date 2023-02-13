@@ -5,10 +5,12 @@
 #include "model/Mesh.h"
 #include "model/Material.h"
 #include "scene/Scene_object.h"
+#include "camera/Camera.h"
 
 class Mesh;
 class Material;
 class Scene_object;
+class Camera;
 
 class Renderer
 {
@@ -19,7 +21,7 @@ public:
       void  push_to_render(Mesh* p_mesh, Material* p_material);
 	  void  push_to_render(Scene_object* p_object);
 				 
-	  void  process_objects();
+	  void  process_objects(Camera *p_camera = nullptr);
 
 	  std::vector<Scene_object*> m_render_objects;
 };

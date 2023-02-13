@@ -1,7 +1,7 @@
 #include "init.h"
 
-constexpr auto WINDOW_WIDTH = 1024;
-constexpr auto WINDOW_HEIGHT = 768;
+unsigned WINDOW_WIDTH = 1024;
+unsigned WINDOW_HEIGHT = 768;
 
 GLFWwindow* init_GLFW_GLAD()
 {

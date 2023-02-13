@@ -12,13 +12,20 @@ void  Renderer::push_to_render(Scene_object* p_object)
     m_render_objects.push_back(p_object);
 }
 
-void  Renderer::process_objects()
+void  Renderer::process_objects(Camera* p_camera)
 {
 	for (auto& it : m_render_objects)
 	{
 		it->p_material->get_Shader_program()->use();
 
-        it->p_material->set_Matrix("transform", it->get_Transform());
+        if (p_camera != nullptr)
+        {
+            it->p_material->set_Matrix("view", p_camera->get_View());
+            it->p_material->set_Matrix("projection", p_camera->get_Projection());
+            it->p_material->set_Matrix("cam_position", p_camera->get_Position());
+        }
+
+        it->p_material->set_Matrix("model", it->get_Transform());
 
         // bind/active uniform sampler/texture objects
         auto* samplers = it->p_material->get_Sampler_uniforms();

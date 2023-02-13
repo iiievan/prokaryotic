@@ -26,13 +26,18 @@ int main()
     smiled_wood->set_Texture("s_Texture_1", &wood_box, 0);
     smiled_wood->set_Texture("s_Texture_2", &awesomeface, 1);
 
-    Scene_object* so_korobkins = new Scene_object(rectangle, smiled_wood);   
+    Scene_object* so_korobkins = new Scene_object(rectangle, smiled_wood); 
     Scene_object* so_yaschik = new Scene_object(rectangle, smiled_wood);
 
-    Renderer renderer;
+      Camera  main_camera(WINDOW_WIDTH, WINDOW_HEIGHT);
+    Renderer  renderer;
+
+    main_camera.Rotate(glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    main_camera.set_Projection(glm::radians(45.0f),0.1f,100.f);
+    main_camera.set_View(glm::vec3(0.0f, 0.0f, -3.0f));
+
     renderer.push_to_render(so_korobkins);
     renderer.push_to_render(so_yaschik);
-
 
     while (!glfwWindowShouldClose(window))
     {        
@@ -49,12 +54,12 @@ int main()
         so_korobkins->set_Rotation((float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 
         so_yaschik->set_Transform(glm::mat4(1.0f));
-        so_yaschik->set_Position(glm::vec3(-0.5f, 0.5f, 0.0f));   
+        so_yaschik->set_Position(glm::vec3(-0.5f, 0.5f, 0.0f));
 
         float scale_Value = abs(sin(glfwGetTime()) / 2.0f) + 0.1f;
         so_yaschik->set_Scale(glm::vec3(glm::vec2(scale_Value), 0.0f));
 
-        renderer.process_objects();
+        renderer.process_objects(&main_camera);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -67,7 +72,6 @@ int main()
     delete shader_program;
     delete smiled_wood;
     delete so_korobkins;
-    delete so_yaschik;
 
     glfwTerminate();
 

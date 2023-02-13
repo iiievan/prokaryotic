@@ -19,9 +19,12 @@
 #include"model/Material.h"
 #include"scene/Scene_object.h"
 #include"renderer/Renderer.h"
+#include"camera/Camera.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 
+extern unsigned WINDOW_WIDTH;
+extern unsigned WINDOW_HEIGHT;
 
 void processInput(GLFWwindow* window);
 

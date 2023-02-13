@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\camera\Camera.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\init.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -35,6 +36,7 @@
   <ItemGroup>
     <ClInclude Include="include\init.h" />
     <ClInclude Include="include\main.h" />
+    <ClInclude Include="src\camera\Camera.h" />
     <ClInclude Include="src\model\Material.h" />
     <ClInclude Include="src\model\Mesh.h" />
     <ClInclude Include="src\model\Texture.h" />
@@ -116,7 +118,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\include;$(SolutionDir)\src;$(SolutionDir)\src\shader;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\src\model;$(SolutionDir)\include\glm-0.9.9.7;$(SolutionDir)\src\utils;$(SolutionDir)\src\stb;$(SolutionDir)\src\scene;$(SolutionDir)\src\renderer;</IncludePath>
+    <IncludePath>$(SolutionDir)\include;$(SolutionDir)\src;$(SolutionDir)\src\shader;$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)\src\model;$(SolutionDir)\include\glm-0.9.9.7;$(SolutionDir)\src\utils;$(SolutionDir)\src\stb;$(SolutionDir)\src\scene;$(SolutionDir)\src\renderer;$(SolutionDir)\src\camera;</IncludePath>
     <LibraryPath>$(SolutionDir)\libs;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -156,7 +158,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\src\scene;$(SolutionDir)\include;$(SolutionDir)\src;$(SolutionDir)\src\shader;$(SolutionDir)\src\model;$(SolutionDir)\include\glm-0.9.9.7;$(SolutionDir)\src\utils;$(SolutionDir)\src\stb;$(SolutionDir)\src\renderer;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\src\scene;$(SolutionDir)\include;$(SolutionDir)\src;$(SolutionDir)\src\shader;$(SolutionDir)\src\model;$(SolutionDir)\include\glm-0.9.9.7;$(SolutionDir)\src\utils;$(SolutionDir)\src\stb;$(SolutionDir)\src\renderer;$(SolutionDir)\src\camera;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
