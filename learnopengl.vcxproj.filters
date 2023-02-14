@@ -36,6 +36,9 @@
     <Filter Include="src\camera">
       <UniqueIdentifier>{fb16bd8e-b34e-47f9-968b-bb33a09ff696}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\model\meshes">
+      <UniqueIdentifier>{27ac1300-05cb-44bc-bb35-17bd4b45dcbf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\glad.c">

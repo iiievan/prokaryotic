@@ -86,6 +86,35 @@ std::vector<unsigned int> triangle_indices =
     0, 1, 2 
 };
 
+Mesh::Mesh(std::vector<glm::vec3>& vertices,
+           std::vector<glm::vec3>& uv, 
+        std::vector<unsigned int>& indices)
+{
+    m_Index_count = indices.size();
+
+    //push the mesh
+    glGenBuffers(1, &m_VBO_ID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_VBO_ID);
+
+    glGenVertexArrays(1, &m_VAO_ID);
+    glBindVertexArray(m_VAO_ID);
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+
+    //vertices
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (const GLvoid*)0);
+    glEnableVertexAttribArray(0);
+
+    //UV
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec2), (const GLvoid*)0);
+    glEnableVertexAttribArray(1);
+
+    glGenBuffers(1, &m_EBO_ID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO_ID);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
 Mesh::Mesh(std::vector<Simple_vertex> vertices, std::vector<unsigned int> indices)
 {
     m_Index_count = indices.size();
@@ -141,6 +170,21 @@ Mesh::~Mesh()
     glDeleteVertexArrays(1, &m_VAO_ID);
     glDeleteBuffers(1, &m_VBO_ID);
     glDeleteBuffers(1, &m_EBO_ID);
+}
+
+void Mesh::set_Vertices(std::vector<glm::vec3>* p_vertices)
+{
+    Positions = positions;
+}
+// --------------------------------------------------------------------------------------------
+void Mesh::SetUVs(std::vector<math::vec2> uv)
+{
+    UV = uv;
+}
+// --------------------------------------------------------------------------------------------
+void Mesh::SetNormals(std::vector<math::vec3> normals)
+{
+    Normals = normals;
 }
 
 void  Mesh::draw_with_VAO(bool vireframe_mode)
