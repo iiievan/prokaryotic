@@ -8,9 +8,6 @@
 #include "model/Mesh.h"
 #include "model/Material.h"
 
-class Mesh;
-class Material;
-
 namespace PROKARYOTIC
 {
     enum e_ENGINE_CLASSES :std::uint16_t
@@ -40,17 +37,20 @@ namespace PROKARYOTIC
     };
 }
 
+class Material;
+struct Vertex;
+
 class Scene_object
 {
 public:        
-                         Mesh* p_mesh       { nullptr };
+    PROKARYOTIC::Mesh<Vertex>* p_mesh       { nullptr };
                      Material* p_material   { nullptr };
 
                 /// bounding box /// 
                 glm::vec3  Box_min = glm::vec3(-99999.0f);
                 glm::vec3  Box_max = glm::vec3( 99999.0f);
 
-                          Scene_object(Mesh* mesh, Material* material);
+                          Scene_object(PROKARYOTIC::Mesh<Vertex>* mesh, Material* material);
                           ~Scene_object();
 
             std::uint64_t  generate_ID();
@@ -68,7 +68,7 @@ public:
                 glm::vec3  get_World_scale();
 
 std::vector<Scene_object*> get_Children()       const { return m_Children; }
-             unsigned int  get_Child_count()    const { return m_Children.size(); }
+             unsigned int  get_Child_count()    const { return (unsigned int)m_Children.size(); }
              Scene_object *get_Parent()         const { return m_Parent; }
              Scene_object *get_Child(std::uint64_t id);
              Scene_object *get_Child_by_index(unsigned int index);

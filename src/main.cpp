@@ -1,5 +1,7 @@
 #include "main.h"
 #include "init.h"
+
+
 float alpha = 0.2f;
  bool mirror = false;
 
@@ -10,7 +12,7 @@ int main()
     if (window == nullptr)
         return -1;
 
-    Mesh* rectangle = new Mesh(rectangle_vertices, rectangle_indices);
+    PROKARYOTIC::Mesh<Vertex>* rectangle = new PROKARYOTIC::Mesh<Vertex>(&rectangle_vertices, &rectangle_indices);
 
     Shader * vertex_shader = new Shader("vertex.glsl", VERTEX);
     Shader * fragment_shader = new Shader("fragment.glsl", FRAGMENT);

@@ -25,6 +25,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\model\Material.cpp" />
     <ClCompile Include="src\model\Mesh.cpp" />
+    <ClCompile Include="src\model\meshes\Cube.cpp" />
     <ClCompile Include="src\model\Texture.cpp" />
     <ClCompile Include="src\model\Texture_loader.cpp" />
     <ClCompile Include="src\renderer\Renderer.cpp" />
@@ -39,6 +40,7 @@
     <ClInclude Include="src\camera\Camera.h" />
     <ClInclude Include="src\model\Material.h" />
     <ClInclude Include="src\model\Mesh.h" />
+    <ClInclude Include="src\model\meshes\Cube.h" />
     <ClInclude Include="src\model\Texture.h" />
     <ClInclude Include="src\model\Texture_loader.h" />
     <ClInclude Include="src\model\Uniform_types.h" />

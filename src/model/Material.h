@@ -11,6 +11,8 @@
 
 #include "GLAD/glad.h"
 
+class Shader_program;
+
 enum e_Material_type : uint32_t
 {
     MATERIAL_DEFAULT,
