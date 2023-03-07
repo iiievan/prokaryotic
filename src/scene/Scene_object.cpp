@@ -4,7 +4,7 @@
 
 PROKARYOTIC::unique_id Scene_object::m_Unique_ID(0,0,0, PROKARYOTIC::CLASS_SCENE_OBJECT);
 
-Scene_object::Scene_object(Mesh* mesh, Material* material)
+Scene_object::Scene_object(Mesh<Vertex>* mesh, Material* material)
 : p_mesh(mesh), p_material(material), m_ID(0)
 {
     m_ID.raw = generate_ID();

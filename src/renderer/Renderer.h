@@ -7,7 +7,7 @@
 #include "scene/Scene_object.h"
 #include "camera/Camera.h"
 
-class Mesh;
+template <typename T> class Mesh;
 class Material;
 class Scene_object;
 class Camera;
@@ -18,7 +18,7 @@ public:
 			Renderer() {}
 		   ~Renderer() {}
 
-      void  push_to_render(Mesh* p_mesh, Material* p_material);
+      void  push_to_render(Mesh<Vertex>* p_mesh, Material* p_material);
 	  void  push_to_render(Scene_object* p_object);
 				 
 	  void  process_objects(Camera *p_camera = nullptr);

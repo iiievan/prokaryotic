@@ -1,6 +1,6 @@
 #include"renderer/Renderer.h"
 
-void  Renderer::push_to_render(Mesh* p_mesh, Material* p_material)
+void  Renderer::push_to_render(Mesh<Vertex> *p_mesh, Material *p_material)
 {
     Scene_object * object = new Scene_object(p_mesh, p_material);
 
@@ -74,6 +74,6 @@ void  Renderer::process_objects(Camera* p_camera)
             }
         }
 
-        it->p_mesh->draw_with_EBO(nullptr);
+        it->p_mesh->draw<Shader_program>(nullptr);
 	}
 }

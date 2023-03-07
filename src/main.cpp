@@ -10,7 +10,7 @@ int main()
     if (window == nullptr)
         return -1;
 
-    Mesh* rectangle = new Mesh(rectangle_vertices, rectangle_indices);
+    Mesh<Vertex>* rectangle = new Mesh<Vertex>(&rectangle_vertices, &rectangle_indices);
 
     Shader * vertex_shader = new Shader("vertex.glsl", VERTEX);
     Shader * fragment_shader = new Shader("fragment.glsl", FRAGMENT);
@@ -68,7 +68,6 @@ int main()
     delete rectangle;
     delete vertex_shader;
     delete fragment_shader;
-    delete vertex_shader;
     delete shader_program;
     delete smiled_wood;
     delete so_korobkins;

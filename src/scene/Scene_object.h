@@ -8,7 +8,7 @@
 #include "model/Mesh.h"
 #include "model/Material.h"
 
-class Mesh;
+template <typename T> class Mesh;
 class Material;
 
 namespace PROKARYOTIC
@@ -43,14 +43,14 @@ namespace PROKARYOTIC
 class Scene_object
 {
 public:        
-                         Mesh* p_mesh       { nullptr };
+                 Mesh<Vertex>* p_mesh       { nullptr };
                      Material* p_material   { nullptr };
 
                 /// bounding box /// 
                 glm::vec3  Box_min = glm::vec3(-99999.0f);
                 glm::vec3  Box_max = glm::vec3( 99999.0f);
 
-                          Scene_object(Mesh* mesh, Material* material);
+                          Scene_object(Mesh<Vertex>* mesh, Material* material);
                           ~Scene_object();
 
             std::uint64_t  generate_ID();
