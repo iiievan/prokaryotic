@@ -39,6 +39,10 @@ namespace PROKARYOTIC
 
 class Material;
 struct Vertex;
+namespace PROKARYOTIC
+{
+    template <typename T> class Mesh;
+}
 
 class Scene_object
 {

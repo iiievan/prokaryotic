@@ -4,9 +4,7 @@
 #include <glm/glm.hpp>
 #include "model/Mesh.h"
 
-static std::vector<Vertex> cube_vertices;
-
-class Cube : public Mesh
+class Cube : public PROKARYOTIC::Mesh<Vertex>
 {
 public:
 	 Cube();

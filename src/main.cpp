@@ -70,7 +70,6 @@ int main()
     delete rectangle;
     delete vertex_shader;
     delete fragment_shader;
-    delete vertex_shader;
     delete shader_program;
     delete smiled_wood;
     delete so_korobkins;
