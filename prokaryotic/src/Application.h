@@ -29,6 +29,7 @@
 #include"model/Texture.h"
 #include"model/Texture_loader.h"
 #include"model/Material.h"
+#include"model/meshes/Cube.h"
 #include"scene/Scene_object.h"
 #include"renderer/Renderer.h"
 #include"camera/Camera.h"

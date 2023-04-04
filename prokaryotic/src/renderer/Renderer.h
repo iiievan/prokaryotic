@@ -9,7 +9,6 @@
 
 namespace PROKARYOTIC
 {
-
 	template <typename T> class Mesh;
 	class Material;
 	class Scene_object;
@@ -18,8 +17,8 @@ namespace PROKARYOTIC
 	class Renderer
 	{
 	public:
-		Renderer() {}
-		~Renderer() {}
+		      Renderer() {}
+		     ~Renderer() {}
 
 		void  push_to_render(Mesh<Vertex>* p_mesh, Material* p_material);
 		void  push_to_render(Scene_object* p_object);

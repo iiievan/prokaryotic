@@ -50,6 +50,7 @@ namespace PROKARYOTIC
 	void Application::run()
 	{
         Mesh<Vertex>* rectangle = new Mesh<Vertex>(&rectangle_vertices, &rectangle_indices);
+        Cube* boxie = new Cube();
 
         Shader* vertex_shader = new Shader("vertex.glsl", VERTEX);
         Shader* fragment_shader = new Shader("fragment.glsl", FRAGMENT);

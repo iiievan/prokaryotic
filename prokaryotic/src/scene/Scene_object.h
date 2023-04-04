@@ -60,7 +60,7 @@ namespace PROKARYOTIC
         void  set_Scale(float scale);
         void  set_Rotation(float degrees, glm::vec3 axis);
 
-        std::uint64_t  get_ID()             const { return m_ID.raw; }
+    std::uint64_t  get_ID()         const { return m_ID.raw; }
         glm::vec3  get_Local_position() const { return m_Position; }
         glm::vec4  get_Local_rotation() const { return m_Rotation; }
         glm::vec3  get_Local_scale()    const { return m_Scale; }
