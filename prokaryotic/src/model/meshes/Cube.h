@@ -10,14 +10,16 @@ namespace PROKARYOTIC
 	template <typename T> class Mesh;
 	class Vertex;
 
-	std::vector<Vertex> cube_vertices;
-	std::vector<GLuint> cube_indices;
+	extern std::vector<Vertex> cube_vertices;
+	extern std::vector<GLuint> cube_indices;
 
-	class Cube : public Mesh<Vertex>
+	template <typename T>
+	class Cube : public Mesh<T>
 	{
 	public:
 		Cube()
-		:Mesh<Vertex>(&cube_vertices, nullptr) {}
+		:Mesh<T>(&cube_vertices, nullptr)	// draw with VAO
+		{}
 		~Cube() {}
 	};
 }

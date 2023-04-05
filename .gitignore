@@ -1,6 +1,9 @@
 # gitignore for C++
 
 *.html
+*.sln
+*.vcxproj
+*.vcxproj.filters
 
 # Visual C++ cache files
 ipch/

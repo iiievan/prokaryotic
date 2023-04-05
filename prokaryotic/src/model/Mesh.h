@@ -54,8 +54,11 @@ namespace PROKARYOTIC
 
             set_vertex_attribs<T>();
 
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * p_indices->size(), p_indices->data(), GL_STATIC_DRAW);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+            if (p_indices != nullptr)
+            {
+                glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * p_indices->size(), p_indices->data(), GL_STATIC_DRAW);
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+            }
 
             //GL_STREAM_DRAW: данные устанавливаются только один раз и используются графическим процессором не более нескольких раз.
             //GL_STATIC_DRAW : данные устанавливаются только один раз и используются многократно.
