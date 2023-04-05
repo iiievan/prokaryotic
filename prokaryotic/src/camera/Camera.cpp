@@ -1,29 +1,39 @@
 #include"camera/Camera.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include<GLFW/glfw3.h>
 
 namespace PROKARYOTIC
 {
-
     void  Camera::set_Projection(float rad, float frustum_strt, float frustum_end)
     {
-        m_Projection = glm::perspective(rad, m_Window_width / m_Window_heigh, frustum_strt, frustum_end);
+        this->Projection = glm::perspective(rad, m_Window_width / m_Window_heigh, frustum_strt, frustum_end);
     }
 
     void  Camera::set_View(glm::vec3  view)
     {
-        glm::mat4 identity_matrix = glm::mat4(1.0f);
+        glm::mat4 model = glm::mat4(1.0f);
 
         // note that we're translating the scene in the reverse direction of where we want to move
-        m_View = glm::translate(identity_matrix, view);
+        this->View = glm::translate(model, view);
     }
 
-    void  Camera::set_Position(glm::mat4  pos)
+    glm::mat4  Camera::get_Position()
     {
-        m_Position = pos;
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, this->Position);
+
+        return model;
     }
 
-    void  Camera::Rotate(float  radians, glm::vec3 axis)
+    void  Camera::update_view()
     {
-        m_Position = glm::rotate(m_Position, radians, axis);
+        this->View = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+        float radius = 10.0f;
+        float camX = static_cast<float>(sin(glfwGetTime()) * radius);
+        float camZ = static_cast<float>(cos(glfwGetTime()) * radius);
+                        //view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+            //main_camera.View = view;
+        //this->View = glm::lookAt(this->Position, this->Position + this->Forward, this->Up);
+        this->View = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), this->Up);        
     }
 }
