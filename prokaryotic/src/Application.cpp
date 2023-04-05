@@ -97,6 +97,10 @@ namespace PROKARYOTIC
         main_camera.set_Projection(glm::radians(55.0f), 0.1f, 100.f);
         main_camera.set_View(glm::vec3(0.0f, 0.0f, -3.0f));
 
+        glm::mat4 cam_pos = main_camera.get_Position();
+        cam_pos = glm::translate(cam_pos, glm::vec3(0.0f, 6.0f, -2.0f));
+        main_camera.set_Position(cam_pos);
+
         for (std::uint32_t i = 0; i < 10; i++)
         {
             Cubes_and_boxes.push_back(new Scene_object(dynamic_cast<Mesh<Vertex>*>(boxie), smiled_wood));
@@ -135,10 +139,17 @@ namespace PROKARYOTIC
             for (std::uint32_t i = 0; i < 10; i++)
             {
                 Cubes_and_boxes[i]->set_Transform(glm::mat4(1.0f));
-                Cubes_and_boxes[i]->set_Position(cube_positions[i]);
+                Cubes_and_boxes[i]->set_Position(cube_positions[i]);               
 
-                float angle = 20.0f * i;
-                Cubes_and_boxes[i]->set_Rotation(glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+                if (i % 3 == 0)
+                {
+                    Cubes_and_boxes[i]->set_Rotation((float)glfwGetTime(), glm::vec3(1.0f, 0.3f, 0.5f));
+                }
+                else
+                {
+                    float angle = 20.0f * i;
+                    Cubes_and_boxes[i]->set_Rotation(glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+                }
             }
 
             renderer.process_objects(&main_camera);
