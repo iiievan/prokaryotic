@@ -5,6 +5,7 @@ namespace PROKARYOTIC
     Application* Application::s_Instance = nullptr;
 
 	Application::Application()
+    : main_camera(WINDOW_WIDTH, WINDOW_HEIGHT)
 	{
         PRKRTC_CORE_ASSERT(!s_Instance, "Application already exist!");
         s_Instance = this;
@@ -18,7 +19,8 @@ namespace PROKARYOTIC
 	}
 
     GLFWwindow* Application::init()
-    {
+    {       
+
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -51,6 +53,8 @@ namespace PROKARYOTIC
 
 	void Application::run()
 	{
+        Renderer  renderer;
+
         Cube<Vertex>* boxie = new Cube<Vertex>();
 
         Shader* vertex_shader = new Shader("vertex.glsl", VERTEX);
@@ -83,9 +87,6 @@ namespace PROKARYOTIC
             glm::vec3(-1.3f,  1.0f, -1.5f)
         };  
 
-          Camera  main_camera(WINDOW_WIDTH, WINDOW_HEIGHT);
-        Renderer  renderer;
-
         main_camera.set_Projection(glm::radians(45.0f), 0.1f, 100.f);
         //main_camera.set_View(glm::vec3(0.0f, 0.0f, -3.0f));
         //
@@ -108,6 +109,10 @@ namespace PROKARYOTIC
 
         while (!glfwWindowShouldClose(m_Window))
         {
+            float current_frame = static_cast<float>(glfwGetTime());
+            m_dt = current_frame - m_last_frame;
+            m_last_frame = current_frame;
+
             process_input(m_Window);   // process key input
 
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -116,6 +121,7 @@ namespace PROKARYOTIC
             smiled_wood->set_Float("f_Alpha", m_alpha);
             smiled_wood->set_Bool("b_Mirror", m_mirror);
 
+            main_camera.update_view();
 
             for (std::uint32_t i = 0; i < 10; i++)
             {
@@ -131,13 +137,7 @@ namespace PROKARYOTIC
                     float angle = 20.0f * i;
                     Cubes_and_boxes[i]->set_Rotation(glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
                 }
-            }
-
-            float radius = 10.0f;
-            float cam_X = static_cast<float>(sin(glfwGetTime()) * radius);
-            float cam_Z = static_cast<float>(cos(glfwGetTime()) * radius);
-
-            main_camera.View = glm::lookAt(glm::vec3(cam_X, 0.0f, cam_Z), glm::vec3(0.0f, 0.0f, 0.0f), main_camera.Up);
+            }            
 
             renderer.process_objects(&main_camera);
 
@@ -160,6 +160,8 @@ namespace PROKARYOTIC
 
     void Application::process_input(GLFWwindow* window)
     {
+        float cameraSpeed = static_cast<float>(2.5 * m_dt);
+
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, true);
 
@@ -184,5 +186,17 @@ namespace PROKARYOTIC
         {
             m_mirror = false;
         }
+        
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+            main_camera.Position += cameraSpeed * main_camera.Forward;
+
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+            main_camera.Position -= cameraSpeed * main_camera.Forward;
+
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+            main_camera.Position -= glm::normalize(glm::cross(main_camera.Forward, main_camera.Up)) * cameraSpeed;
+
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+            main_camera.Position += glm::normalize(glm::cross(main_camera.Forward, main_camera.Up)) * cameraSpeed;
     }
 }

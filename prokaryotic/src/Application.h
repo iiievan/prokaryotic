@@ -44,6 +44,9 @@ namespace PROKARYOTIC
 	class PRKRTC_API Application
 	{
 	public:
+		  Camera  main_camera;
+
+	public:
 			        Application();
 		   virtual ~Application();
 
@@ -56,6 +59,8 @@ namespace PROKARYOTIC
 		GLFWwindow* m_Window;
 		     float  m_alpha  { 0.2f };
 		      bool  m_mirror  { false };
+			  float  m_last_frame {0.0f};
+			  float  m_dt {0.0f};
 
 static Application* s_Instance;
 	};

@@ -27,13 +27,6 @@ namespace PROKARYOTIC
 
     void  Camera::update_view()
     {
-        this->View = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-        float radius = 10.0f;
-        float camX = static_cast<float>(sin(glfwGetTime()) * radius);
-        float camZ = static_cast<float>(cos(glfwGetTime()) * radius);
-                        //view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-            //main_camera.View = view;
-        //this->View = glm::lookAt(this->Position, this->Position + this->Forward, this->Up);
-        this->View = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), this->Up);        
+        this->View = glm::lookAt(this->Position, this->Position + this->Forward, this->Up);   
     }
 }
