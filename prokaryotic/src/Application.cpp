@@ -72,16 +72,41 @@ namespace PROKARYOTIC
         //Scene_object* so_yaschik = new Scene_object(rectangle, smiled_wood);
         Scene_object* so_boxie = new Scene_object(dynamic_cast<Mesh<Vertex>*>(boxie), smiled_wood);
 
+        std::vector<Scene_object*> Cubes_and_boxes;
+
+        glm::vec3 cube_positions[] = 
+        {
+            glm::vec3(0.0f,  0.0f,  0.0f),
+            glm::vec3(2.0f,  5.0f, -15.0f),
+            glm::vec3(-1.5f, -2.2f, -2.5f),
+            glm::vec3(-3.8f, -2.0f, -12.3f),
+            glm::vec3(2.4f, -0.4f, -3.5f),
+            glm::vec3(-1.7f,  3.0f, -7.5f),
+            glm::vec3(1.3f, -2.0f, -2.5f),
+            glm::vec3(1.5f,  2.0f, -2.5f),
+            glm::vec3(1.5f,  0.2f, -1.5f),
+            glm::vec3(-1.3f,  1.0f, -1.5f)
+        };
+
+  
+
         Camera  main_camera(WINDOW_WIDTH, WINDOW_HEIGHT);
         Renderer  renderer;
 
         main_camera.Rotate(glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-        main_camera.set_Projection(glm::radians(45.0f), 0.1f, 100.f);
+        main_camera.set_Projection(glm::radians(55.0f), 0.1f, 100.f);
         main_camera.set_View(glm::vec3(0.0f, 0.0f, -3.0f));
+
+        for (std::uint32_t i = 0; i < 10; i++)
+        {
+            Cubes_and_boxes.push_back(new Scene_object(dynamic_cast<Mesh<Vertex>*>(boxie), smiled_wood));
+
+            renderer.push_to_render(Cubes_and_boxes[i]);
+        }
 
         //renderer.push_to_render(so_korobkins);
         //renderer.push_to_render(so_yaschik);
-        renderer.push_to_render(so_boxie);
+        //renderer.push_to_render(so_boxie);
 
         while (!glfwWindowShouldClose(m_Window))
         {
@@ -100,12 +125,21 @@ namespace PROKARYOTIC
             //so_yaschik->set_Transform(glm::mat4(1.0f));
             //so_yaschik->set_Position(glm::vec3(-0.5f, 0.5f, 0.0f));
 
-            so_boxie->set_Transform(glm::mat4(1.0f));
-            so_boxie->set_Position(glm::vec3(-0.5f, 0.5f, 0.0f));
-            so_boxie->set_Rotation((float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+            //so_boxie->set_Transform(glm::mat4(1.0f));
+            //so_boxie->set_Position(glm::vec3(-0.5f, 0.5f, 0.0f));
+            //so_boxie->set_Rotation((float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 
            //float scale_Value = abs(sin(glfwGetTime()) / 2.0f) + 0.1f;
            //so_yaschik->set_Scale(glm::vec3(glm::vec2(scale_Value), 0.0f));
+
+            for (std::uint32_t i = 0; i < 10; i++)
+            {
+                Cubes_and_boxes[i]->set_Transform(glm::mat4(1.0f));
+                Cubes_and_boxes[i]->set_Position(cube_positions[i]);
+
+                float angle = 20.0f * i;
+                Cubes_and_boxes[i]->set_Rotation(glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            }
 
             renderer.process_objects(&main_camera);
 
