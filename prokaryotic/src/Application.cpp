@@ -121,7 +121,8 @@ namespace PROKARYOTIC
             smiled_wood->set_Float("f_Alpha", m_alpha);
             smiled_wood->set_Bool("b_Mirror", m_mirror);
 
-            main_camera.update_view();
+            //main_camera.update_view();
+            main_camera.View = glm::lookAt(main_camera.Position, main_camera.Position + main_camera.Front, main_camera.Up);
 
             for (std::uint32_t i = 0; i < 10; i++)
             {
@@ -188,15 +189,15 @@ namespace PROKARYOTIC
         }
         
         if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-            main_camera.Position += cameraSpeed * main_camera.Forward;
+            main_camera.Position += cameraSpeed * main_camera.Front;
 
         if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-            main_camera.Position -= cameraSpeed * main_camera.Forward;
+            main_camera.Position -= cameraSpeed * main_camera.Front;
 
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-            main_camera.Position -= glm::normalize(glm::cross(main_camera.Forward, main_camera.Up)) * cameraSpeed;
+            main_camera.Position -= glm::normalize(glm::cross(main_camera.Front, main_camera.Up)) * cameraSpeed;
 
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-            main_camera.Position += glm::normalize(glm::cross(main_camera.Forward, main_camera.Up)) * cameraSpeed;
+            main_camera.Position += glm::normalize(glm::cross(main_camera.Front, main_camera.Up)) * cameraSpeed;
     }
 }

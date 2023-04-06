@@ -27,6 +27,6 @@ namespace PROKARYOTIC
 
     void  Camera::update_view()
     {
-        this->View = glm::lookAt(this->Position, this->Position + this->Forward, this->Up);   
+        this->View = glm::lookAt(this->Position, this->Position + this->Front, this->Up);
     }
 }
