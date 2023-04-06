@@ -88,18 +88,6 @@ namespace PROKARYOTIC
         };  
 
         main_camera.set_Projection(glm::radians(45.0f), 0.1f, 100.f);
-        //main_camera.set_View(glm::vec3(0.0f, 0.0f, -3.0f));
-        //
-        //main_camera.Position  = glm::vec3(0.0f, 0.0f, 3.0f);
-        //glm::vec3 cam_target = glm::vec3(0.0f, 0.0f, 0.0f);
-        //glm::vec3 cam_direction = glm::normalize(main_camera.Position - cam_target);
-        //
-        //// get the right X axis of camera, trough up_axis(and world) direction.
-        //glm::vec3 up_dir = glm::vec3(0.0f, 1.0f, 0.0f);
-        //main_camera.Right = glm::normalize(glm::cross(up_dir, cam_direction));
-        //main_camera.Up = glm::cross(cam_direction, main_camera.Right);
-        //
-        //main_camera.update_view();
 
         for (std::uint32_t i = 0; i < 10; i++)
         {
@@ -121,9 +109,6 @@ namespace PROKARYOTIC
             smiled_wood->set_Float("f_Alpha", m_alpha);
             smiled_wood->set_Bool("b_Mirror", m_mirror);
 
-            //main_camera.update_view();
-            main_camera.View = glm::lookAt(main_camera.Position, main_camera.Position + main_camera.Front, main_camera.Up);
-
             for (std::uint32_t i = 0; i < 10; i++)
             {
                 Cubes_and_boxes[i]->set_Transform(glm::mat4(1.0f));
@@ -139,6 +124,8 @@ namespace PROKARYOTIC
                     Cubes_and_boxes[i]->set_Rotation(glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
                 }
             }            
+
+            main_camera.update_view();
 
             renderer.process_objects(&main_camera);
 

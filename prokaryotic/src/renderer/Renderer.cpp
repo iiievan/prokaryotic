@@ -23,9 +23,8 @@ namespace PROKARYOTIC
 
             if (p_camera != nullptr)
             {
-                it->p_material->set_Matrix("view", p_camera->View);
                 it->p_material->set_Matrix("projection", p_camera->Projection);
-                it->p_material->set_Matrix("cam_position", p_camera->get_Position());
+                it->p_material->set_Matrix("view", p_camera->View);                
             }
 
             it->p_material->set_Matrix("model", it->get_Transform());
