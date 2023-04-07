@@ -44,9 +44,6 @@ namespace PROKARYOTIC
 	class PRKRTC_API Application
 	{
 	public:
-		  Camera  main_camera;
-
-	public:
 			        Application();
 		   virtual ~Application();
 
@@ -56,11 +53,9 @@ namespace PROKARYOTIC
 		     void  process_input(GLFWwindow* window);
 
 	private:
-		GLFWwindow* m_Window;
-		     float  m_alpha  { 0.2f };
-		      bool  m_mirror  { false };
-			 float  m_last_frame {0.0f};
-			 float  m_dt {0.0f};
+		GLFWwindow*  m_Window;
+			  float  m_last_frame {0.0f};
+			  float  m_dt {0.0f};
 
 static Application* s_Instance;
 	};
@@ -68,7 +63,10 @@ static Application* s_Instance;
 	// To be defined in client;
 	Application* Create_application();
 
-	void framebuffer_size_callback(GLFWwindow* window, int width, int height);	
+	void  deb_input(GLFWwindow* window, int key, int scancode, int action, int mods);
+	void  mouse_callback(GLFWwindow* window, double xpos, double ypos);
+	void  scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+	void  framebuffer_size_callback(GLFWwindow* window, int width, int height);	
 }
 
 
