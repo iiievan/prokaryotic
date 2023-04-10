@@ -99,6 +99,9 @@ namespace PROKARYOTIC
             renderer.push_to_render(Cubes_and_boxes[i]);
         }
 
+        //main_camera.set_true_FPS();
+        main_camera.set_floating();
+
         while (!glfwWindowShouldClose(m_Window))
         {
             float current_frame = static_cast<float>(glfwGetTime());
