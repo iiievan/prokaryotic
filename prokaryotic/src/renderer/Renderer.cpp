@@ -10,7 +10,7 @@ namespace PROKARYOTIC
         m_render_objects.push_back(object);
     }
 
-    void  Renderer::push_to_render(Scene_object* p_object)
+    void  Renderer::push_to_render(Render_object* p_object)
     {
         m_render_objects.push_back(p_object);
     }

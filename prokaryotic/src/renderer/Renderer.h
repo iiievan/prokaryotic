@@ -25,7 +25,7 @@ namespace PROKARYOTIC
 
 		void  process_objects(Camera* p_camera = nullptr);
 
-		std::vector<Scene_object*> m_render_objects;
+		std::vector<Render_object*> m_render_objects;
 	};
 }
 #endif //__RENDERER_H

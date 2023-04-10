@@ -4,12 +4,10 @@
 
 namespace PROKARYOTIC
 {
-    unique_id Scene_object::m_Unique_ID(0, 0, 0, CLASS_SCENE_OBJECT);
-
     Scene_object::Scene_object(Mesh<Vertex>* mesh, Material* material)
-        : p_mesh(mesh), p_material(material), m_ID(0)
+     : p_mesh(mesh), p_material(material), Render_object(CLASS_SCENE_OBJECT)
     {
-        m_ID.raw = generate_ID();
+        
     }
 
     Scene_object::~Scene_object()
@@ -18,27 +16,7 @@ namespace PROKARYOTIC
         {
             delete m_Children[i];
         }
-    }
-
-    std::uint64_t  Scene_object::generate_ID()
-    {
-        if (m_Unique_ID.MIN < 0xFFFF)
-        {
-            m_Unique_ID.MIN++;
-
-            return m_Unique_ID.raw;
-        }
-        else
-            if (m_Unique_ID.MAJ < 0xFFFF)
-            {
-                m_Unique_ID.MIN = 0;
-                m_Unique_ID.MAJ++;
-
-                return m_Unique_ID.raw;
-            }
-
-        assert(m_Unique_ID.MAJ < 0xFFFF);
-    }
+    }    
 
     void  Scene_object::set_Position(glm::vec3 position)
     {
