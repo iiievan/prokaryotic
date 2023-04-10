@@ -16,7 +16,7 @@ namespace PROKARYOTIC
         glm::vec3    Front = glm::vec3(0.0f, 0.0f,-1.0f);
         glm::vec3       Up = glm::vec3(0.0f, 1.0f, 0.0f);
         glm::vec3    Right = glm::vec3(1.0f, 0.0f, 0.0f);
-        glm::vec3 World_up = glm::vec3(0.0f, 1.0f, 0.0f);;
+        glm::vec3 World_up = glm::vec3(0.0f, 1.0f, 0.0f);
 
     public:
         Camera() 
@@ -49,12 +49,15 @@ namespace PROKARYOTIC
             update_View();
         }
 
-       ~Camera() { };
+             ~Camera() { };
 
         void  set_Projection(float degrees, float frustum_strt, float frustum_end);
         void  set_View(glm::vec3  view);
    glm::mat4  get_Position();
         void  update_View();
+
+        void  set_true_FPS() { m_TRUE_FPS = true; }
+        void  set_floating() { m_TRUE_FPS = false; }
 
         inline  void  process_mouse(float x_offset, float y_offset, bool constrain_pitch = false)
         {
@@ -100,25 +103,37 @@ namespace PROKARYOTIC
         inline void move_forward(float dt)
         {
             m_velocity = m_Movement_speed * dt;
-            Position += Front * m_velocity; 
+            Position += Front * m_velocity;
+
+            if (m_TRUE_FPS)
+                Position.y = 0.0f; 
         }
 
         inline void move_backward(float dt)
         {
             m_velocity = m_Movement_speed * dt;
             Position -= Front * m_velocity;
+
+            if (m_TRUE_FPS)
+                Position.y = 0.0f;
         }
 
         inline void move_left(float dt)
         {
             m_velocity = m_Movement_speed * dt;
             Position -= Right * m_velocity;
+
+            if (m_TRUE_FPS)
+                Position.y = 0.0f;
         }
 
         inline void move_right(float dt)
         {
             m_velocity = m_Movement_speed * dt;
             Position += Right * m_velocity;
+
+            if(m_TRUE_FPS)
+                Position.y = 0.0f;
         }
 
     private:
@@ -127,15 +142,47 @@ namespace PROKARYOTIC
        float  m_Window_heigh;
 
        // euler Angles
-       float m_Pitch { 0.0f };   // тангаж   (сверху вниз)
-       float m_Yaw   { -90.0f }; // рыскание (слева на право)
-       //float m_Roll  { 0.0f };   // крен ( когда одно крыло выше другого)
+       float m_Pitch { 0.0f };      // тангаж   (сверху вниз)
+       float m_Yaw   { -90.0f };    // рыскание (слева на право)
+       //float m_Roll  { 0.0f };    // крен ( когда одно крыло выше другого)
 
        // camera options
-       float m_Movement_speed    { 5.0f };
-       float m_velocity          { 0.0f };
-       float m_Mouse_sensitivity { 0.1f };
-       float m_Zoom              { 45.0f };   
+       float  m_Movement_speed    { 5.0f };
+       float  m_velocity          { 0.0f };
+       float  m_Mouse_sensitivity { 0.1f };
+       float  m_Zoom              { 45.0f }; 
+
+        bool  m_TRUE_FPS          { false };
+
+        inline glm::mat4 m_look_at(glm::vec3 position, glm::vec3 target, glm::vec3 world_Up)
+        {
+            glm::mat4  frame = glm::mat4(1.0f);
+            glm::mat4  translate = glm::mat4(1.0f);
+
+            glm::vec3  forward = glm::normalize(target - position);
+            glm::vec3    right = glm::normalize(glm::cross(forward, world_Up));
+            glm::vec3       up = glm::cross(right, forward);
+
+            frame[0].x = right.x;
+            frame[0].y = right.y;
+            frame[0].z = right.z;
+            frame[1].x = up.x;
+            frame[1].y = up.y;
+            frame[1].z = up.z;
+
+            frame[2].x = -forward.x;
+            frame[2].y = -forward.y;
+            frame[2].z = -forward.z;
+
+            frame = glm::transpose(frame);
+
+            translate[3].x = -position.x;
+            translate[3].y = -position.y;
+            translate[3].z = -position.z;
+
+            return frame * translate;
+        }
+
     };
 }
 
