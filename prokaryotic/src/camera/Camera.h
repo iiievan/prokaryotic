@@ -154,6 +154,35 @@ namespace PROKARYOTIC
 
         bool  m_TRUE_FPS          { false };
 
+        inline glm::mat4 m_look_at(glm::vec3 position, glm::vec3 target, glm::vec3 world_Up)
+        {
+            glm::mat4  frame = glm::mat4(1.0f);
+            glm::mat4  translate = glm::mat4(1.0f);
+
+            glm::vec3  forward = glm::normalize(target - position);
+            glm::vec3    right = glm::normalize(glm::cross(forward, world_Up));
+            glm::vec3       up = glm::cross(right, forward);
+
+            frame[0].x = right.x;
+            frame[0].y = right.y;
+            frame[0].z = right.z;
+            frame[1].x = up.x;
+            frame[1].y = up.y;
+            frame[1].z = up.z;
+
+            frame[2].x = -forward.x;
+            frame[2].y = -forward.y;
+            frame[2].z = -forward.z;
+
+            frame = glm::transpose(frame);
+
+            translate[3].x = -position.x;
+            translate[3].y = -position.y;
+            translate[3].z = -position.z;
+
+            return frame * translate;
+        }
+
     };
 }
 
