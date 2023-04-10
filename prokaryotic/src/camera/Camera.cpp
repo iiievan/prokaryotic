@@ -23,6 +23,7 @@ namespace PROKARYOTIC
     glm::mat4  Camera::get_Position()
     {
         glm::mat4 model = glm::mat4(1.0f);
+        
         model = glm::translate(model, this->Position);
 
         return model;
