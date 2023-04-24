@@ -65,7 +65,10 @@ namespace PROKARYOTIC
 
         Shader* vertex_shader = new Shader("vertex.glsl", VERTEX);
         Shader* fragment_shader = new Shader("fragment.glsl", FRAGMENT);
+        Shader* vertex_light_shader = new Shader("vertex_light.glsl", VERTEX);
+        Shader* fragment_light_shader = new Shader("fragment_light.glsl", FRAGMENT);
         Shader_program* shader_program = new Shader_program();
+        Shader_program* shader_light_program = new Shader_program();
 
         Texture wood_box = Texture_loader::Load_texture("wooden_container.jpg", GL_TEXTURE_2D, GL_RGB);
         Texture awesomeface = Texture_loader::Load_texture("awesomeface.png", GL_TEXTURE_2D, GL_RGBA);
@@ -73,7 +76,11 @@ namespace PROKARYOTIC
         shader_program->load_shader(vertex_shader);
         shader_program->load_shader(fragment_shader);
 
+        shader_light_program->load_shader(vertex_light_shader);
+        shader_light_program->load_shader(fragment_light_shader);
+
         Material* smiled_wood = new Material(shader_program);
+
         smiled_wood->set_Texture("s_Texture_1", &wood_box, 0);
         smiled_wood->set_Texture("s_Texture_2", &awesomeface, 1);
 
@@ -113,24 +120,8 @@ namespace PROKARYOTIC
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the z buffer
 
-            smiled_wood->set_Float("f_Alpha", alpha);
-            smiled_wood->set_Bool("b_Mirror", mirror);
-
-            for (std::uint32_t i = 0; i < 10; i++)
-            {
-                Cubes_and_boxes[i]->set_Transform(glm::mat4(1.0f));
-                Cubes_and_boxes[i]->set_Position(cube_positions[i]);               
-
-                if (i % 3 == 0)
-                {
-                    Cubes_and_boxes[i]->set_Rotation((float)glfwGetTime(), glm::vec3(1.0f, 0.3f, 0.5f));
-                }
-                else
-                {
-                    float angle = 20.0f * i;
-                    Cubes_and_boxes[i]->set_Rotation(glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-                }
-            }            
+            shader_light_program->set_Uniform("object_Color",glm::vec3(1.0f, 0.5f, 0.31f));
+            shader_light_program->set_Uniform("light_Color", glm::vec3(1.0f, 1.0f, 1.0f));
 
             main_camera.set_Projection(-1.0f, 0.1f, 100.f);     // -1.0f for camera zoom through mouse scroll
             main_camera.update_View();

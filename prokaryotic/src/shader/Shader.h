@@ -18,7 +18,6 @@
 
 namespace PROKARYOTIC
 {
-
     enum e_GLSL_shader_type : int
     {
         SHADER_NA = -1,
@@ -40,17 +39,17 @@ namespace PROKARYOTIC
 
         GLuint  get_ID() const { return m_ID; }
 
-        bool  linked{ false };
-        bool  validated{ false };
+        bool  linked { false };
+        bool  validated { false };
 
     private:
         char* m_Get_shader_path(const std::string& cfg_filename);
         std::string  m_Read_file(const char* filePath);
 
-        e_GLSL_shader_type  m_Shader_type{ SHADER_NA };
-        std::string  m_Shader_source_code;
-        GLuint  m_ID{ 0 };
-        GLuint  m_shader_program_ID{ 0 };
+        e_GLSL_shader_type  m_Shader_type { SHADER_NA };
+               std::string  m_Shader_source_code;
+                    GLuint  m_ID { 0 };
+                    GLuint  m_shader_program_ID { 0 };
     };
 }
 

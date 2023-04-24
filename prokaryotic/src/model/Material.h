@@ -67,6 +67,7 @@ namespace PROKARYOTIC
 
         std::map<std::string, Uniform_value>* get_Uniforms() { return &m_Uniforms; }
         std::map<std::string, Uniform_value_sampler>* get_Sampler_uniforms() { return &m_Sampler_uniforms; }
+
     private:
         Shader_program* m_Shader_program;
         std::map<std::string, Uniform_value>  m_Uniforms;

@@ -27,6 +27,9 @@ namespace PROKARYOTIC
 
 		void  process_objects(Camera* p_camera = nullptr);
 
+	private:
+		void  m_handle_scene_object(Scene_object& scene_object, Camera* p_camera);
+
 		std::vector<Render_object*> m_render_objects;
 	};
 }

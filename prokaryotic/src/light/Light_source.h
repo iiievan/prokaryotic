@@ -22,6 +22,8 @@ namespace PROKARYOTIC
 
 			glEnableVertexAttribArray(0);
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Simple_vertex), (const GLvoid*)0);
+
+			glBufferData(GL_ARRAY_BUFFER, sizeof(Simple_vertex) * p_vertices->size(), p_vertices->data(), GL_STATIC_DRAW);
         }
 
         unsigned int  get_VAO() const { return m_VAO; }
