@@ -2,7 +2,7 @@
 
 namespace PROKARYOTIC
 {
-	unique_id m_Unique_ID(0, 0, 0, CLASS_NA);
+	static unique_id m_Unique_ID(0, 0, 0, TYPE_NA);
 
     std::uint64_t  Render_object::m_generate_ID()
     {

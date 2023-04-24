@@ -11,6 +11,7 @@ namespace PROKARYOTIC
 {
 	template <typename T> class Mesh;
 	class Material;
+	class Render_object;
 	class Scene_object;
 	class Camera;
 
@@ -21,6 +22,7 @@ namespace PROKARYOTIC
 		     ~Renderer() {}
 
 		void  push_to_render(Mesh<Vertex>* p_mesh, Material* p_material);
+		void  push_to_render(Render_object* p_object);
 		void  push_to_render(Scene_object* p_object);
 
 		void  process_objects(Camera* p_camera = nullptr);

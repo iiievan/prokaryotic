@@ -5,7 +5,7 @@
 namespace PROKARYOTIC
 {
     Scene_object::Scene_object(Mesh<Vertex>* mesh, Material* material)
-     : p_mesh(mesh), p_material(material), Render_object(CLASS_SCENE_OBJECT)
+     : p_mesh(mesh), p_material(material), Render_object(TYPE_SCENE_OBJECT)
     {
         
     }
