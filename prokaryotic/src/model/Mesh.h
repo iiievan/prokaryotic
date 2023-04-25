@@ -7,7 +7,6 @@
 
 namespace PROKARYOTIC
 {
-
     class Shader_program;
     template <typename T> void set_vertex_attribs();
 
@@ -18,20 +17,21 @@ namespace PROKARYOTIC
     extern std::vector<unsigned int> rectangle_indices;
     extern std::vector<unsigned int> triangle_indices;
 
-    enum TOPOLOGY : uint32_t
+    enum  TOPOLOGY : uint32_t
     {
         T_POINTS,
         T_LINES,
         T_LINE_STRIP,
         T_TRIANGLES,
         T_TRIANGLE_STRIP,
-        T_TRIANGLE_FAN,
+        T_TRIANGLE_FAN
     };
 
     template <typename T>
     class Mesh
     {
-        TOPOLOGY  Topology{ T_TRIANGLES };
+        TOPOLOGY  Topology { T_TRIANGLES };
+
     public:
         Mesh();
         Mesh(std::vector<T>* p_vertices, std::vector<unsigned int>* p_indices)

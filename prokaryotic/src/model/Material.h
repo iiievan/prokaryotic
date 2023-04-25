@@ -44,11 +44,10 @@ namespace PROKARYOTIC
 
     public:
         Material(Shader_program* sh_prg)
-            : m_Shader_program(sh_prg)
+        : m_Shader_program(*sh_prg)
         { }
 
-        Shader_program* get_Shader_program()                 const { return m_Shader_program; }
-        void  set_Shader_program(Shader_program* sh_prg) { m_Shader_program = sh_prg; }
+        Shader_program& get_Shader_program() const { return m_Shader_program; }
 
         Material  copy();
 
@@ -69,7 +68,7 @@ namespace PROKARYOTIC
         std::map<std::string, Uniform_value_sampler>* get_Sampler_uniforms() { return &m_Sampler_uniforms; }
 
     private:
-        Shader_program* m_Shader_program;
+        Shader_program& m_Shader_program;
         std::map<std::string, Uniform_value>  m_Uniforms;
         std::map<std::string, Uniform_value_sampler>  m_Sampler_uniforms;
     };

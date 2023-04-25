@@ -70,7 +70,7 @@ namespace PROKARYOTIC
         Shader_program* shader_program = new Shader_program();
         Shader_program* shader_light_program = new Shader_program();
 
-        Texture wood_box = Texture_loader::Load_texture("wooden_container.jpg", GL_TEXTURE_2D, GL_RGB);
+        Texture    wood_box = Texture_loader::Load_texture("wooden_container.jpg", GL_TEXTURE_2D, GL_RGB);
         Texture awesomeface = Texture_loader::Load_texture("awesomeface.png", GL_TEXTURE_2D, GL_RGBA);
 
         shader_program->load_shader(vertex_shader);
@@ -81,30 +81,14 @@ namespace PROKARYOTIC
 
         Material* smiled_wood = new Material(shader_program);
 
-        smiled_wood->set_Texture("s_Texture_1", &wood_box, 0);
-        smiled_wood->set_Texture("s_Texture_2", &awesomeface, 1);
+        //smiled_wood->set_Texture("s_Texture_1", &wood_box, 0);
+        //smiled_wood->set_Texture("s_Texture_2", &awesomeface, 1);
 
-        std::vector<Scene_object*> Cubes_and_boxes;
+        Light_source* light_bulb = new Light_source(&light_cube_vertices, shader_light_program);
+        Scene_object* simple_Box = new Scene_object(dynamic_cast<Mesh<Vertex>*>(boxie), smiled_wood);
 
-        glm::vec3 cube_positions[] = 
-        {
-            glm::vec3(0.0f,  0.0f,  0.0f),
-            glm::vec3(2.0f,  5.0f, -15.0f),
-            glm::vec3(-1.5f, -2.2f, -2.5f),
-            glm::vec3(-3.8f, -2.0f, -12.3f),
-            glm::vec3(2.4f, -0.4f, -3.5f),
-            glm::vec3(-1.7f,  3.0f, -7.5f),
-            glm::vec3(1.3f, -2.0f, -2.5f),
-            glm::vec3(1.5f,  2.0f, -2.5f),
-            glm::vec3(1.5f,  0.2f, -1.5f),
-            glm::vec3(-1.3f,  1.0f, -1.5f)
-        };          
-
-        for (std::uint32_t i = 0; i < 10; i++)
-        {
-            Cubes_and_boxes.push_back(new Scene_object(dynamic_cast<Mesh<Vertex>*>(boxie), smiled_wood));
-            renderer.push_to_render(Cubes_and_boxes[i]);
-        }
+        renderer.push_to_render(light_bulb);
+        renderer.push_to_render(simple_Box);
 
         //main_camera.set_true_FPS();
         main_camera.set_floating();
@@ -117,11 +101,18 @@ namespace PROKARYOTIC
 
             process_input(m_Window);   // process key input
 
-            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the z buffer
 
-            shader_light_program->set_Uniform("object_Color",glm::vec3(1.0f, 0.5f, 0.31f));
-            shader_light_program->set_Uniform("light_Color", glm::vec3(1.0f, 1.0f, 1.0f));
+            shader_program->set_Uniform("object_Color",glm::vec3(1.0f, 0.5f, 0.31f));
+            shader_program->set_Uniform("light_Color", glm::vec3(1.0f, 1.0f, 1.0f));
+
+            light_bulb->set_Transform(glm::mat4(1.0f));
+            light_bulb->set_Position(glm::vec3(1.2f, 1.0f, 2.0f));
+            light_bulb->set_Scale(glm::vec3(0.2f));
+
+            simple_Box->set_Transform(glm::mat4(1.0f));
+            //simple_Box->set_Position(glm::vec3(0.0f, -2.2f, -2.5f));
 
             main_camera.set_Projection(-1.0f, 0.1f, 100.f);     // -1.0f for camera zoom through mouse scroll
             main_camera.update_View();

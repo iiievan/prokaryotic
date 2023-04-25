@@ -33,6 +33,7 @@
 #include"scene/Scene_object.h"
 #include"renderer/Renderer.h"
 #include"camera/Camera.h"
+#include "light/Light_source.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 
