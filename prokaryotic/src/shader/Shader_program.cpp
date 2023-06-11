@@ -246,6 +246,7 @@ namespace PROKARYOTIC
     void  Shader_program::set_Uniform(const std::string& name, const glm::vec3& v) const
     {
         int location = glGetUniformLocation(m_ID, name.c_str());
+
         if (glGetError() != GL_NO_ERROR)
         {
             printf("Error occured retrieving uniform location: ");
