@@ -53,7 +53,7 @@ namespace PROKARYOTIC
 
         void  set_Projection(float degrees, float frustum_strt, float frustum_end);
         void  set_View(glm::vec3  view);
-   glm::mat4  get_Position();
+   glm::mat4  get_Position();   // for vec3 position just use public glm::vec3 Position
         void  update_View();
 
         void  set_true_FPS() { m_TRUE_FPS = true; }

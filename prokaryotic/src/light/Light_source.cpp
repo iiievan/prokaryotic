@@ -152,6 +152,15 @@ namespace PROKARYOTIC
 		m_Recalc = true;
 	}
 
+	glm::mat4  Light_source::get_Position()
+	{
+		glm::mat4 model = glm::mat4(1.0f);
+
+		model = glm::translate(model, m_Position);
+
+		return model;
+	}
+
 	void  Light_source::set_Scale(glm::vec3 scale)
 	{
 		m_Scale = scale;

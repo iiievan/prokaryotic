@@ -44,6 +44,8 @@ namespace PROKARYOTIC
 		void  set_Matrix(std::string name, glm::mat4 value);
 
 		void  set_Position(glm::vec3 position);
+   glm::mat4  get_Position();
+   glm::vec3  get_Position() const { return m_Position; }
 		void  set_Scale(glm::vec3 scale);
 		void  set_Scale(float scale);
 		void  set_Rotation(float degrees, glm::vec3 axis);
