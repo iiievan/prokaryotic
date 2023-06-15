@@ -107,6 +107,8 @@ namespace PROKARYOTIC
             shader_program->set_Uniform("object_Color",glm::vec3(1.0f, 0.5f, 0.31f));
             shader_program->set_Uniform("light_Color", glm::vec3(1.0f, 1.0f, 1.0f));
             shader_program->set_Uniform("light_Position", glm::vec3(1.2f, 1.0f, 2.0f));
+            shader_program->set_Uniform("view_Position", main_camera.Position);
+            
 
             light_bulb->set_Transform(glm::mat4(1.0f));
             light_bulb->set_Position(glm::vec3(1.2f, 1.0f, 2.0f));
