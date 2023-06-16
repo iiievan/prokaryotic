@@ -152,7 +152,7 @@ namespace PROKARYOTIC
 		m_Recalc = true;
 	}
 
-	glm::mat4  Light_source::get_Position()
+	glm::mat4  Light_source::get_m4_Position()
 	{
 		glm::mat4 model = glm::mat4(1.0f);
 

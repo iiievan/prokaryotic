@@ -93,6 +93,10 @@ namespace PROKARYOTIC
         //main_camera.set_true_FPS();
         main_camera.set_floating();
 
+        float Radius = 5.0f;
+        float X0 = 0.0f;
+        float Y0 = 0.0f;
+
         while (!glfwWindowShouldClose(m_Window))
         {
             float current_frame = static_cast<float>(glfwGetTime());
@@ -104,15 +108,22 @@ namespace PROKARYOTIC
             glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the z buffer
 
-            shader_program->set_Uniform("object_Color",glm::vec3(1.0f, 0.5f, 0.31f));
-            shader_program->set_Uniform("light_Color", glm::vec3(1.0f, 1.0f, 1.0f));
-            shader_program->set_Uniform("light_Position", glm::vec3(1.2f, 1.0f, 2.0f));
-            shader_program->set_Uniform("view_Position", main_camera.Position);
-            
-
             light_bulb->set_Transform(glm::mat4(1.0f));
             light_bulb->set_Position(glm::vec3(1.2f, 1.0f, 2.0f));
             light_bulb->set_Scale(glm::vec3(0.2f));
+
+            glm::vec4 v4_Light_src_position = light_bulb->get_v4_Position();
+            glm::vec3 v3_Circle_path = glm::vec3(X0 + cos((float)glfwGetTime()) * Radius,
+                                                 Y0 + sin((float)glfwGetTime()) * Radius,
+                                                 0.0f);
+            glm::mat4 m4_Circle_move = glm::mat4(1.0f);
+            m4_Circle_move = glm::translate(m4_Circle_move, v3_Circle_path);
+            light_bulb->set_Position(m4_Circle_move * v4_Light_src_position);
+
+            shader_program->set_Uniform("object_Color", glm::vec3(1.0f, 0.5f, 0.31f));
+            shader_program->set_Uniform("light_Color", glm::vec3(1.0f, 1.0f, 1.0f));
+            shader_program->set_Uniform("light_Position", light_bulb->get_v3_Position());
+            shader_program->set_Uniform("view_Position", main_camera.Position);
 
             simple_Box->set_Transform(glm::mat4(1.0f));
             //simple_Box->set_Position(glm::vec3(0.0f, -2.2f, -2.5f));
