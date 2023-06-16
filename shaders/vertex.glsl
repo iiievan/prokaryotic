@@ -15,6 +15,5 @@ void main()
     fragment_Position = vec3(model * vec4(a_Pos, 1.0));
 
     // Normal = a_Normal;
-    Normal = mat3(transpose(inverse(model))) * a_Normal;    // в случае если было неоднородное масштабирование, пересчитываем нормали
-                                                            // чтобы они действительно были нормальны граням.
+    Normal = mat3(transpose(inverse(model))) * a_Normal;     
 }

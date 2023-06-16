@@ -12,17 +12,17 @@ out vec4 frag_Color;
 
 void main()
 {
-    // получение составл€ющей рассе€нного света
+    // 
     float  ambient_Strength  = 0.1;
      vec3  ambient           = ambient_Strength * light_Color;
 
-    // получение диффузной составлющей света
+    // 
      vec3  norm      = normalize(Normal);
      vec3  light_Dir = normalize(light_Position - fragment_Position);
-    float  diff      = max(dot(norm, light_Dir), 0.0); // max - потому что могут быть отрицательные числа если угол больше 90
+    float  diff      = max(dot(norm, light_Dir), 0.0); // max 
      vec3  diffuse   = diff * light_Color;
 
-    // получение «еркальной(Specular) составлющей света
+    // 
    float  specular_Strength  = 0.5;
     vec3  view_Dir           = normalize(view_Position - fragment_Position);
     vec3  reflect_Dir        = reflect(-light_Dir, norm);
