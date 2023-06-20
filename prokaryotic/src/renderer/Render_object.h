@@ -12,6 +12,7 @@ namespace PROKARYOTIC
         TYPE_NA = 0,
         TYPE_SCENE_OBJECT,
         TYPE_LIGHT_SOURCE,
+        TYPE_UI_ITEM
     };
 
     struct unique_id

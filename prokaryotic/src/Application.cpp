@@ -2,6 +2,8 @@
 
 namespace PROKARYOTIC
 {
+    extern std::vector<Vertex> rectangle_vertices;
+
     Camera  main_camera(WINDOW_WIDTH, WINDOW_HEIGHT);
      float  alpha{ 0.2f };
       bool  mirror{ false };
@@ -18,7 +20,7 @@ namespace PROKARYOTIC
 
 	Application::~Application()
 	{
-
+        glfwTerminate();
 	}
 
     GLFWwindow* Application::init()
@@ -67,8 +69,11 @@ namespace PROKARYOTIC
         Shader* fragment_shader = new Shader("fragment.glsl", FRAGMENT);
         Shader* vertex_light_shader = new Shader("vertex_light.glsl", VERTEX);
         Shader* fragment_light_shader = new Shader("fragment_light.glsl", FRAGMENT);
+        Shader* vertex_ui_shader = new Shader("vertex_ui.glsl", VERTEX);
+        Shader* fragment_ui_shader = new Shader("fragment_ui.glsl", FRAGMENT);
         Shader_program* shader_program = new Shader_program();
         Shader_program* shader_light_program = new Shader_program();
+        Shader_program* ui_shader_prg = new Shader_program();
 
         Texture    wood_box = Texture_loader::Load_texture("wooden_container.jpg", GL_TEXTURE_2D, GL_RGB);
         Texture awesomeface = Texture_loader::Load_texture("awesomeface.png", GL_TEXTURE_2D, GL_RGBA);
@@ -79,27 +84,31 @@ namespace PROKARYOTIC
         shader_light_program->load_shader(vertex_light_shader);
         shader_light_program->load_shader(fragment_light_shader);
 
-        Material* smiled_wood = new Material(shader_program);
+        ui_shader_prg->load_shader(vertex_ui_shader);
+        ui_shader_prg->load_shader(fragment_ui_shader);
 
+        Material* smiled_wood = new Material(shader_program);
+    
         //smiled_wood->set_Texture("s_Texture_1", &wood_box, 0);
         //smiled_wood->set_Texture("s_Texture_2", &awesomeface, 1);
 
         Light_source* light_bulb = new Light_source(&light_cube_vertices, shader_light_program);
         Scene_object* simple_Box = new Scene_object(dynamic_cast<Mesh<Vertex>*>(boxie), smiled_wood);
+                 UI_item* button = new UI_item(&rectangle_vertices, ui_shader_prg);
 
         renderer.push_to_render(light_bulb);
         renderer.push_to_render(simple_Box);
+        //renderer.push_to_render(button);
 
-        //main_camera.set_true_FPS();
         main_camera.set_floating();
 
         float Radius = 5.0f;
         float X0 = 0.0f;
         float Y0 = 0.0f;
 
-        while (!glfwWindowShouldClose(m_Window))
+        while (!m_should_quit())
         {
-            float current_frame = static_cast<float>(glfwGetTime());
+            double current_frame = m_get_time();
             m_dt = current_frame - m_last_frame;
             m_last_frame = current_frame;
 
@@ -108,9 +117,17 @@ namespace PROKARYOTIC
             glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the z buffer
 
+            m_cull(GL_BACK);
+            m_depth_test(true);
+            m_transparency(false);
+
             light_bulb->set_Transform(glm::mat4(1.0f));
             light_bulb->set_Position(glm::vec3(1.2f, 1.0f, 2.0f));
             light_bulb->set_Scale(glm::vec3(0.2f));
+
+            //button->set_Transform(glm::mat4(1.0f));
+            //button->set_Position(glm::vec3(1.2f, 1.0f, 2.0f));
+            //button->set_Scale(glm::vec3(0.1f));
 
             glm::vec4 v4_Light_src_position = light_bulb->get_v4_Position();
             glm::vec3 v3_Circle_path = glm::vec3(X0 + cos((float)glfwGetTime()) * Radius,
@@ -131,18 +148,23 @@ namespace PROKARYOTIC
             main_camera.set_Projection(-1.0f, 0.1f, 100.f);     // -1.0f for camera zoom through mouse scroll
             main_camera.update_View();
 
+            // first processing 3D objects in 3D space
             renderer.process_objects(&main_camera);
 
-            glfwSwapBuffers(m_Window);
-            glfwPollEvents();
+            m_cull(GL_FRONT);
+            m_depth_test(false);
+            m_transparency(true);
+
+            // then process GUI
+
+            m_swap_buffers();
+            m_poll();
         }
 
         delete vertex_shader;
         delete fragment_shader;
         delete shader_program;
         delete smiled_wood;
-
-        glfwTerminate();
 	}
 
     void Application::process_input(GLFWwindow* window)

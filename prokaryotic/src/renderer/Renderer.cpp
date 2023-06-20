@@ -2,19 +2,6 @@
 
 namespace PROKARYOTIC
 {
-
-    void  Renderer::push_to_render(Mesh<Vertex>* p_mesh, Material* p_material)
-    {
-        Scene_object* p_scene_obj = new Scene_object(p_mesh, p_material);
-
-        Render_object* p_render_obj = dynamic_cast<Render_object*>(p_scene_obj);
-
-        if (p_render_obj == nullptr)
-            printf("Render object bad cast!");
-        else
-            m_render_objects.push_back(p_render_obj);
-    }
-
     void  Renderer::push_to_render(Render_object* p_object)
     {
         m_render_objects.push_back(p_object);
@@ -25,7 +12,27 @@ namespace PROKARYOTIC
         Render_object* p_render_obj = dynamic_cast<Render_object*>(p_object);
 
         if (p_render_obj == nullptr)
-            printf("Render object bad cast!");
+            printf("push to render: Scene_object to Render object bad cast!");
+        else
+            m_render_objects.push_back(p_render_obj);
+    }
+
+    void  Renderer::push_to_render(Light_source* p_object)
+    {
+        Render_object* p_render_obj = dynamic_cast<Render_object*>(p_object);
+
+        if (p_render_obj == nullptr)
+            printf("push to render: Light_source to Render object bad cast!");
+        else
+            m_render_objects.push_back(p_render_obj);
+    }
+
+    void  Renderer::push_to_render(UI_item* p_object)
+    {
+        Render_object* p_render_obj = dynamic_cast<Render_object*>(p_object);
+
+        if (p_render_obj == nullptr)
+            printf("push to render: UI_item to Render object bad cast!");
         else
             m_render_objects.push_back(p_render_obj);
     }
@@ -47,7 +54,7 @@ namespace PROKARYOTIC
                     }
                     catch (std::bad_cast)
                     {
-                        printf("Render object bad cast!");
+                        printf("rendering: Scene_object to Render object bad cast!");
                     }
                     break;
                 case TYPE_LIGHT_SOURCE:                    
@@ -58,7 +65,18 @@ namespace PROKARYOTIC
                     }
                     catch (std::bad_cast)
                     {
-                        printf("Render object bad cast!");
+                        printf("rendering: Light_source to Render object bad cast!");
+                    }
+                    break;
+                case TYPE_UI_ITEM:
+                    try
+                    {
+                        UI_item& ui_obj = dynamic_cast<UI_item&>(*it);
+                        m_handle_ui_object(ui_obj, p_camera);
+                    }
+                    catch (std::bad_cast)
+                    {
+                        printf("rendering: Light_source to Render object bad cast!");
                     }
                     break;
                 case TYPE_NA:
@@ -183,5 +201,59 @@ namespace PROKARYOTIC
         }
 
         light_obj.draw<Shader_program>(nullptr);
+    }
+
+    void  Renderer::m_handle_ui_object(UI_item& ui_obj, Camera* p_camera)
+    {
+        ui_obj.get_Shader_program().use();
+
+        if (p_camera != nullptr)
+        {
+            ui_obj.set_Matrix("projection", p_camera->Projection);
+            ui_obj.set_Matrix("view", p_camera->View);
+        }
+
+        ui_obj.set_Matrix("model", ui_obj.get_Transform());
+
+        // set uniform state of material
+        auto* uniforms = ui_obj.get_Uniforms();
+        for (auto u_it = uniforms->begin(); u_it != uniforms->end(); ++u_it)
+        {
+            switch (u_it->second.Type)
+            {
+            case UNIFORM_TYPE_BOOL:
+                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Bool);
+                break;
+            case UNIFORM_TYPE_INT:
+                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Int);
+                break;
+            case UNIFORM_TYPE_FLOAT:
+                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Float);
+                break;
+            case UNIFORM_TYPE_VEC2:
+                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Vec2);
+                break;
+            case UNIFORM_TYPE_VEC3:
+                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Vec3);
+                break;
+            case UNIFORM_TYPE_VEC4:
+                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Vec4);
+                break;
+            case UNIFORM_TYPE_MAT2:
+                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Mat2);
+                break;
+            case UNIFORM_TYPE_MAT3:
+                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Mat3);
+                break;
+            case UNIFORM_TYPE_MAT4:
+                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Mat4);
+                break;
+            default:
+                printf("Unrecognized Uniform type set.");
+                break;
+            }
+        }
+
+        ui_obj.draw<Shader_program>(nullptr);
     }
 }

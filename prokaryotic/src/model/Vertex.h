@@ -37,7 +37,7 @@ namespace PROKARYOTIC
 		glm::vec2  UVs;
 		glm::vec3  normals;
 		glm::vec4  colors;
-		GLubyte  padding[12];	//pad to 64 bytes -> improved performance on some cards
+		  GLubyte  padding[12];	//pad to 64 bytes -> improved performance on some cards
 	};
 
 	struct Linked_vertex

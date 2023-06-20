@@ -30,6 +30,7 @@
 #include"model/Texture_loader.h"
 #include"model/Material.h"
 #include"model/meshes/Cube.h"
+#include"userinterface/UI_item.h"
 #include"scene/Scene_object.h"
 #include"renderer/Renderer.h"
 #include"camera/Camera.h"
@@ -54,6 +55,59 @@ namespace PROKARYOTIC
 		     void  process_input(GLFWwindow* window);
 
 	private:
+		inline   bool  m_should_quit() const	{ return glfwWindowShouldClose(m_Window); }
+		inline   void  m_poll()					{ glfwPollEvents(); }
+		inline   void  m_swap_buffers()			{ glfwSwapBuffers(m_Window); }
+		inline double  m_get_time() const		{ return static_cast<double>(glfwGetTime()); }
+		inline   void  m_transparency(bool state)
+		{
+			if (state) 
+			{
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			}
+			else 
+				glDisable(GL_BLEND);
+
+		}
+
+		inline   void  m_depth_test(bool state)
+		{
+			if (state)
+				glEnable(GL_DEPTH_TEST);
+			else
+				glDisable(GL_DEPTH_TEST);
+		}
+
+		inline   void  m_cull(int state)
+		{
+			switch (state) 
+			{
+			case GL_FRONT:
+				glEnable(GL_CULL_FACE);
+				glCullFace(GL_FRONT);
+				glFrontFace(GL_CCW);
+				break;
+			case GL_BACK:
+				glEnable(GL_CULL_FACE);
+				glCullFace(GL_BACK);
+				glFrontFace(GL_CCW);
+				break;
+			default:
+				glDisable(GL_CULL_FACE);
+				break;
+			}
+		}
+
+		inline    void  m_wirefreame(bool state) 
+		{
+			if (state)
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			else
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+
+
 		GLFWwindow*  m_Window;
 			  float  m_last_frame {0.0f};
 			  float  m_dt {0.0f};
