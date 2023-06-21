@@ -34,7 +34,6 @@ namespace PROKARYOTIC
 	private:
 		void  m_handle_scene_object(Scene_object& scene_object, Camera* p_camera);
 		void  m_handle_light_object(Light_source& light_obj, Camera* p_camera);
-		void  m_handle_ui_object(UI_item& ui_obj, Camera* p_camera);
 
 		std::vector<Render_object*> m_render_objects;
 	};

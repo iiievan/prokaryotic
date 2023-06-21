@@ -11,6 +11,7 @@ namespace PROKARYOTIC
     Application* Application::s_Instance = nullptr;
 
 	Application::Application()
+    : m_screen(WINDOW_WIDTH, WINDOW_HEIGHT)
 	{
         PRKRTC_CORE_ASSERT(!s_Instance, "Application already exist!");
         s_Instance = this;
@@ -29,6 +30,7 @@ namespace PROKARYOTIC
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
         GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Prokaryotic", NULL, NULL);
 
@@ -40,7 +42,7 @@ namespace PROKARYOTIC
         }
 
         glfwMakeContextCurrent(window);
-        glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+        //glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
         glfwSetKeyCallback(window, deb_input);
         glfwSetCursorPosCallback(window, mouse_callback);
         glfwSetScrollCallback(window, scroll_callback);
@@ -52,9 +54,9 @@ namespace PROKARYOTIC
             return nullptr;
         }
 
-        glEnable(GL_DEPTH_TEST);    // Activate the zed buffer so that the fragments are not drawn one on top of the other.        
+        //glEnable(GL_DEPTH_TEST);    // Activate the zed buffer so that the fragments are not drawn one on top of the other.        
 
-        glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+        //glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
         return window;
     }
@@ -98,7 +100,6 @@ namespace PROKARYOTIC
 
         renderer.push_to_render(light_bulb);
         renderer.push_to_render(simple_Box);
-        //renderer.push_to_render(button);
 
         main_camera.set_floating();
 
@@ -114,10 +115,11 @@ namespace PROKARYOTIC
 
             process_input(m_Window);   // process key input
 
-            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the z buffer
+            m_screen.use();
+            m_screen.clear_to_color(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
+            m_screen.clear();
 
-            m_cull(GL_BACK);
+            //m_cull(GL_BACK);
             m_depth_test(true);
             m_transparency(false);
 
@@ -151,11 +153,12 @@ namespace PROKARYOTIC
             // first processing 3D objects in 3D space
             renderer.process_objects(&main_camera);
 
-            m_cull(GL_FRONT);
-            m_depth_test(false);
-            m_transparency(true);
-
+            //m_cull(GL_FRONT);
+            //m_depth_test(false);
+            //m_transparency(true);
+            
             // then process GUI
+            //handle_gui(*button, &main_camera);
 
             m_swap_buffers();
             m_poll();
@@ -242,6 +245,60 @@ namespace PROKARYOTIC
     void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     {
         glViewport(0, 0, width, height);
+    }
+
+    void  handle_gui(UI_item& ui_obj, Camera* p_camera)
+    {
+        ui_obj.get_Shader_program().use();
+
+        if (p_camera != nullptr)
+        {
+            ui_obj.set_Matrix("projection", p_camera->Projection);
+            ui_obj.set_Matrix("view", p_camera->View);
+        }
+
+        ui_obj.set_Matrix("model", ui_obj.get_Transform());
+
+        // set uniform state of material
+        auto* uniforms = ui_obj.get_Uniforms();
+        for (auto u_it = uniforms->begin(); u_it != uniforms->end(); ++u_it)
+        {
+            switch (u_it->second.Type)
+            {
+            case UNIFORM_TYPE_BOOL:
+                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Bool);
+                break;
+            case UNIFORM_TYPE_INT:
+                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Int);
+                break;
+            case UNIFORM_TYPE_FLOAT:
+                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Float);
+                break;
+            case UNIFORM_TYPE_VEC2:
+                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Vec2);
+                break;
+            case UNIFORM_TYPE_VEC3:
+                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Vec3);
+                break;
+            case UNIFORM_TYPE_VEC4:
+                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Vec4);
+                break;
+            case UNIFORM_TYPE_MAT2:
+                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Mat2);
+                break;
+            case UNIFORM_TYPE_MAT3:
+                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Mat3);
+                break;
+            case UNIFORM_TYPE_MAT4:
+                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Mat4);
+                break;
+            default:
+                printf("Unrecognized Uniform type set.");
+                break;
+            }
+        }
+
+        ui_obj.draw<Shader_program>(nullptr);
     }
 
 }

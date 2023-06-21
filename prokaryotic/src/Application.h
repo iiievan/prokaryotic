@@ -36,12 +36,14 @@
 #include"camera/Camera.h"
 #include "light/Light_source.h"
 
+#include "utils/Frame_buffer.h"
+
 #define STB_IMAGE_IMPLEMENTATION
 
 namespace PROKARYOTIC
 {
-	constexpr unsigned WINDOW_WIDTH = 1024;
-	constexpr unsigned WINDOW_HEIGHT = 768;
+	constexpr unsigned WINDOW_WIDTH = 1920;
+	constexpr unsigned WINDOW_HEIGHT = 1080;
 
 	class PRKRTC_API Application
 	{
@@ -109,6 +111,7 @@ namespace PROKARYOTIC
 
 
 		GLFWwindow*  m_Window;
+	   Frame_buffer  m_screen;
 			  float  m_last_frame {0.0f};
 			  float  m_dt {0.0f};
 
@@ -122,6 +125,7 @@ static Application* s_Instance;
 	void  mouse_callback(GLFWwindow* window, double xpos, double ypos);
 	void  scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 	void  framebuffer_size_callback(GLFWwindow* window, int width, int height);	
+	void  handle_gui(UI_item& ui_obj, Camera* p_camera);
 }
 
 
