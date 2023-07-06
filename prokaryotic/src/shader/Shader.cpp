@@ -2,6 +2,113 @@
 
 namespace PROKARYOTIC
 {
+    Shader::Shader(const GLchar* vertex_Path, const GLchar* frag_Path, const GLchar* geo_Path, bool debug) 
+    {
+        std::ifstream vertex_File;
+        std::ifstream frag_File;
+        std::ifstream geo_File;
+        std::string vertex_Code;
+        std::string frag_Code;
+        std::string geo_Code;
+    
+        if (geo_Path != nullptr)
+            m_type = VFG;
+        else
+            m_type = VF;
+
+    m_vCode = m_Get_shader_code(vertex_Path).c_str();       // read vertex file
+    m_fCode = m_Get_shader_code(frag_Path).c_str();         // read fragment file
+
+    if (geo_Path != nullptr) 
+    {
+        m_gCode = m_Get_shader_code(geo_Path).c_str();                    // read geometry file
+    }    
+
+    if (debug)
+    {
+        std::cout << m_vCode << std::endl << std::endl;
+        std::cout << m_fCode << std::endl << std::endl;
+
+        if (geo_Path != nullptr)
+            std::cout << m_fCode << std::endl << std::endl;
+    }
+
+    GLuint vertex, fragment, geometry;
+
+    //compile vertex shader
+    vertex = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertex, 1, &vCode, NULL);
+    glCompileShader(vertex);
+    glGetShaderiv(vertex, GL_COMPILE_STATUS, &success);
+
+    if (!success) 
+    {
+        glGetShaderInfoLog(vertex, 512, NULL, infoLog);
+        std::cout << "ERROR: Vertex shader COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
+    else 
+    {
+        std::cout << "Compiled Vertex Shader: " << vertexPath << std::endl;
+    }
+
+    //compile fragment shader
+    fragment = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragment, 1, &fCode, NULL);
+    glCompileShader(fragment);
+    glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
+
+    if (!success) 
+    {
+        glGetShaderInfoLog(fragment, 512, NULL, infoLog);
+        std::cout << "ERROR: Fragment shader COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
+    else 
+    {
+        std::cout << "Compiled Fragment Shader: " << frag_Path << std::endl;
+    }
+
+    if (geo_Path != nullptr)
+    {
+        //compile geometry shader
+        geometry = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(geometry, 1, &gCode, NULL);
+        glCompileShader(geometry);
+        glGetShaderiv(geometry, GL_COMPILE_STATUS, &success);
+
+        if (!success) 
+        {
+            glGetShaderInfoLog(geometry, 512, NULL, infoLog);
+            std::cout << "ERROR: Geometry shader COMPILATION_FAILED\n" << infoLog << std::endl;
+        }
+        else 
+        {
+            std::cout << "Compiled Geometry Shader: " << geo_Path << std::endl;
+        }
+    }
+
+    // link shaders to program
+    m_ID = glCreateProgram();
+    glAttachShader(m_ID, vertex);
+    glAttachShader(m_ID, fragment);
+
+    if (geo_Path != nullptr)
+        glAttachShader(m_ID, geometry);
+
+    glLinkProgram(m_ID);
+    glGetProgramiv(m_ID, GL_LINK_STATUS, &success);
+
+    if (!success)
+    {
+        glGetProgramInfoLog(ID, 512, NULL, infoLog);
+        std::cout << "ERROR: Shader program LINKING_FAILED\n" << infoLog << std::endl;
+    }
+
+    //delete shaders
+    glDeleteShader(vertex);
+    glDeleteShader(fragment);
+    if (geo_Path != nullptr)
+        glDeleteShader(fragment);
+}
 
     Shader::Shader(const std::string& GLSL_filename, e_GLSL_shader_type type)
     {
@@ -16,22 +123,25 @@ namespace PROKARYOTIC
 
     Shader::~Shader()
     {
-        glDeleteShader(m_ID);
-        glDeleteProgram(m_shader_program_ID);
+
+        glDeleteProgram(m_ID);
     }
 
-    bool Shader::compile(GLuint shader_program_ID)
+    bool Shader::compile(GLuint shader_ID)
     {
-        //Create the program if we havn't already got one
-        if (shader_program_ID <= 0)
+        GLint success;
+        GLchar info_Log[512];
+
+        //compile vertex shader
+        shader_ID = glCreateShader(GL_VERTEX_SHADER);
+        glShaderSource(shader_ID, 1, &vCode, NULL);
+        glCompileShader(shader_ID);
+        glGetShaderiv(shader_ID, GL_COMPILE_STATUS, &success);
+
+        if (!success)
         {
-            printf("Compile Shader: Unable to compile. No shader program handle ID.\n");
-            return false;
-        }
-        else
-        {
-            if (m_shader_program_ID == 0)
-                m_shader_program_ID = shader_program_ID;
+            glGetShaderInfoLog(shader_ID, 512, NULL, info_Log);
+            std::cout << "ERROR: Vertex shader COMPILATION_FAILED\n" << info_Log << std::endl;
         }
 
         //set up the specific shader part
@@ -199,6 +309,31 @@ namespace PROKARYOTIC
         memcpy(result, directory.c_str(), directory.length() + 1);
 
         return result;
+    }
+
+    std::string  m_Get_shader_code(const GLchar* file_Path)
+    {
+        std::string sh_code;
+        std::ifstream sh_File;
+
+        //read vertex file
+        sh_File.open(file_Path);
+
+        if (sh_File.is_open())
+        {
+            std::stringstream s_Stream;
+
+            s_Stream << sh_File.rdbuf();
+            sh_code = s_Stream.str();
+        }
+        else
+        {
+            std::cout << "ERROR: Can't open vertex shader file at: " << file_Path << std::endl;
+        }
+
+        sh_File.close();
+
+        return sh_code;
     }
 
     std::string Shader::m_Read_file(const char* filePath)

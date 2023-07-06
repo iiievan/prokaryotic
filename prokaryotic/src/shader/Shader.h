@@ -26,9 +26,18 @@ namespace PROKARYOTIC
         GEOMETRY = GL_GEOMETRY_SHADER
     };
 
+    enum e_shader_type 
+    {
+        VF,     // vertex and fragment shader
+        VFG,    // vertex, fragment and geometry shader
+        COMP    // compute Shader
+    };
+
     class Shader
     {
     public:
+        Shader(const GLchar* vertex_Path, const GLchar* frag_Path, const GLchar* geo_Path, bool debug);     // VFG or VF Shader           
+        Shader(const GLchar* compute_Path, bool debug);                                                      // compute Shader
         Shader(const std::string& GLSL_filename, e_GLSL_shader_type type);
         ~Shader();
 
@@ -45,11 +54,18 @@ namespace PROKARYOTIC
     private:
         char* m_Get_shader_path(const std::string& cfg_filename);
         std::string  m_Read_file(const char* filePath);
+        std::string  m_Get_shader_code(const GLchar* file_Path);
+
 
         e_GLSL_shader_type  m_Shader_type { SHADER_NA };
                std::string  m_Shader_source_code;
                     GLuint  m_ID { 0 };
                     GLuint  m_shader_program_ID { 0 };
+
+             e_shader_type  m_type;
+             const GLchar*  m_vCode { nullptr };
+             const GLchar*  m_fCode { nullptr };
+             const GLchar*  m_gCode { nullptr };
     };
 }
 
