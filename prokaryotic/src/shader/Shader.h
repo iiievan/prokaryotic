@@ -37,7 +37,7 @@ namespace PROKARYOTIC
     {
     public:
         Shader(const GLchar* vertex_Path, const GLchar* frag_Path, const GLchar* geo_Path, bool debug);     // VFG or VF Shader           
-        Shader(const GLchar* compute_Path, bool debug);                                                      // compute Shader
+        //Shader(const GLchar* compute_Path, bool debug);                                                      // compute Shader
         Shader(const std::string& GLSL_filename, e_GLSL_shader_type type);
         ~Shader();
 
@@ -46,7 +46,25 @@ namespace PROKARYOTIC
         bool  validate(GLuint shader_program_ID);
         bool  link_and_validate(GLuint shader_program_ID);
 
-        GLuint  get_ID() const { return m_ID; }
+        void  use();
+      GLuint  get_ID() const { return m_ID; }
+
+         int  get_Uniform_location(const char* name) const;
+         
+        void  set_Uniform(const std::string& name, float x, float y) const;
+        void  set_Uniform(const std::string& name, float x, float y, float z) const;
+        void  set_Uniform(const std::string& name, const glm::vec2& v) const;
+        void  set_Uniform(const std::string& name, const glm::vec3& v) const;
+        void  set_Uniform(const std::string& name, const glm::vec4& v) const;
+        void  set_Uniform(const std::string& name, const glm::mat2& m) const;
+        void  set_Uniform(const std::string& name, const glm::mat3& m) const;
+        void  set_Uniform(const std::string& name, const glm::mat4& m) const;
+        void  set_Uniform(const std::string& name, float val) const;
+        void  set_Uniform(const std::string& name, int val) const;
+        void  set_Uniform(const std::string& name, bool val) const;
+
+        void  print_Active_uniforms();
+        void  print_Active_attribs();
 
         bool  linked { false };
         bool  validated { false };
