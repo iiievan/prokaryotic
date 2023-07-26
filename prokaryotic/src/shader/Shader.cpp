@@ -4,12 +4,9 @@ namespace PROKARYOTIC
 {
     Shader::Shader(const GLchar* vertex_Path, const GLchar* frag_Path, const GLchar* geo_Path, bool debug) 
     {
-        std::ifstream vertex_File;
-        std::ifstream frag_File;
-        std::ifstream geo_File;
-        std::string vertex_Code;
-        std::string frag_Code;
-        std::string geo_Code;
+          std::string  vertex_Code;
+          std::string  frag_Code;
+          std::string  geo_Code;
     
         if (geo_Path != nullptr)
             m_type = VFG;
@@ -21,7 +18,7 @@ namespace PROKARYOTIC
 
         if (geo_Path != nullptr) 
         {
-            m_gCode = m_Get_shader_code(geo_Path).c_str();                    // read geometry file
+            m_gCode = m_Get_shader_code(geo_Path).c_str();      // read geometry file
         }    
 
         if (debug)
@@ -50,7 +47,7 @@ namespace PROKARYOTIC
         }
         else 
         {
-            std::cout << "Compiled Vertex Shader: " << vertexPath << std::endl;
+            std::cout << "Compiled Vertex Shader: " << vertex_Path << std::endl;
         }
 
         //compile fragment shader
@@ -101,13 +98,14 @@ namespace PROKARYOTIC
     
         if (!success)
         {
-            glGetProgramInfoLog(ID, 512, NULL, infoLog);
-            std::cout << "ERROR: Shader program LINKING_FAILED\n" << infoLog << std::endl;
+            glGetProgramInfoLog(m_ID, 512, NULL, info_log);
+            std::cout << "ERROR: Shader program LINKING_FAILED\n" << info_log << std::endl;
         }
 
         //delete shaders
         glDeleteShader(vertex);
         glDeleteShader(fragment);
+
         if (geo_Path != nullptr)
             glDeleteShader(fragment);
     }
@@ -135,7 +133,7 @@ namespace PROKARYOTIC
 
         //compile vertex shader
         shader_ID = glCreateShader(GL_VERTEX_SHADER);
-        glShaderSource(shader_ID, 1, &vCode, NULL);
+        glShaderSource(shader_ID, 1, &m_vCode, NULL);
         glCompileShader(shader_ID);
         glGetShaderiv(shader_ID, GL_COMPILE_STATUS, &success);
 
@@ -190,7 +188,7 @@ namespace PROKARYOTIC
         else
         {
             //compile succeeded, attach shader and return true
-            glAttachShader(shader_program_ID, m_ID);
+            glAttachShader(m_shader_program_ID, m_ID);
             return true;
         }
     }
@@ -297,7 +295,7 @@ namespace PROKARYOTIC
         return result;
     }
 
-    void  Shaderv::set_Uniform(const std::string& name, float x, float y) const
+    void  Shader::set_Uniform(const std::string& name, float x, float y) const
     {
         int location = glGetUniformLocation(m_ID, name.c_str());
 
@@ -513,7 +511,7 @@ namespace PROKARYOTIC
         return result;
     }
 
-    std::string  m_Get_shader_code(const GLchar* file_Path)
+    std::string  Shader::m_Get_shader_code(const GLchar* file_Path)
     {
         std::string sh_code;
         std::ifstream sh_File;

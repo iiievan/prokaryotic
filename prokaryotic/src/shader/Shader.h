@@ -70,7 +70,7 @@ namespace PROKARYOTIC
         bool  validated { false };
 
     private:
-        char* m_Get_shader_path(const std::string& cfg_filename);
+              char*  m_Get_shader_path(const std::string& cfg_filename);
         std::string  m_Read_file(const char* filePath);
         std::string  m_Get_shader_code(const GLchar* file_Path);
 
