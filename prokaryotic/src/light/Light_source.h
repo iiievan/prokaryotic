@@ -2,7 +2,7 @@
 
 #include "Application.h"
 #include "model/Vertex.h"
-#include "shader/Shader_program.h"
+#include "shader/Shader.h"
 #include "model/Uniform_types.h"
 #include "renderer/Render_object.h"
 #include "model/Mesh.h"
@@ -16,6 +16,7 @@ namespace PROKARYOTIC
 	extern std::vector<Simple_vertex> light_cube_vertices;	
 
     enum  TOPOLOGY : uint32_t;
+	class Shader;
 
 	class Light_source : public Render_object
 	{
@@ -23,12 +24,12 @@ namespace PROKARYOTIC
 
 	public:
 
-		Light_source(Shader_program* sh_prg);
-		Light_source(std::vector<Simple_vertex>* p_vertices, Shader_program* sh_prg);
+		Light_source(Shader* sh_prg);
+		Light_source(std::vector<Simple_vertex>* p_vertices, Shader* sh_prg);
 
 		std::uint64_t  get_ID() const { return Render_object::m_ID.raw; }
 
-		                      Shader_program& get_Shader_program() const { return m_Shader_program; }
+		                              Shader& get_Shader_program() const { return m_Shader; }
 		std::map<std::string, Uniform_value>* get_Uniforms()             { return &m_Uniforms; }
 
 		void  set_Mesh(std::vector<Simple_vertex>* p_vertices);
@@ -83,7 +84,7 @@ namespace PROKARYOTIC
 		unsigned int  get_VBO() const { return m_VBO; }
 
 	private:
-		                     Shader_program&  m_Shader_program;
+		                              Shader& m_Shader;
 		std::map<std::string, Uniform_value>  m_Uniforms;
 		          std::vector<Simple_vertex>* m_Vertices {nullptr};
 

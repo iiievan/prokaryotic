@@ -23,14 +23,12 @@
 #include "Log.h"
 
 #include"shader/Shader.h"
-#include"shader/Shader_program.h"
 #include"model/Mesh.h"
 #include"model/Vertex.h"
 #include"model/Texture.h"
 #include"model/Texture_loader.h"
 #include"model/Material.h"
 #include"model/meshes/Cube.h"
-#include"userinterface/UI_item.h"
 #include"scene/Scene_object.h"
 #include"renderer/Renderer.h"
 #include"camera/Camera.h"
@@ -125,7 +123,6 @@ static Application* s_Instance;
 	void  mouse_callback(GLFWwindow* window, double xpos, double ypos);
 	void  scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 	void  framebuffer_size_callback(GLFWwindow* window, int width, int height);	
-	void  handle_gui(UI_item& ui_obj, Camera* p_camera);
 }
 
 

@@ -36,17 +36,14 @@ namespace PROKARYOTIC
     class Shader
     {
     public:
-        Shader(const GLchar* vertex_Path, const GLchar* frag_Path, const GLchar* geo_Path, bool debug);     // VFG or VF Shader           
+        Shader(const std::string& vertex_fName, const std::string& frag_fName, const std::string& geo_fName, bool debug = false);     // VFG or VF Shader           
         //Shader(const GLchar* compute_Path, bool debug);                                                      // compute Shader
-        Shader(const std::string& GLSL_filename, e_GLSL_shader_type type);
         ~Shader();
 
-        bool  compile(GLuint shader_program_ID);
-        bool  link(GLuint shader_program_ID);
-        bool  validate(GLuint shader_program_ID);
-        bool  link_and_validate(GLuint shader_program_ID);
-
-        void  use();
+        void  use() { glUseProgram(m_ID); }
+        //has a memory barrier to ensure what the compute shader is writing too is not read
+        //void  invoke(glm::vec3 res) { if (m_type == COMP) glDispatchCompute((GLuint)res.x, (GLuint)res.y, (GLuint)res.z); }
+        //void  memory_barrier() { glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT); }
       GLuint  get_ID() const { return m_ID; }
 
          int  get_Uniform_location(const char* name) const;
@@ -66,19 +63,14 @@ namespace PROKARYOTIC
         void  print_Active_uniforms();
         void  print_Active_attribs();
 
-        bool  linked { false };
-        bool  validated { false };
-
     private:
-              char*  m_Get_shader_path(const std::string& cfg_filename);
+             GLchar*  m_Get_shader_path(const std::string& cfg_filename);
         std::string  m_Read_file(const char* filePath);
         std::string  m_Get_shader_code(const GLchar* file_Path);
 
 
         e_GLSL_shader_type  m_Shader_type { SHADER_NA };
-               std::string  m_Shader_source_code;
                     GLuint  m_ID { 0 };
-                    GLuint  m_shader_program_ID { 0 };
 
              e_shader_type  m_type;
              const GLchar*  m_vCode { nullptr };

@@ -3,7 +3,7 @@
 
 #include "Application.h"
 #include "model/Vertex.h"
-#include "shader/Shader_program.h"
+#include "shader/Shader.h"
 
 namespace PROKARYOTIC
 {
@@ -72,7 +72,7 @@ namespace PROKARYOTIC
             glDeleteBuffers(1, &m_EBO_ID);
         }
 
-        template<typename SH = Shader_program>
+        template<typename SH = Shader>
         inline void  draw(SH* p_Sh_prg, bool vireframe_mode = false)
         {
             if (vireframe_mode)

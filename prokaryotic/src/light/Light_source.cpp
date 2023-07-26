@@ -48,15 +48,15 @@ namespace PROKARYOTIC
 		Simple_vertex(glm::vec3(-0.5f,  0.5f, -0.5f))
 	};
 
-	Light_source::Light_source(Shader_program* sh_prg)
-		: m_Shader_program(*sh_prg),
+	Light_source::Light_source(Shader* sh_prg)
+		: m_Shader(*sh_prg),
 		Render_object(TYPE_LIGHT_SOURCE)
 	{
 		Topology = T_TRIANGLES;
 	}
 
-	Light_source::Light_source(std::vector<Simple_vertex>* p_vertices, Shader_program* sh_prg)
-		: m_Shader_program(*sh_prg),
+	Light_source::Light_source(std::vector<Simple_vertex>* p_vertices, Shader* sh_prg)
+		: m_Shader(*sh_prg),
 		Render_object(TYPE_LIGHT_SOURCE)
 	{
 		Topology = T_TRIANGLES;

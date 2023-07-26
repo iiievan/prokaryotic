@@ -27,16 +27,6 @@ namespace PROKARYOTIC
             m_render_objects.push_back(p_render_obj);
     }
 
-    void  Renderer::push_to_render(UI_item* p_object)
-    {
-        Render_object* p_render_obj = dynamic_cast<Render_object*>(p_object);
-
-        if (p_render_obj == nullptr)
-            printf("push to render: UI_item to Render object bad cast!");
-        else
-            m_render_objects.push_back(p_render_obj);
-    }
-
     void  Renderer::process_objects(Camera* p_camera)
     {
         e_RENDER_OBJECT_TYPES obj_type = TYPE_NA;
@@ -77,7 +67,7 @@ namespace PROKARYOTIC
 
     void  Renderer::m_handle_scene_object(Scene_object& scene_obj, Camera* p_camera)
     {
-        scene_obj.p_material->get_Shader_program().use();
+        scene_obj.p_material->get_Shader().use();
 
         if (p_camera != nullptr)
         {
@@ -103,31 +93,31 @@ namespace PROKARYOTIC
             switch (u_it->second.Type)
             {
             case UNIFORM_TYPE_BOOL:
-                scene_obj.p_material->get_Shader_program().set_Uniform(u_it->first, u_it->second.Bool);
+                scene_obj.p_material->get_Shader().set_Uniform(u_it->first, u_it->second.Bool);
                 break;
             case UNIFORM_TYPE_INT:
-                scene_obj.p_material->get_Shader_program().set_Uniform(u_it->first, u_it->second.Int);
+                scene_obj.p_material->get_Shader().set_Uniform(u_it->first, u_it->second.Int);
                 break;
             case UNIFORM_TYPE_FLOAT:
-                scene_obj.p_material->get_Shader_program().set_Uniform(u_it->first, u_it->second.Float);
+                scene_obj.p_material->get_Shader().set_Uniform(u_it->first, u_it->second.Float);
                 break;
             case UNIFORM_TYPE_VEC2:
-                scene_obj.p_material->get_Shader_program().set_Uniform(u_it->first, u_it->second.Vec2);
+                scene_obj.p_material->get_Shader().set_Uniform(u_it->first, u_it->second.Vec2);
                 break;
             case UNIFORM_TYPE_VEC3:
-                scene_obj.p_material->get_Shader_program().set_Uniform(u_it->first, u_it->second.Vec3);
+                scene_obj.p_material->get_Shader().set_Uniform(u_it->first, u_it->second.Vec3);
                 break;
             case UNIFORM_TYPE_VEC4:
-                scene_obj.p_material->get_Shader_program().set_Uniform(u_it->first, u_it->second.Vec4);
+                scene_obj.p_material->get_Shader().set_Uniform(u_it->first, u_it->second.Vec4);
                 break;
             case UNIFORM_TYPE_MAT2:
-                scene_obj.p_material->get_Shader_program().set_Uniform(u_it->first, u_it->second.Mat2);
+                scene_obj.p_material->get_Shader().set_Uniform(u_it->first, u_it->second.Mat2);
                 break;
             case UNIFORM_TYPE_MAT3:
-                scene_obj.p_material->get_Shader_program().set_Uniform(u_it->first, u_it->second.Mat3);
+                scene_obj.p_material->get_Shader().set_Uniform(u_it->first, u_it->second.Mat3);
                 break;
             case UNIFORM_TYPE_MAT4:
-                scene_obj.p_material->get_Shader_program().set_Uniform(u_it->first, u_it->second.Mat4);
+                scene_obj.p_material->get_Shader().set_Uniform(u_it->first, u_it->second.Mat4);
                 break;
             default:
                 printf("Unrecognized Uniform type set.");
@@ -135,7 +125,7 @@ namespace PROKARYOTIC
             }
         }
 
-        scene_obj.p_mesh->draw<Shader_program>(nullptr);
+        scene_obj.p_mesh->draw<Shader>(nullptr);
     }
 
     void  Renderer::m_handle_light_object(Light_source& light_obj, Camera* p_camera)
@@ -189,8 +179,6 @@ namespace PROKARYOTIC
             }
         }
 
-        light_obj.draw<Shader_program>(nullptr);
-    }
-
-    
+        light_obj.draw<Shader>(nullptr);
+    }    
 }

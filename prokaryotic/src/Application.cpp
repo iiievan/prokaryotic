@@ -65,39 +65,22 @@ namespace PROKARYOTIC
 	{
         Renderer  renderer;
 
-        Cube<Vertex>* boxie = new Cube<Vertex>();
-
-        Shader* vertex_shader = new Shader("vertex.glsl", VERTEX);
-        Shader* fragment_shader = new Shader("fragment.glsl", FRAGMENT);
-        Shader* vertex_light_shader = new Shader("vertex_light.glsl", VERTEX);
-        Shader* fragment_light_shader = new Shader("fragment_light.glsl", FRAGMENT);
-        Shader* vertex_ui_shader = new Shader("vertex_ui.glsl", VERTEX);
-        Shader* fragment_ui_shader = new Shader("fragment_ui.glsl", FRAGMENT);
-        Shader_program* shader_program = new Shader_program();
-        Shader_program* shader_light_program = new Shader_program();
-        Shader_program* ui_shader_prg = new Shader_program();
+        Cube<Vertex>* box = new Cube<Vertex>();
+  
+        Shader* box_shader = new Shader("vertex.glsl", "fragment.glsl", "");
+        Shader* light_bulb_shader = new Shader("vertex_light.glsl", "fragment_light.glsl", "");
 
         Texture    wood_box = Texture_loader::Load_texture("wooden_container.jpg", GL_TEXTURE_2D, GL_RGB);
         Texture awesomeface = Texture_loader::Load_texture("awesomeface.png", GL_TEXTURE_2D, GL_RGBA);
 
-        shader_program->load_shader(vertex_shader);
-        shader_program->load_shader(fragment_shader);
-
-        shader_light_program->load_shader(vertex_light_shader);
-        shader_light_program->load_shader(fragment_light_shader);
-
-        ui_shader_prg->load_shader(vertex_ui_shader);
-        ui_shader_prg->load_shader(fragment_ui_shader);
-
-        Material* smiled_wood = new Material(shader_program);
+        Material* smiled_wood = new Material(box_shader);
     
         //smiled_wood->set_Texture("s_Texture_1", &wood_box, 0);
         //smiled_wood->set_Texture("s_Texture_2", &awesomeface, 1);
 
-        Light_source* light_bulb = new Light_source(&light_cube_vertices, shader_light_program);
-        Scene_object* simple_Box = new Scene_object(dynamic_cast<Mesh<Vertex>*>(boxie), smiled_wood);
-                 UI_item* button = new UI_item(&rectangle_vertices, ui_shader_prg);
-
+        Light_source* light_bulb = new Light_source(&light_cube_vertices, light_bulb_shader);
+        Scene_object* simple_Box = new Scene_object(dynamic_cast<Mesh<Vertex>*>(box), smiled_wood);
+   
         renderer.push_to_render(light_bulb);
         renderer.push_to_render(simple_Box);
 
@@ -139,10 +122,10 @@ namespace PROKARYOTIC
             m4_Circle_move = glm::translate(m4_Circle_move, v3_Circle_path);
             light_bulb->set_Position(m4_Circle_move * v4_Light_src_position);
 
-            shader_program->set_Uniform("object_Color", glm::vec3(1.0f, 0.5f, 0.31f));
-            shader_program->set_Uniform("light_Color", glm::vec3(1.0f, 1.0f, 1.0f));
-            shader_program->set_Uniform("light_Position", light_bulb->get_v3_Position());
-            shader_program->set_Uniform("view_Position", main_camera.Position);
+            box_shader->set_Uniform("object_Color", glm::vec3(1.0f, 0.5f, 0.31f));
+            box_shader->set_Uniform("light_Color", glm::vec3(1.0f, 1.0f, 1.0f));
+            box_shader->set_Uniform("light_Position", light_bulb->get_v3_Position());
+            box_shader->set_Uniform("view_Position", main_camera.Position);
 
             simple_Box->set_Transform(glm::mat4(1.0f));
             //simple_Box->set_Position(glm::vec3(0.0f, -2.2f, -2.5f));
@@ -164,9 +147,8 @@ namespace PROKARYOTIC
             m_poll();
         }
 
-        delete vertex_shader;
-        delete fragment_shader;
-        delete shader_program;
+        delete box_shader;
+        delete light_bulb_shader;
         delete smiled_wood;
 	}
 
@@ -246,61 +228,6 @@ namespace PROKARYOTIC
     {
         glViewport(0, 0, width, height);
     }
-
-    void  handle_gui(UI_item& ui_obj, Camera* p_camera)
-    {
-        ui_obj.get_Shader_program().use();
-
-        if (p_camera != nullptr)
-        {
-            ui_obj.set_Matrix("projection", p_camera->Projection);
-            ui_obj.set_Matrix("view", p_camera->View);
-        }
-
-        ui_obj.set_Matrix("model", ui_obj.get_Transform());
-
-        // set uniform state of material
-        auto* uniforms = ui_obj.get_Uniforms();
-        for (auto u_it = uniforms->begin(); u_it != uniforms->end(); ++u_it)
-        {
-            switch (u_it->second.Type)
-            {
-            case UNIFORM_TYPE_BOOL:
-                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Bool);
-                break;
-            case UNIFORM_TYPE_INT:
-                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Int);
-                break;
-            case UNIFORM_TYPE_FLOAT:
-                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Float);
-                break;
-            case UNIFORM_TYPE_VEC2:
-                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Vec2);
-                break;
-            case UNIFORM_TYPE_VEC3:
-                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Vec3);
-                break;
-            case UNIFORM_TYPE_VEC4:
-                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Vec4);
-                break;
-            case UNIFORM_TYPE_MAT2:
-                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Mat2);
-                break;
-            case UNIFORM_TYPE_MAT3:
-                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Mat3);
-                break;
-            case UNIFORM_TYPE_MAT4:
-                ui_obj.get_Shader_program().set_Uniform(u_it->first, u_it->second.Mat4);
-                break;
-            default:
-                printf("Unrecognized Uniform type set.");
-                break;
-            }
-        }
-
-        ui_obj.draw<Shader_program>(nullptr);
-    }
-
 }
 
 

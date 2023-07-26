@@ -4,6 +4,7 @@
 #include<vector>
 #include "model/Mesh.h"
 #include "model/Material.h"
+#include "shader/Shader.h"
 #include "scene/Scene_object.h"
 #include "light/Light_source.h"
 #include "camera/Camera.h"
@@ -15,7 +16,6 @@ namespace PROKARYOTIC
 	class Render_object;
 	class Scene_object;
 	class Light_source;
-	class UI_item;
 	class Camera;
 
 	class Renderer
@@ -27,7 +27,6 @@ namespace PROKARYOTIC
 		void  push_to_render(Render_object* p_object);
 		void  push_to_render(Scene_object* p_object);
 		void  push_to_render(Light_source* p_object);
-		void  push_to_render(UI_item* p_object);
 
 		void  process_objects(Camera* p_camera = nullptr);
 

@@ -5,7 +5,7 @@ namespace PROKARYOTIC
 
     Material  Material::copy()
     {
-        Material copy(&m_Shader_program);
+        Material copy(&m_Shader);
 
         copy.Type = Type;
 
@@ -105,8 +105,8 @@ namespace PROKARYOTIC
             break;
         }
 
-        m_Shader_program.use();
-        m_Shader_program.set_Uniform(name, (int)unit);
+        m_Shader.use();
+        m_Shader.set_Uniform(name, (int)unit);
     }
     /*
     void  Material::set_Texture_cube(std::string name, TextureCube* value, unsigned int unit = 0)
