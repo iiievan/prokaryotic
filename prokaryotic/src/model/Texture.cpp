@@ -92,17 +92,17 @@ namespace PROKARYOTIC
             glTexImage1D(GL_TEXTURE_1D, 0, m_Internal_format, width, 0, m_Format, m_Type, 0);
         }
         else
-            if (m_Target == GL_TEXTURE_2D)
-            {
-                assert(height > 0);
-                glTexImage2D(GL_TEXTURE_2D, 0, m_Internal_format, width, height, 0, m_Format, m_Type, 0);
-            }
-            else
-                if (m_Target == GL_TEXTURE_3D)
-                {
-                    assert(height > 0 && depth > 0);
-                    glTexImage3D(GL_TEXTURE_3D, 0, m_Internal_format, width, height, depth, 0, m_Format, m_Type, 0);
-                }
+        if (m_Target == GL_TEXTURE_2D)
+        {
+            assert(height > 0);
+            glTexImage2D(GL_TEXTURE_2D, 0, m_Internal_format, width, height, 0, m_Format, m_Type, 0);
+        }
+        else
+        if (m_Target == GL_TEXTURE_3D)
+        {
+            assert(height > 0 && depth > 0);
+            glTexImage3D(GL_TEXTURE_3D, 0, m_Internal_format, width, height, depth, 0, m_Format, m_Type, 0);
+        }
     }
 
     void Texture::Bind(int unit)
@@ -129,23 +129,23 @@ namespace PROKARYOTIC
             glTexParameteri(m_Target, GL_TEXTURE_WRAP_S, wrapMode);
         }
         else
-            if (m_Target == GL_TEXTURE_2D)
-            {
-                m_Wrap_S = wrapMode;
-                m_Wrap_T = wrapMode;
-                glTexParameteri(m_Target, GL_TEXTURE_WRAP_S, wrapMode);
-                glTexParameteri(m_Target, GL_TEXTURE_WRAP_T, wrapMode);
-            }
-            else
-                if (m_Target == GL_TEXTURE_3D)
-                {
-                    m_Wrap_S = wrapMode;
-                    m_Wrap_T = wrapMode;
-                    m_Wrap_R = wrapMode;
-                    glTexParameteri(m_Target, GL_TEXTURE_WRAP_S, wrapMode);
-                    glTexParameteri(m_Target, GL_TEXTURE_WRAP_T, wrapMode);
-                    glTexParameteri(m_Target, GL_TEXTURE_WRAP_R, wrapMode);
-                }
+        if (m_Target == GL_TEXTURE_2D)
+        {
+            m_Wrap_S = wrapMode;
+            m_Wrap_T = wrapMode;
+            glTexParameteri(m_Target, GL_TEXTURE_WRAP_S, wrapMode);
+            glTexParameteri(m_Target, GL_TEXTURE_WRAP_T, wrapMode);
+        }
+        else
+        if (m_Target == GL_TEXTURE_3D)
+        {
+            m_Wrap_S = wrapMode;
+            m_Wrap_T = wrapMode;
+            m_Wrap_R = wrapMode;
+            glTexParameteri(m_Target, GL_TEXTURE_WRAP_S, wrapMode);
+            glTexParameteri(m_Target, GL_TEXTURE_WRAP_T, wrapMode);
+            glTexParameteri(m_Target, GL_TEXTURE_WRAP_R, wrapMode);
+        }
     }
 
     void Texture::set_GL_Filter(GLenum filter_min, GLenum filter_max, bool bind)

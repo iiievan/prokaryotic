@@ -16,12 +16,17 @@ namespace PROKARYOTIC
         else
             m_type = VF;
 
-        m_vCode = m_Get_shader_code(vertex_Path).c_str();       // read vertex file
-        m_fCode = m_Get_shader_code(frag_Path).c_str();         // read fragment file
+        std::string vertex_shader_code = m_Get_shader_code(vertex_Path);    // read vertex file
+        std::string fragment_shader_code = m_Get_shader_code(frag_Path);    // read fragment file
+        std::string geometry_shader_code;
+
+        m_vCode = vertex_shader_code.c_str();       
+        m_fCode = fragment_shader_code.c_str();         
 
         if (geo_Path != nullptr)
         {
-            m_gCode = m_Get_shader_code(geo_Path).c_str();      // read geometry file
+            geometry_shader_code = m_Get_shader_code(geo_Path); // read geometry file
+            m_gCode = geometry_shader_code.c_str();      
         }    
 
         if (debug)
