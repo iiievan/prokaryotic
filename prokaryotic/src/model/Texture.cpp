@@ -3,11 +3,88 @@
 #include <assert.h>
 #include <string>
 
+#include "stb\stb_image.h"
+
 namespace PROKARYOTIC
 {
-    Texture::Texture(std::string  fname,             // file name of texture
-                          GLenum  texture_type,      // type of texture: [ GL_TEXTURE_1D, GL_TEXTURE_2D ,GL_TEXTURE_3D, GL_TEXTURE_CUBE_MAP ]
-                 texture_param_t  params)
+
+    Texture_param_t::Texture_param_t(std::string  fname, bool srgb)
+    {
+        char* path = Get_texture_path(fname);
+        int  nrComponents;
+
+        switch (internal_format)
+        {
+        case GL_RGB:
+            internal_format = (srgb ? GL_SRGB : GL_RGB);
+            break;
+        case GL_SRGB:
+            internal_format = (srgb ? GL_SRGB : GL_RGB);
+            break;
+        case GL_SRGB_ALPHA:
+            internal_format = (srgb ? GL_SRGB_ALPHA : GL_RGBA);
+            break;
+        case GL_RGBA:
+            internal_format = (srgb ? GL_SRGB_ALPHA : GL_RGBA);
+            break;
+        default:
+            break;
+        }
+
+        // flip textures on their y coordinate while loading
+        stbi_set_flip_vertically_on_load(true);
+        unsigned char* p_image_data = stbi_load(path, &width, &height, &nrComponents, 0);
+
+        if (p_image_data)
+        {
+            switch (nrComponents)
+            {
+            case 1:
+                format = GL_RED;
+                break;
+            case 3:
+                format = GL_RGB;
+                break;
+            case 4:
+                format = GL_RGBA;
+                break;
+            default:
+                break;
+            }
+        }
+        else
+            printf("Texture failed to load at path: %s", path);
+
+        stbi_image_free(p_image_data);
+    }
+
+    char* Texture_param_t::Get_texture_path(const std::string& fname)
+    {
+        TCHAR c_path[MAX_PATH];
+        char* result = nullptr;
+
+        GetModuleFileName(NULL, c_path, (sizeof(c_path)));  // get execution filepath
+
+        PathRemoveFileSpec(c_path); // remove name of program from path
+
+        // make shader filepath
+        std::wstring wStr = c_path;
+        std::string directory = std::string(wStr.begin(), wStr.end());
+        directory = directory - "\\sandbox" - "\\Debug-windows-x86_64" - "\\bin";
+        directory = directory + "\\resources" + "\\textures\\";
+        directory = directory + fname;
+
+        result = new char[directory.length() + 1];
+
+        result[directory.length()] = '\0';  // make sure that the new string is null terminated
+
+        memcpy(result, directory.c_str(), directory.length() + 1);
+
+        return result;
+    }
+
+    Texture::Texture(GLenum  texture_type,      // type of texture: [ GL_TEXTURE_1D, GL_TEXTURE_2D ,GL_TEXTURE_3D, GL_TEXTURE_CUBE_MAP ]
+            Texture_param_t  params)
     {
         m_texture_type = texture_type;
         glGenTextures(1, &m_ID);
@@ -51,7 +128,12 @@ namespace PROKARYOTIC
         if (params.mipmapping)
             glGenerateMipmap(m_texture_type);
 
-        Unbind();
+        Unbind();        
+    }
+
+    char* Texture::m_Get_texture_path(const std::string& fname)
+    {
+
     }
 
     void Texture::Generate(unsigned int width, GLenum internalFormat, GLenum format, GLenum type, void* data)
