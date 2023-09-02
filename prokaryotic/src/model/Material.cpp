@@ -89,7 +89,7 @@ namespace PROKARYOTIC
         m_Sampler_uniforms[name].Unit = unit;
         m_Sampler_uniforms[name].Texture = value;
 
-        switch (value->get_Target())
+        switch (value->get_Type())
         {
         case GL_TEXTURE_1D:
             m_Sampler_uniforms[name].Type = UNIFORM_TYPE_SAMPLER1D;

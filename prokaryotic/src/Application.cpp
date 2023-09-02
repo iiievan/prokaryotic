@@ -70,13 +70,15 @@ namespace PROKARYOTIC
         Shader* box_shader = new Shader("vertex.glsl", "fragment.glsl", "");
         Shader* light_bulb_shader = new Shader("vertex_light.glsl", "fragment_light.glsl", "");
 
-        Texture    wood_box = Texture_loader::Load_texture("wooden_container.jpg", GL_TEXTURE_2D, GL_RGB);
-        Texture awesomeface = Texture_loader::Load_texture("awesomeface.png", GL_TEXTURE_2D, GL_RGBA);
+        //Texture    wood_box = Texture_loader::Load_texture("wooden_container.jpg", GL_TEXTURE_2D, GL_RGB);
+        //Texture awesomeface = Texture_loader::Load_texture("awesomeface.png", GL_TEXTURE_2D, GL_RGBA);
+        Texture    wood_box(Texture_params<GL_TEXTURE_2D>("wooden_container.jpg", GL_RGB)); 
+        Texture awesomeface(Texture_params<GL_TEXTURE_2D>("awesomeface.png", GL_RGBA));
 
         Material* smiled_wood = new Material(box_shader);
     
-        //smiled_wood->set_Texture("s_Texture_1", &wood_box, 0);
-        //smiled_wood->set_Texture("s_Texture_2", &awesomeface, 1);
+        smiled_wood->set_Texture("s_Texture_1", &wood_box, 0);
+        smiled_wood->set_Texture("s_Texture_2", &awesomeface, 1);
 
         Light_source* light_bulb = new Light_source(&light_cube_vertices, light_bulb_shader);
         Scene_object* simple_Box = new Scene_object(dynamic_cast<Mesh<Vertex>*>(box), smiled_wood);
