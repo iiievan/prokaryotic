@@ -40,7 +40,7 @@ namespace PROKARYOTIC
     private:
 
          unsigned int  m_ID{ 0xffffffff };
-              GLenum  m_texture_type;
+               GLenum  m_texture_type;
     };
 }
 

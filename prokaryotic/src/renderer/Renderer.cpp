@@ -77,7 +77,7 @@ namespace PROKARYOTIC
 
         scene_obj.p_material->set_Matrix("model", scene_obj.get_Transform());
 
-        /*
+        
         // bind/active uniform sampler/texture objects
         auto* samplers = scene_obj.p_material->get_Sampler_uniforms();
 
@@ -85,7 +85,7 @@ namespace PROKARYOTIC
         {
             sampler_it->second.Texture->Bind(sampler_it->second.Unit);
         }
-        */
+        
         // set uniform state of material
         auto* uniforms = scene_obj.p_material->get_Uniforms();
         for (auto u_it = uniforms->begin(); u_it != uniforms->end(); ++u_it)

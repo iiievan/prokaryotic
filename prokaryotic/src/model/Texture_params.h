@@ -16,7 +16,7 @@ namespace PROKARYOTIC
         int  width{ 0 };                                // Must be 2n + 2 (boundary) for some integer n.
         int  height{ 0 };                                // The value must be 2 * m * + 2 (boundary) for some integer m.
         int  depth{ 0 };
-        GLenum  internal_format{};                         // number of color components:
+        GLenum  internal_format { 0 };                         // number of color components:
                                                            // [GL_ALPHA, GL_ALPHA4, GL_ALPHA8, GL_ALPHA12, GL_ALPHA16, GL_LUMINANCE, GL_LUMINANCE4, GL_LUMINANCE8, GL_LUMINANCE12, GL_LUMINANCE16,
                                                            //  GL_LUMINANCE_ALPHA, GL_LUMINANCE4_ALPHA4, GL_LUMINANCE6_ALPHA2, GL_LUMINANCE8_ALPHA8, GL_LUMINANCE12_ALPHA4, GL_LUMINANCE12_ALPHA12, 
                                                            //  GL_LUMINANCE16_ALPHA16, GL_INTENSITY GL_INTENSITY4, GL_INTENSITY8, GL_INTENSITY12, GL_INTENSITY16, GL_R3_G3_B2, GL_RGB, GL_RGB4, GL_RGB5, 
@@ -28,20 +28,20 @@ namespace PROKARYOTIC
 
 
         GLenum  filter_min{ GL_LINEAR_MIPMAP_LINEAR };    // what filter method to use during minification
-        GLenum  filter_max{ GL_LINEAR };                  // what filter method to use during magnification
-        GLenum  wrap_S{ 0 };                                // wrapping method of the S coordinate
-        GLenum  wrap_T{ 0 };                                // wrapping method of the T coordinate
-        GLenum  wrap_R{ 0 };                                // wrapping method of the R coordinate
+        GLenum  filter_max{ GL_LINEAR };                  // what filter method to use during magnification [GL_NEAREST , GL_LINEAR ]
+        GLenum  wrap_S{ 0 };                              // wrapping method of the S coordinate
+        GLenum  wrap_T{ 0 };                              // wrapping method of the T coordinate
+        GLenum  wrap_R{ 0 };                              // wrapping method of the R coordinate
+                                                          // wrapping methods: [GL_REPEAT, GL_MIRRORED_REPEAT, GL_CLAMP_TO_EDGE, GL_CLAMP_TO_BORDER]
 
-        bool  mipmapping{ false };
-        bool  srgb;
+        bool  mipmapping{ true };
 
-        Texture_params(std::string  fname, bool srgb = false)   // 2D-type fills width, hight, internal_format, format, srgb fields automatically
+        Texture_params(std::string  fname, GLenum intform, bool srgb = false)   // 2D-type fills width, hight, internal_format, format, srgb fields automatically
         {
             char* path = Get_texture_path(fname);
             int  nrComponents;
 
-            switch (internal_format)
+            switch (intform)
             {
             case GL_RGB:
                 internal_format = (srgb ? GL_SRGB : GL_RGB);
@@ -61,7 +61,7 @@ namespace PROKARYOTIC
 
             // flip textures on their y coordinate while loading
             stbi_set_flip_vertically_on_load(true);
-            unsigned char* p_image_data = stbi_load(path, &width, &height, &nrComponents, 0);
+            p_image_data = stbi_load(path, &width, &height, &nrComponents, 0);
 
             if (p_image_data)
             {
@@ -81,9 +81,7 @@ namespace PROKARYOTIC
                 }
             }
             else
-                printf("Texture failed to load at path: %s", path);
-
-            stbi_image_free(p_image_data);
+                printf("Texture failed to load at path:%s.", path);            
         }
 
         template<GLenum TEXTYPE = GL_TEXTURE_1D>

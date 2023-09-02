@@ -78,7 +78,7 @@ namespace PROKARYOTIC
         Material* smiled_wood = new Material(box_shader);
     
         smiled_wood->set_Texture("s_Texture_1", &wood_box, 0);
-        smiled_wood->set_Texture("s_Texture_2", &awesomeface, 1);
+        //smiled_wood->set_Texture("s_Texture_2", &awesomeface, 1);
 
         Light_source* light_bulb = new Light_source(&light_cube_vertices, light_bulb_shader);
         Scene_object* simple_Box = new Scene_object(dynamic_cast<Mesh<Vertex>*>(box), smiled_wood);
@@ -124,7 +124,7 @@ namespace PROKARYOTIC
             m4_Circle_move = glm::translate(m4_Circle_move, v3_Circle_path);
             light_bulb->set_Position(m4_Circle_move * v4_Light_src_position);
 
-            box_shader->set_Uniform("object_Color", glm::vec3(1.0f, 0.5f, 0.31f));
+            //box_shader->set_Uniform("object_Color", glm::vec3(1.0f, 0.5f, 0.31f));
             box_shader->set_Uniform("light_Color", glm::vec3(1.0f, 1.0f, 1.0f));
             box_shader->set_Uniform("light_Position", light_bulb->get_v3_Position());
             box_shader->set_Uniform("view_Position", main_camera.Position);

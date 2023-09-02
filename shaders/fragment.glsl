@@ -2,11 +2,13 @@
 
 in vec3 Normal;
 in vec3 fragment_Position;  // for diffuse lightning
+in vec2 Texcoord;
 
-uniform vec3 object_Color;
+//uniform vec3 object_Color;
 uniform vec3 light_Color;
 uniform vec3 light_Position;    // for diffuse lightning
 uniform vec3 view_Position;     // for Specular lightning
+uniform sampler2D s_Texture_1;
 
 out vec4 frag_Color;
 
@@ -29,6 +31,7 @@ void main()
    float  spec               = pow(max(dot(view_Dir, reflect_Dir), 0.0), 64);
     vec3  specular           = specular_Strength * spec * light_Color;
 
-    vec3  result             = (ambient + diffuse + specular) * object_Color;
-      frag_Color             = vec4(result, 1.0);
+    //vec3  result             = (ambient + diffuse + specular) * object_Color;
+	  vec3  result             = (ambient + diffuse + specular);
+      frag_Color               = texture(s_Texture_1, Texcoord)* vec4(result, 1.0);
 }
