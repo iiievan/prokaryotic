@@ -13,7 +13,7 @@
 #include <windows.h>
 #include <stdint.h>
 
-#include<GLAD/glad.h>
+#include <GLAD/glad.h>
 #include "utils/utils.h"
 
 namespace PROKARYOTIC

@@ -1,4 +1,5 @@
 #include "model/Mesh.h"
+#include "shader/Shader.h"
 /*
 GL_ARRAY_BUFFER
 The buffer will be used as a source for vertex data, but the connection is only made when glVertexAttribPointer is called. 

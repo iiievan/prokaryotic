@@ -14,26 +14,27 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include<GLAD/glad.h>
-#include<GLFW/glfw3.h>
-#include<glm/glm.hpp>
-#include<glm/gtc/matrix_transform.hpp>
-#include<glm/gtc/type_ptr.hpp>
+#include <GLAD/glad.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Log.h"
 
-#include"shader/Shader.h"
-#include"model/Mesh.h"
-#include"model/Vertex.h"
-#include"model/Texture.h"
-#include"model/Material.h"
-#include"model/meshes/Cube.h"
-#include"scene/Scene_object.h"
-#include"renderer/Renderer.h"
-#include"camera/Camera.h"
+#include "shader/Shader.h"
+#include "model/Mesh.h"
+#include "model/Vertex.h"
+#include "model/Texture.h"
+#include "model/Material.h"
+#include "model/meshes/Cube.h"
+#include "scene/Scene_object.h"
+#include "renderer/Renderer.h"
+#include "camera/Camera.h"
 #include "light/Light_source.h"
-
+		 
 #include "utils/Frame_buffer.h"
+#include "gui/GUI.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 

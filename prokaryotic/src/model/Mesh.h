@@ -33,7 +33,17 @@ namespace PROKARYOTIC
         TOPOLOGY  Topology { T_TRIANGLES };
 
     public:
-        Mesh();
+
+        // default constructor for manual mesh assembly
+        Mesh()
+        {
+            m_vertex_size = 0;
+            m_instance_size = 0;
+            m_attach_size = 0;
+
+            glGenVertexArrays(1, &m_VAO_ID);
+        }
+
         Mesh(std::vector<T>* p_vertices, std::vector<unsigned int>* p_indices)
         {
             if (p_indices != nullptr)
@@ -72,8 +82,62 @@ namespace PROKARYOTIC
             glDeleteBuffers(1, &m_EBO_ID);
         }
 
-        template<typename SH = Shader>
-        inline void  draw(SH* p_Sh_prg, bool vireframe_mode = false)
+        //-----> function set for default constructor use
+
+        //The vertex array buffer being attach must be bound before this function is called
+        void  attach(GLenum type, int numberComponents, int stride, int offset, bool instance)
+        {
+            glVertexAttribPointer(m_attach_size, numberComponents, type, GL_FALSE, stride, (GLvoid*)offset);
+            glEnableVertexAttribArray(m_attach_size);
+
+            if (instance)
+                glVertexAttribDivisor(m_attach_size, 1);
+
+            m_attach_size++;
+        }
+        void  set_vertex_size(int size)     { m_vertex_size = size; }
+        void  set_instance_size(int size)   { m_instance_size = size; }
+        void  bind()                        { glBindVertexArray(m_VAO_ID); }
+        void  unbind()                      { glBindVertexArray(0); }
+        void  create_rect_2D()
+        {
+            GLfloat rectVerts[] =
+            {
+                 1.0f, -1.0f,  1.0f, 0.0f,
+                -1.0f, -1.0f,  0.0f, 0.0f,
+                -1.0f,  1.0f,  0.0f, 1.0f,
+
+                 1.0f,  1.0f,  1.0f, 1.0f,
+                 1.0f, -1.0f,  1.0f, 0.0f,
+                -1.0f,  1.0f,  0.0f, 1.0f,
+            };
+
+            Buffer meshData(GL_ARRAY_BUFFER, 24 * sizeof(GLfloat), rectVerts, GL_STATIC_DRAW);
+            meshData.bind();
+
+            bind();
+            set_vextex_size(6);
+            attach(GL_FLOAT, 2, 4 * sizeof(GLfloat), 0, false);
+            attach(GL_FLOAT, 2, 4 * sizeof(GLfloat), 2 * sizeof(GLfloat), false);
+            unbind();
+        }
+
+        void  draw()
+        {
+            glBindVertexArray(m_VAO_ID);
+
+            if (m_instance_size > 0)
+                glDrawArraysInstanced(GL_TRIANGLES, 0, m_vertex_size, m_instance_size);
+            else
+                glDrawArrays(GL_TRIANGLES, 0, m_vertex_size);
+
+            glBindVertexArray(0);
+        } 
+
+        //<------ function set for default constructor use
+
+        template<typename T = Shader>
+        void  draw(T* p_Sh_prg, bool vireframe_mode = false)
         {
             if (vireframe_mode)
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -85,6 +149,7 @@ namespace PROKARYOTIC
                 p_Sh_prg->use();
 
             glBindVertexArray(m_VAO_ID);
+
             if (m_Index_count)
             {
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO_ID);
@@ -119,9 +184,13 @@ namespace PROKARYOTIC
         std::vector<T>* m_Vertices;
         unsigned int  m_Index_count{ 0 };
 
-        unsigned int  m_VBO_ID;
         unsigned int  m_VAO_ID;
+        unsigned int  m_VBO_ID;  
         unsigned int  m_EBO_ID;
+
+        unsigned int  m_vertex_size;
+        unsigned int  m_instance_size;
+        unsigned int  m_attach_size;
     };
 
     template <>
@@ -194,4 +263,5 @@ namespace PROKARYOTIC
         glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(Linked_vertex), (const GLvoid*)64);
     }
 }
+
 #endif	//__MESH_H
