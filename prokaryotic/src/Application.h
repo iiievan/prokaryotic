@@ -43,6 +43,8 @@ namespace PROKARYOTIC
 	constexpr unsigned WINDOW_WIDTH = 1920;
 	constexpr unsigned WINDOW_HEIGHT = 1080;
 
+	class GUI;
+
 	class PRKRTC_API Application
 	{
 	public:
@@ -107,13 +109,12 @@ namespace PROKARYOTIC
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 
+		   GLFWwindow* m_Window;
+		 Frame_buffer  m_screen;
+			    float  m_last_frame {0.0f};
+			    float  m_dt {0.0f};
 
-		GLFWwindow*  m_Window;
-	   Frame_buffer  m_screen;
-			  float  m_last_frame {0.0f};
-			  float  m_dt {0.0f};
-
-static Application* s_Instance;
+  static Application* s_Instance;
 	};
 
 	// To be defined in client;

@@ -85,17 +85,17 @@ namespace PROKARYOTIC
 		              double  m_element_width;
 		              double  m_element_height;
 		              double  m_element_aspect_ratio;
-		                bool  m_mouse_already_down;
+					    bool  m_mouse_already_down {false};
 		           glm::vec2  m_position;
 		           glm::vec3  m_background_col;
 		              double  m_transparency;
 	
 	std::vector<GUI_element>  m_elements;
 	
-				Shader_buffer  m_buffer;
-		              Texture  m_font;
-		               Shader  m_shader;
-		          Mesh<float>  m_mesh;
+				Shader_buffer  *m_buffer;
+		              Texture  *m_font;
+		               Shader  *m_shader;
+		          Mesh<float>  *m_mesh;
 	
 		              GLfloat  m_text_verts[]; 
 	};

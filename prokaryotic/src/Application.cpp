@@ -66,9 +66,14 @@ namespace PROKARYOTIC
         Renderer  renderer;
 
         Cube<Vertex>* box = new Cube<Vertex>();
-  
+        
         Shader* box_shader = new Shader("vertex.glsl", "fragment.glsl", "");
         Shader* light_bulb_shader = new Shader("vertex_light.glsl", "fragment_light.glsl", "");
+
+        //GUI gui(WINDOW_WIDTH, WINDOW_HEIGHT, 0.11, 0.04, glm::vec3(0.05), 0.8);
+
+        //ADD GUI ELEMENTS
+        //gui->add_text("Simple GUI", 0.05, GUI_CENTER_SIDE, glm::vec3(1.0), glm::vec3(0.0, 0.0, 1.0));
 
         //Texture    wood_box = Texture_loader::Load_texture("wooden_container.jpg", GL_TEXTURE_2D, GL_RGB);
         //Texture awesomeface = Texture_loader::Load_texture("awesomeface.png", GL_TEXTURE_2D, GL_RGBA);
@@ -143,7 +148,7 @@ namespace PROKARYOTIC
             //m_transparency(true);
             
             // then process GUI
-            //handle_gui(*button, &main_camera);
+            //gui.draw();
 
             m_swap_buffers();
             m_poll();
