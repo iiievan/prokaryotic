@@ -27,7 +27,7 @@ namespace PROKARYOTIC
     GLFWwindow* Application::init()
     {  
         glfwInit();
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -47,6 +47,7 @@ namespace PROKARYOTIC
         glfwSetCursorPosCallback(window, mouse_callback);
         glfwSetScrollCallback(window, scroll_callback);
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
         {
@@ -77,8 +78,8 @@ namespace PROKARYOTIC
 
         //Texture    wood_box = Texture_loader::Load_texture("wooden_container.jpg", GL_TEXTURE_2D, GL_RGB);
         //Texture awesomeface = Texture_loader::Load_texture("awesomeface.png", GL_TEXTURE_2D, GL_RGBA);
-        Texture    wood_box(Texture_params<GL_TEXTURE_2D>("wooden_container.jpg", GL_RGB)); 
-        Texture awesomeface(Texture_params<GL_TEXTURE_2D>("awesomeface.png", GL_RGBA));
+        Texture    wood_box(GL_TEXTURE_2D,"wooden_container.jpg", GL_RGB, true, false);
+        Texture awesomeface(GL_TEXTURE_2D,"awesomeface.png", GL_RGBA, true, false);
 
         Material* smiled_wood = new Material(box_shader);
     

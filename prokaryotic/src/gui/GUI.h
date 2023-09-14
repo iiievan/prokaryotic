@@ -9,7 +9,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "model/Mesh.h"
-#include "model/Texture_params.h"
 #include "model/Texture.h"
 #include "shader/Shader.h"
 #include "utils/Shader_buffer.h"
@@ -46,11 +45,14 @@ namespace PROKARYOTIC
 	};
 
 
-	template <GLenum TEXTYPE>
-	struct Texture_params;
-
 	template <typename T>
 	class Mesh;
+	
+
+	extern Shader_buffer gui_buffer;
+	//extern Texture gui_Font;
+	extern Shader gui_shader;
+	extern Mesh<float> gui_mesh;
 
 	class GUI 
 	{
@@ -93,12 +95,14 @@ namespace PROKARYOTIC
 	std::vector<GUI_element>  m_elements;
 	
 				Shader_buffer  *m_buffer;
-		              Texture  *m_font;
+				      Texture  *m_font;
 		               Shader  *m_shader;
 		          Mesh<float>  *m_mesh;
 	
 		              GLfloat  m_text_verts[]; 
 	};
 }
+
+
 
 #endif // _GUI_H_

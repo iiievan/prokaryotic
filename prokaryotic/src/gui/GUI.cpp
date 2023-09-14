@@ -2,9 +2,14 @@
 
 namespace PROKARYOTIC
 {
+	//Texture gui_Font(GL_TEXTURE_2D,"fontSDF.png", GL_RGB);
+	Shader_buffer gui_buffer(GL_SHADER_STORAGE_BUFFER, 256 * sizeof(GLfloat), nullptr, GL_STREAM_DRAW);	
+	Shader gui_shader("GUI_vert.glsl", "GUI_frag.glsl", "");
+	Mesh<float> gui_mesh;
 
 	GUI::GUI(int screen_width, int screen_height, double element_width, double element_height, glm::vec3 backgrnd_clr, double transparency)
-	: m_text_verts
+	: m_font(new Texture( GL_TEXTURE_2D, "fontSDF.png", GL_RGB, true, false)),
+	  m_text_verts
 	  {
 	  	  1.0f, 0.0f,  1.0f, 0.0f,
 	  	  0.0f, 0.0f,  0.0f, 0.0f,
@@ -15,9 +20,6 @@ namespace PROKARYOTIC
 	  	  0.0f, 1.0f,  0.0f, 1.0f,
 	  } 
 	{	
-		Texture_params<GL_TEXTURE_2D> font_params("fontSDF.png", GL_RGB);
-		m_font = new Texture(font_params);
-
 		m_aspect_ratio = double(screen_height) / double(screen_width);
 		m_element_width = element_width;
 		m_element_height = element_height;
@@ -26,30 +28,26 @@ namespace PROKARYOTIC
 		m_transparency = transparency;
 		m_position = glm::vec2(0.0);
 
-		m_shader = new Shader("GUI_vert.glsl", "GUI_frag.glsl", "");
-		m_shader->use();
-		m_shader->set_Uniform("font_texture", (int)0);
-		m_shader->set_Uniform("aspect_ratio", (float)m_aspect_ratio);
-		m_shader->set_Uniform("box_aspect_ratio", (float)m_element_aspect_ratio);
-		m_shader->set_Uniform("background_col", m_background_col);
-		m_shader->set_Uniform("alpha_val", (float)m_transparency);
+		gui_shader.use();
+		gui_shader.set_Uniform("font_texture", (int)0);
+		gui_shader.set_Uniform("aspect_ratio", (float)m_aspect_ratio);
+		gui_shader.set_Uniform("box_aspect_ratio", (float)m_element_aspect_ratio);
+		gui_shader.set_Uniform("background_col", m_background_col);
+		gui_shader.set_Uniform("alpha_val", (float)m_transparency);
 
-		m_buffer = new Shader_buffer(GL_SHADER_STORAGE_BUFFER, 256 * sizeof(GLfloat), nullptr, GL_STREAM_DRAW);
-		m_buffer->bind();
-		m_buffer->bind_to(2);
-		m_buffer->unbind();
+		gui_buffer.bind();
+		gui_buffer.bind_to(2);
+		gui_buffer.unbind();
 
 		Shader_buffer uv_buf(GL_ARRAY_BUFFER, 24 * sizeof(GLfloat), m_text_verts, GL_STATIC_DRAW);
 
 		uv_buf.bind();
 
-		m_mesh = new Mesh<float>;
-
-		m_mesh->bind();
-		m_mesh->set_vertex_size(6);
-		m_mesh->attach(GL_FLOAT, 2, 4 * sizeof(GLfloat), 0, false);						// GUI_vert.glsl layout (location = 0) in vec2 position;
-		m_mesh->attach(GL_FLOAT, 2, 4 * sizeof(GLfloat), 2 * sizeof(GLfloat), false);	// GUI_vert.glsl layout (location = 1) in vec2 texcoords;
-		m_mesh->unbind();
+		gui_mesh.bind();
+		gui_mesh.set_vertex_size(6);
+		gui_mesh.attach(GL_FLOAT, 2, 4 * sizeof(GLfloat), 0, false);				    // GUI_vert.glsl layout (location = 0) in vec2 position;
+		gui_mesh.attach(GL_FLOAT, 2, 4 * sizeof(GLfloat), 2 * sizeof(GLfloat), false);	// GUI_vert.glsl layout (location = 1) in vec2 texcoords;
+		gui_mesh.unbind();
 	}
 
 	GUI::~GUI()
@@ -57,7 +55,6 @@ namespace PROKARYOTIC
 		m_elements.clear();
 
 		delete m_buffer;
-		delete m_font;
 		delete m_shader;
 		delete m_mesh;
 	}
@@ -66,8 +63,8 @@ namespace PROKARYOTIC
 	{
 		float data[256];
 
-		m_shader->use();
-		m_shader->set_Uniform("scale", glm::vec2(m_element_width, m_element_height));
+		gui_shader.use();
+		gui_shader.set_Uniform("scale", glm::vec2(m_element_width, m_element_height));
 
 		m_font->Bind(0);
 
@@ -84,7 +81,7 @@ namespace PROKARYOTIC
 					data[i] = float(str[i]);
 				}
 
-				m_shader->set_Uniform("string_count", (int)s);
+				gui_shader.set_Uniform("string_count", (int)s);
 			}
 			else
 			{
@@ -95,10 +92,10 @@ namespace PROKARYOTIC
 					i++;
 				}
 
-				m_shader->set_Uniform("string_count", (int)i);
+				gui_shader.set_Uniform("string_count", (int)i);
 			}
 
-			m_buffer->update(0, 256, data);
+			gui_buffer.update(0, 256, data);
 
 			glm::vec2 p = m_position + glm::vec2(0.0, py);
 
@@ -114,13 +111,14 @@ namespace PROKARYOTIC
 				slider_val = 1.0;
 			}
 
-			m_shader->set_Uniform("pos", p);
-			m_shader->set_Uniform("char_size", (float)element.char_size);
-			m_shader->set_Uniform("slider_val", (float)slider_val);
-			m_shader->set_Uniform("side", (int)element.side);
-			m_shader->set_Uniform("text_col", element.text_col);
-			m_shader->set_Uniform("active_col", element.active_col);
-			m_mesh->draw();
+			gui_shader.set_Uniform("pos", p);
+			gui_shader.set_Uniform("char_size", (float)element.char_size);
+			gui_shader.set_Uniform("slider_val", (float)slider_val);
+			gui_shader.set_Uniform("side", (int)element.side);
+			gui_shader.set_Uniform("text_col", element.text_col);
+			gui_shader.set_Uniform("active_col", element.active_col);
+
+			gui_mesh.draw();
 
 			py += m_element_height;
 		}
