@@ -14,6 +14,7 @@
 #include "utils/Shader_buffer.h"
 
 #include <iostream>
+#include <memory>
 
 namespace PROKARYOTIC
 {
@@ -93,11 +94,11 @@ namespace PROKARYOTIC
 		              double  m_transparency;
 	
 	std::vector<GUI_element>  m_elements;
-	
-				Shader_buffer  *m_buffer;
-				      Texture  *m_font;
-		               Shader  *m_shader;
-		          Mesh<float>  *m_mesh;
+		   	       
+		   std::unique_ptr <Shader>			m_shader	{ };
+		   std::unique_ptr <Shader_buffer>  m_buffer	{ };
+		   std::unique_ptr <Mesh<float>>	m_mesh		{ };
+		   std::unique_ptr <Texture>		m_font		{ };
 	
 		              GLfloat  m_text_verts[]; 
 	};
