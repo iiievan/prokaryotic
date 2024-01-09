@@ -80,15 +80,13 @@ namespace PROKARYOTIC
         gui.add_slider("ampD: %f", 0.05, &ampD, 0.0, 1.0, GUI_LEFT_SIDE, glm::vec3(1.0), glm::vec3(0.572, 0.007, 0.529));
         */
 
-        //Texture    wood_box = Texture_loader::Load_texture("wooden_container.jpg", GL_TEXTURE_2D, GL_RGB);
-        //Texture awesomeface = Texture_loader::Load_texture("awesomeface.png", GL_TEXTURE_2D, GL_RGBA);
         Texture    wood_box(GL_TEXTURE_2D,"wooden_container.jpg", GL_RGB, true, false);
         Texture awesomeface(GL_TEXTURE_2D,"awesomeface.png", GL_RGBA, true, false);
 
         Material* smiled_wood = new Material(box_shader);
     
         smiled_wood->set_Texture("s_Texture_1", &wood_box, 0);
-        //smiled_wood->set_Texture("s_Texture_2", &awesomeface, 1);
+        smiled_wood->set_Texture("s_Texture_2", &awesomeface, 1);
 
         Light_source* light_bulb = new Light_source(&light_cube_vertices, light_bulb_shader);
         Scene_object* simple_Box = new Scene_object(dynamic_cast<Mesh<Vertex>*>(box), smiled_wood);
@@ -135,9 +133,9 @@ namespace PROKARYOTIC
             light_bulb->set_Position(m4_Circle_move * v4_Light_src_position);
 
             //box_shader->set_Uniform("object_Color", glm::vec3(1.0f, 0.5f, 0.31f));
-            box_shader->set_Uniform("light_Color", glm::vec3(1.0f, 1.0f, 1.0f));
-            box_shader->set_Uniform("light_Position", light_bulb->get_v3_Position());
-            box_shader->set_Uniform("view_Position", main_camera.Position);
+            box_shader->set_Uniform("light_color", glm::vec3(1.0f, 1.0f, 1.0f));
+            box_shader->set_Uniform("light_pos", light_bulb->get_v3_Position());
+            box_shader->set_Uniform("view_pos", main_camera.Position);
 
             simple_Box->set_Transform(glm::mat4(1.0f));
             //simple_Box->set_Position(glm::vec3(0.0f, -2.2f, -2.5f));

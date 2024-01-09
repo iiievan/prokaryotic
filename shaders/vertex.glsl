@@ -7,21 +7,41 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
-uniform vec3 light_Position;    // for diffuse lightning
+uniform vec3 light_pos;
+uniform vec3 view_pos;
+uniform vec3 light_color;
 
-out vec3 Normal;
-out vec3 fragment_Position; // for diffuse lightning
+out vec3 lighting_color; // resulting color from lighting calculations
+
 out vec2 Texcoord;
-out vec3 o_Lightpos;
 
 void main()
 {
     gl_Position = projection * view * model * vec4(a_Pos, 1.0);
-    fragment_Position = vec3(view * model * vec4(a_Pos, 1.0));
 
-    // Normal = a_Normal;
-    Normal = mat3(transpose(inverse(view * model))) * a_Normal; 
-	Texcoord =  a_Texcoord;  
-	o_Lightpos = vec3(view * vec4(light_Position, 1.0)); // Transform world-space light position to view-space light position
-	
+
+    // gouraud shading
+    // ------------------------
+    vec3 position = vec3(model * vec4(a_Pos, 1.0));
+    vec3 normal = mat3(transpose(inverse(model))) * a_Normal;
+    
+    // ambient
+    float ambient_strength = 0.1;
+    vec3 ambient = ambient_strength * light_color;
+  	
+    // diffuse 
+    vec3 norm = normalize(normal);
+    vec3 light_dir = normalize(light_pos - position);
+    float diff = max(dot(norm, light_dir), 0.0);
+    vec3 diffuse = diff * light_color;
+    
+    // specular
+    float specular_strength = 1.0; // this is set higher to better show the effect of Gouraud shading 
+    vec3 view_dir = normalize(view_pos - position);
+    vec3 reflect_dir = reflect(-light_dir, norm);  
+    float spec = pow(max(dot(view_dir, reflect_dir), 0.0), 32);
+    vec3 specular = specular_strength * spec * light_color;      
+
+    lighting_color = ambient + diffuse + specular;	
+	Texcoord =  a_Texcoord;
 }
