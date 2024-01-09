@@ -71,12 +71,14 @@ namespace PROKARYOTIC
         Shader* box_shader = new Shader("vertex.glsl", "fragment.glsl", "");
         Shader* light_bulb_shader = new Shader("vertex_light.glsl", "fragment_light.glsl", "");
 
+        /*
         GUI gui(WINDOW_WIDTH, WINDOW_HEIGHT, 0.11, 0.04, glm::vec3(0.05), 0.8);
 
         //ADD GUI ELEMENTS
         gui.add_text("Simple GUI", 0.05, GUI_CENTER_SIDE, glm::vec3(1.0), glm::vec3(0.0, 0.0, 1.0));
         double ampD = 0.0625;
         gui.add_slider("ampD: %f", 0.05, &ampD, 0.0, 1.0, GUI_LEFT_SIDE, glm::vec3(1.0), glm::vec3(0.572, 0.007, 0.529));
+        */
 
         //Texture    wood_box = Texture_loader::Load_texture("wooden_container.jpg", GL_TEXTURE_2D, GL_RGB);
         //Texture awesomeface = Texture_loader::Load_texture("awesomeface.png", GL_TEXTURE_2D, GL_RGBA);
@@ -151,7 +153,7 @@ namespace PROKARYOTIC
             m_transparency(true);
             
             // then process GUI
-            gui.draw();
+            //gui.draw();
 
             m_swap_buffers();
             m_poll();

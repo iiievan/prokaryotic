@@ -23,6 +23,8 @@ namespace PROKARYOTIC
 		m_position = glm::vec2(0.0);
 
 		m_shader = std::make_unique<Shader>("GUI_vert.glsl", "GUI_frag.glsl", "");
+		m_buffer = std::make_unique<Shader_buffer>(GL_SHADER_STORAGE_BUFFER, 256 * sizeof(GLfloat), nullptr, GL_STREAM_DRAW);
+		m_mesh = std::make_unique<Mesh<float>>();
 
 		m_shader->use();
 		m_shader->set_Uniform("font_texture", (int)0);
@@ -31,17 +33,14 @@ namespace PROKARYOTIC
 		m_shader->set_Uniform("background_col", m_background_col);
 		m_shader->set_Uniform("alpha_val", (float)m_transparency);
 
-		m_buffer = std::make_unique<Shader_buffer>(GL_SHADER_STORAGE_BUFFER, 256 * sizeof(GLfloat), nullptr, GL_STREAM_DRAW);
-
+		
 		m_buffer->bind();
 		m_buffer->bind_to(2);
 		m_buffer->unbind();
 
 		Shader_buffer uv_buf(GL_ARRAY_BUFFER, 24 * sizeof(GLfloat), m_text_verts, GL_STATIC_DRAW);
 
-		uv_buf.bind();
-
-		m_mesh = std::make_unique<Mesh<float>>();
+		uv_buf.bind();		
 
 		m_mesh->bind();
 		m_mesh->set_vertex_size(6);
