@@ -71,11 +71,11 @@ namespace PROKARYOTIC
 
         if (p_camera != nullptr)
         {
-            scene_obj.p_material->set_Matrix("projection", p_camera->Projection);
-            scene_obj.p_material->set_Matrix("view", p_camera->View);
+            scene_obj.p_material->set_Uniform("projection", p_camera->Projection);
+            scene_obj.p_material->set_Uniform("view", p_camera->View);
         }
 
-        scene_obj.p_material->set_Matrix("model", scene_obj.get_Transform());
+        scene_obj.p_material->set_Uniform("model", scene_obj.get_Transform());
 
         
         // bind/active uniform sampler/texture objects

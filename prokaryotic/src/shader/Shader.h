@@ -49,9 +49,10 @@ namespace PROKARYOTIC
          int  get_Uniform_location(const char* name) const;
          
         void  set_Uniform(const std::string& name, float x, float y) const;
-        void  set_Uniform(const std::string& name, float x, float y, float z) const;
         void  set_Uniform(const std::string& name, const glm::vec2& v) const;
+        void  set_Uniform(const std::string& name, float x, float y, float z) const;
         void  set_Uniform(const std::string& name, const glm::vec3& v) const;
+        void  set_Uniform(const std::string& name, float x, float y, float z, float w) const;
         void  set_Uniform(const std::string& name, const glm::vec4& v) const;
         void  set_Uniform(const std::string& name, const glm::mat2& m) const;
         void  set_Uniform(const std::string& name, const glm::mat3& m) const;

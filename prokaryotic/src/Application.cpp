@@ -88,11 +88,13 @@ namespace PROKARYOTIC
         smiled_wood->set_Texture("s_Texture_1", &wood_box, 0);
         smiled_wood->set_Texture("s_Texture_2", &awesomeface, 1);
 
+        smiled_wood->set_properties(PROP_COPPER);
+
         Light_source* light_bulb = new Light_source(&light_cube_vertices, light_bulb_shader);
-        Scene_object* simple_Box = new Scene_object(dynamic_cast<Mesh<Vertex>*>(box), smiled_wood);
+        Scene_object* woodbox = new Scene_object(dynamic_cast<Mesh<Vertex>*>(box), smiled_wood);
    
         renderer.push_to_render(light_bulb);
-        renderer.push_to_render(simple_Box);
+        renderer.push_to_render(woodbox);
 
         main_camera.set_floating();
 
@@ -133,11 +135,14 @@ namespace PROKARYOTIC
             light_bulb->set_Position(m4_Circle_move * v4_Light_src_position);
 
             //box_shader->set_Uniform("object_Color", glm::vec3(1.0f, 0.5f, 0.31f));
-            box_shader->set_Uniform("light_color", glm::vec3(1.0f, 1.0f, 1.0f));
-            box_shader->set_Uniform("light_pos", light_bulb->get_v3_Position());
+            box_shader->set_Uniform("light.position", light_bulb->get_v3_Position());
             box_shader->set_Uniform("view_pos", main_camera.Position);
 
-            simple_Box->set_Transform(glm::mat4(1.0f));
+            box_shader->set_Uniform("light.ambient", 0.3f, 0.3f, 0.3f);
+            box_shader->set_Uniform("light.diffuse", 0.5f, 0.5f, 0.5f); // darken the light a bit to fit the scene
+            box_shader->set_Uniform("light.specular", 1.0f, 1.0f, 1.0f);
+
+            woodbox->set_Transform(glm::mat4(1.0f));
             //simple_Box->set_Position(glm::vec3(0.0f, -2.2f, -2.5f));
 
             main_camera.set_Projection(-1.0f, 0.1f, 100.f);     // -1.0f for camera zoom through mouse scroll

@@ -146,19 +146,6 @@ namespace PROKARYOTIC
             printf("Uniform(%s): %d not found.\n", name.c_str(), location);
     }
 
-    void  Shader::set_Uniform(const std::string& name, float x, float y, float z) const
-    {
-        int location = glGetUniformLocation(m_ID, name.c_str());
-
-        if (glGetError() != GL_NO_ERROR)
-            printf("Shader ID:%d.Error retrieving 3f uniform location (%s).\n", (int)m_ID, name.c_str());
-
-        if (location >= 0)
-            glUniform3f(location, x, y, z);
-        else
-            printf("Uniform (%s) not found.Location(%d).", name.c_str(), location);
-    }
-
     void  Shader::set_Uniform(const std::string& name, const glm::vec2& v) const
     {
         int location = glGetUniformLocation(m_ID, name.c_str());
@@ -172,6 +159,19 @@ namespace PROKARYOTIC
             printf("Uniform (%s) not found.Location(%d).", name.c_str(), location);
     }
 
+    void  Shader::set_Uniform(const std::string& name, float x, float y, float z) const
+    {
+        int location = glGetUniformLocation(m_ID, name.c_str());
+
+        if (glGetError() != GL_NO_ERROR)
+            printf("Shader ID:%d.Error retrieving 3f uniform location (%s).\n", (int)m_ID, name.c_str());
+
+        if (location >= 0)
+            glUniform3f(location, x, y, z);
+        else
+            printf("Uniform (%s) not found.Location(%d).", name.c_str(), location);
+    }
+
     void  Shader::set_Uniform(const std::string& name, const glm::vec3& v) const
     {
         int location = glGetUniformLocation(m_ID, name.c_str());
@@ -181,6 +181,19 @@ namespace PROKARYOTIC
 
         if (location >= 0)
             glUniform3f(location, v.x, v.y, v.z);
+        else
+            printf("Uniform (%s) not found.Location(%d).", name.c_str(), location);
+    }
+
+    void  Shader::set_Uniform(const std::string& name, float x, float y, float z, float w) const
+    {
+        int location = glGetUniformLocation(m_ID, name.c_str());
+
+        if (glGetError() != GL_NO_ERROR)
+            printf("Shader ID:%d.Error retrieving vec4 uniform location (%s).\n", (int)m_ID, name.c_str());
+
+        if (location >= 0)
+            glUniform4f(location, x, y, z, w);
         else
             printf("Uniform (%s) not found.Location(%d).", name.c_str(), location);
     }

@@ -30,58 +30,76 @@ namespace PROKARYOTIC
         return copy;
     }
 
-    void  Material::set_Bool(std::string name, bool value)
+    void  Material::set_Uniform(const std::string& name, float x, float y)
     {
-        m_Uniforms[name].Type = UNIFORM_TYPE_BOOL;
-        m_Uniforms[name].Bool = value;
+        m_Uniforms[name].Type = UNIFORM_TYPE_VEC2;
+        m_Uniforms[name].Vec2 = glm::vec2(x,y);    
     }
 
-    void  Material::set_Int(std::string name, int value)
-    {
-        m_Uniforms[name].Type = UNIFORM_TYPE_INT;
-        m_Uniforms[name].Int = value;
-    }
-
-    void  Material::set_Float(std::string name, float value)
-    {
-        m_Uniforms[name].Type = UNIFORM_TYPE_FLOAT;
-        m_Uniforms[name].Float = value;
-    }
-
-    void  Material::set_Vector(std::string name, glm::vec2 value)
+    void  Material::set_Uniform(const std::string& name, glm::vec2 value)
     {
         m_Uniforms[name].Type = UNIFORM_TYPE_VEC2;
         m_Uniforms[name].Vec2 = value;
     }
 
-    void  Material::set_Vector(std::string name, glm::vec3 value)
+    void  Material::set_Uniform(const std::string& name, float x, float y, float z)
+    {
+        m_Uniforms[name].Type = UNIFORM_TYPE_VEC3;
+        m_Uniforms[name].Vec3 = glm::vec3(x,y,z);   
+    }
+
+    void  Material::set_Uniform(const std::string& name, glm::vec3 value)
     {
         m_Uniforms[name].Type = UNIFORM_TYPE_VEC3;
         m_Uniforms[name].Vec3 = value;
     }
 
-    void  Material::set_Vector(std::string name, glm::vec4 value)
+    void  Material::set_Uniform(const std::string& name, float x, float y, float z, float w) 
+    {
+        m_Uniforms[name].Type = UNIFORM_TYPE_VEC4;
+        m_Uniforms[name].Vec4 = glm::vec4(x,y,z,w);;   
+    }
+    
+    void  Material::set_Uniform(const std::string& name, glm::vec4 value)
     {
         m_Uniforms[name].Type = UNIFORM_TYPE_VEC4;
         m_Uniforms[name].Vec4 = value;
     }
 
-    void  Material::set_Matrix(std::string name, glm::mat2 value)
+    void  Material::set_Uniform(const std::string& name, glm::mat2 value)
     {
         m_Uniforms[name].Type = UNIFORM_TYPE_MAT2;
         m_Uniforms[name].Mat2 = value;
     }
 
-    void  Material::set_Matrix(std::string name, glm::mat3 value)
+    void  Material::set_Uniform(const std::string& name, glm::mat3 value)
     {
         m_Uniforms[name].Type = UNIFORM_TYPE_MAT3;
         m_Uniforms[name].Mat3 = value;
     }
 
-    void  Material::set_Matrix(std::string name, glm::mat4 value)
+    void  Material::set_Uniform(const std::string& name, glm::mat4 value)
     {
         m_Uniforms[name].Type = UNIFORM_TYPE_MAT4;
         m_Uniforms[name].Mat4 = value;
+    }
+
+    void  Material::set_Uniform(const std::string& name, float value)
+    {
+        m_Uniforms[name].Type = UNIFORM_TYPE_FLOAT;
+        m_Uniforms[name].Float = value;
+    }
+
+    void  Material::set_Uniform(const std::string& name, int value)
+    {
+        m_Uniforms[name].Type = UNIFORM_TYPE_INT;
+        m_Uniforms[name].Int = value;
+    }
+
+    void  Material::set_Uniform(const std::string& name, bool value)
+    {
+        m_Uniforms[name].Type = UNIFORM_TYPE_BOOL;
+        m_Uniforms[name].Bool = value;
     }
 
     void  Material::set_Texture(std::string name, Texture* value, unsigned int unit)
@@ -108,6 +126,17 @@ namespace PROKARYOTIC
         m_Shader.use();
         m_Shader.set_Uniform(name, (int)unit);
     }
+
+    void  Material::set_properties(e_simple_props prop)
+    {
+        material_props_t mat_props(prop);
+
+        set_Uniform("material.ambient", mat_props.ambient);
+        set_Uniform("material.diffuse", mat_props.diffuse);
+        set_Uniform("material.specular", mat_props.specular);
+        set_Uniform("material.shininess", mat_props.shininess * 128.0f);
+    }
+
     /*
     void  Material::set_Texture_cube(std::string name, TextureCube* value, unsigned int unit = 0)
     {
